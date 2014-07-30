@@ -97,28 +97,28 @@ struct QuadEdge * quadEdge_construct() {
 	struct Point b = {-1 * scale, -1 * scale};
 	struct Point c = {2 * scale, -1 * scale};
 
-	struct Edge ea = quadEdge_makeEdge();
-	edge_setCoordinates(&ea, &a, &b);
+	struct Edge *ea = quadEdge_makeEdge();
+	edge_setCoordinates(ea, &a, &b);
 
-	struct Edge eb = quadEdge_makeEdge();
+	struct Edge *eb = quadEdge_makeEdge();
 	edge_setCoordinates(&eb, &b, &c);
-	quadEdge_splice(edge_sym(&ea), &eb);
+	quadEdge_splice(edge_sym(ea), eb);
 
-	struct Edge ec = quadEdge_makeEdge();
+	struct Edge *ec = quadEdge_makeEdge();
 	edge_setCoordinates(&ec, &c, &a);
-	quadEdge_splice(edge_sym(&eb), &ec);
+	quadEdge_splice(edge_sym(eb), ec);
 
-	quadEdge_splice(edge_sym(&ec), &ea);
+	quadEdge_splice(edge_sym(ec), ea);
 
-	QuadEdge qe = {&ec};
+	struct QuadEdge qe = {&ec};
 	return &qe;
 }
 
 struct Edge * quadEdge_connect(struct Edge *a, struct Edge *b) {
-	struct Edge e = quadEdge_makeEdge();
-	edge_setCoordinates(&e, edge_dest(a), edge_orig(b));
-	quadEdge_splice(edge_sym(&e), b);
-	return &e;
+	struct Edge *e = quadEdge_makeEdge();
+	edge_setCoordinates(e, edge_dest(a), edge_orig(b));
+	quadEdge_splice(edge_sym(e), b);
+	return e;
 }
 
 void quadEdge_deleteEdge(struct Edge * e) {
@@ -140,7 +140,7 @@ struct Edge * quadEdge_getFirst(struct QuadEdge *q) {
 			e = edge_oNext(e);
 		}
 	} while (e != q->first);
-	return null;
+	return NULL;
 }
 
 int quadEdge_isWall(struct Edge * e) {
@@ -242,12 +242,12 @@ struct Edge * locate(struct Subdivision *s, struct Point *q) {
 	struct Point *p = edge_orig(e);
 	if (p == q) {
 		// duplicate point
-		return null;
+		return NULL;
 	}
 	do {
 		if (q == edge_dest(e)) {
 			// duplicate point
-			return null;
+			return NULL;
 		} else if (!predicate_leftOrAhead(q, edge_orig(e), edge_dest(e))) {
 			return edge_sym(e);
 		} else if (predicate_rightOrAhead(edge_dest(edge_oNext(e)), p, q)) {
