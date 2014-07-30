@@ -18,16 +18,16 @@ void quadEdge_construct(struct QuadEdge *qe) {
 	c->x = 2 * scale;
 	c->y = -1 * scale;
 
-	struct Edge *ea = (struct Edge*) malloc(sizeof(struct Edge));;
+	struct Edge *ea = (struct Edge*) malloc(sizeof(struct Edge));
 	quadEdge_makeEdge(ea);
 	edge_setCoordinates(ea, *a, *b);
 
-	struct Edge *eb;
+	struct Edge *eb = (struct Edge*) malloc(sizeof(struct Edge));
 	quadEdge_makeEdge(eb);
 	edge_setCoordinates(eb, *b, *c);
 	quadEdge_splice(edge_sym(ea), eb);
 
-	struct Edge *ec;
+	struct Edge *ec = (struct Edge*) malloc(sizeof(struct Edge));
 	quadEdge_makeEdge(ec);
 	edge_setCoordinates(ec, *c, *a);
 	quadEdge_splice(edge_sym(eb), ec);
@@ -42,7 +42,7 @@ void quadEdge_construct(struct QuadEdge *qe) {
 }
 
 struct Edge * quadEdge_connect(struct Edge *a, struct Edge *b) {
-	struct Edge *e;
+	struct Edge *e = (struct Edge*) malloc(sizeof(struct Edge));
 	quadEdge_makeEdge(e);
 	edge_setCoordinates(e, *edge_dest(a), *edge_orig(b));
 	quadEdge_splice(edge_sym(e), b);
