@@ -12,7 +12,7 @@ struct PointsList {
 struct PointsArrayList {
 	int numPoints;
 	struct Point *points;
-	struct PointsListList *next;
+	struct PointsArrayList *next;
 };
 
 struct PointsList * importGML_readFile(char fileName[]);

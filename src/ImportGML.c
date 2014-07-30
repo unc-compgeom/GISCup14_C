@@ -60,8 +60,8 @@ struct PointsList * importGML_readFile(char fileName[]) {
 		listIterator = frontOfList;
 		for (i = 0; i < numberOfCoordinates; i++) {
 			struct Point *tmpPoint = (struct Point*) malloc(sizeof(struct Point));
-			tmpPoint->x = listIterator->x;
-			tmpPoint->y = listIterator->y;
+			tmpPoint->x = *(listIterator->x);
+			tmpPoint->y = *(listIterator->y);
 			importedPoints->points[i] = tmpPoint;
 			listIterator = listIterator->next;
 		}
