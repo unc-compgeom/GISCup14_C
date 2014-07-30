@@ -2,6 +2,7 @@
 #include "QuadEdge.h"
 #include "Subdivision.h"
 #include "Delaunay.h"
+#include <stdlib.h>
 
 ///////////////// DELAUNAY TRIANGULATION /////////////////
 struct Subdivision * delaunay_triangulate(struct Point points[], int numPoints) {
