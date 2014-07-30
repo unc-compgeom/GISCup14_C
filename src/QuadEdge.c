@@ -13,16 +13,16 @@ void quadEdge_construct(struct QuadEdge *qe) {
 
 	struct Edge *ea;
 	quadEdge_makeEdge(ea);
-	edge_setCoordinates(ea, &a, &b);
+	edge_setCoordinates(ea, a, b);
 
 	struct Edge *eb;
 	quadEdge_makeEdge(eb);
-	edge_setCoordinates(eb, &b, &c);
+	edge_setCoordinates(eb, b, c);
 	quadEdge_splice(edge_sym(ea), eb);
 
 	struct Edge *ec;
 	quadEdge_makeEdge(ec);
-	edge_setCoordinates(ec, &c, &a);
+	edge_setCoordinates(ec, c, a);
 	quadEdge_splice(edge_sym(eb), ec);
 
 	quadEdge_splice(edge_sym(ec), ea);
@@ -33,7 +33,7 @@ void quadEdge_construct(struct QuadEdge *qe) {
 struct Edge * quadEdge_connect(struct Edge *a, struct Edge *b) {
 	struct Edge *e;
 	quadEdge_makeEdge(e);
-	edge_setCoordinates(e, edge_dest(a), edge_orig(b));
+	edge_setCoordinates(e, *edge_dest(a), *edge_orig(b));
 	quadEdge_splice(edge_sym(e), b);
 	return e;
 }
@@ -73,10 +73,10 @@ void quadEdge_makeEdge(struct Edge *edge) {
 
 	struct Edge e2, e3, e4;
 
-	edge_setOrigin(edge, &p1);
-	edge_setOrigin(&e2, &p2);
-	edge_setOrigin(&e3, &p3);
-	edge_setOrigin(&e4, &p4);
+	edge_setOrigin(edge, *p1);
+	edge_setOrigin(&e2, *p2);
+	edge_setOrigin(&e3, *p3);
+	edge_setOrigin(&e4, *p4);
 
 	edge_setRot(edge, &e2);
 	edge_setRot(&e2, &e3);
@@ -108,7 +108,7 @@ void quadEdge_splice(struct Edge *a, struct Edge *b) {
 void quadEdge_swap(struct Edge *e) {
 	struct Edge *a = edge_oPrev(e);
 	struct Edge *b = edge_oPrev(edge_sym(e));
-	edge_setCoordinates(e, edge_dest(a), edge_dest(b));
+	edge_setCoordinates(e, *edge_dest(a), *edge_dest(b));
 	quadEdge_splice(e, a);
 	quadEdge_splice(edge_sym(e), b);
 	quadEdge_splice(e, edge_lNext(a));
