@@ -1,9 +1,11 @@
-///////////////// POINT /////////////////
-typedef struct {
-	float x;
-	float y;
-} Point;
+#include <Point.h>
+#include <Edge.h>
+#include <QuadEdge.h>
+#include <Subdivision.h>
+#include <Predicate.h>
+#include <Delaunay.h>
 
+///////////////// POINT /////////////////
 int point_compare(struct Point * point1, struct Point * point2) {
 	return 	point1->x < point2->x ? -1 :
 			point1->x > point2->x ?  1 :
@@ -13,12 +15,6 @@ int point_compare(struct Point * point1, struct Point * point2) {
 }
 
 ///////////////// EDGE /////////////////
-typedef struct {
-	struct Point *o;
-	struct Edge *next;
-	struct Edge *rot;
-} Edge;
-
 struct Point * edge_dest(struct Edge *edge) {
 	return edge_orig(edge_sym(edge));
 }
@@ -98,10 +94,6 @@ struct Edge * edge_sym(struct Edge *edge) {
 }
 
 ///////////////// QUADEDGE /////////////////
-typedef struct {
-	struct Edge *first;
-} QuadEdge;
-
 struct QuadEdge * quadEdge_construct() {
 	// initialize the triangle
 	int scale;
@@ -213,11 +205,6 @@ void quadEdge_swap(struct Edge *e) {
 }
 
 ///////////////// SUBDIVISION /////////////////
-typedef struct {
-	struct Edge *startingEdge;
-	struct QuadEdge *qe;
-} Subdivision;
-
 struct Subdivision * subdivision_construct() {
 	QuadEdge *qe = quadEdge_construct();
 	struct Edge *startingEdge = quadEdge_getFirst(qe);
