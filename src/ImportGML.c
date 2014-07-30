@@ -4,9 +4,9 @@
 #include <stdlib.h>
 
 struct PointsList * readFile(char fileName[]) {
-	File *file;
-	file = fopen(fileName, "r");
-	if (!file) {
+	File * fp;
+	fp = fopen(fpName, "r");
+	if (!fp) {
 		printf("Error opening file %s\n", fileName);
 		exit(1);
 	}
@@ -15,24 +15,26 @@ struct PointsList * readFile(char fileName[]) {
 	double x, y;
 	while(1) {
 		while(1) {
-			fscanf(file, "%c", c);
+			fscanf(fp, "%c", &c);
 			if (c == '>') {
 				break;
 			}
 		}
 		while(1) {
-			fscanf(file, "%c", c);
+			fscanf(fp, "%c", &c);
 			if (c == '>') {
 				break;
 			}
 		}
-		fscanf(file, "%lf,%lf ", &x, &y);
+		fscanf(fp, "%lf,%lf ", &x, &y);
 		struct CoordinateList *coordinateList = {x, y, 0};
 		while(1) {
-			if(fscanf(file, "%lf,%lf ", &x, &y) == 0) {
+			if(fscanf(fp, "%lf,%lf ", &x, &y) == 0) {
 				break;
 			}
-			struct CoordinateList *newCoords = {x, y, 0};
+			struct CoordinateList *newCoords;
+			newCoords->x = x;
+			newCoords->y = y;
 			coordinateList->next = newCoords;
 			coordinateList = newCoords;
 		}
