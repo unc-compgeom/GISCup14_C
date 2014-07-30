@@ -1,6 +1,7 @@
 #include "ImportGML.h"
 #include "ArcsPointsAndOffsets.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 struct CoordinateList {
 	double x;
