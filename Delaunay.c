@@ -133,7 +133,7 @@ void quadEdge_deleteEdge(struct Edge *edge) {
 struct Edge * quadEdge_getFirst(struct QuadEdge *qe) {
 	int count;
 	count = 0;
-	struct Edge *e = q->first;
+	struct Edge *e = qe->first;
 	do {
 		if (0 == count++) {
 			return e;
@@ -143,13 +143,13 @@ struct Edge * quadEdge_getFirst(struct QuadEdge *qe) {
 		} else {
 			e = edge_oNext(e);
 		}
-	} while (e != q->first);
+	} while (e != qe->first);
 	return NULL;
 }
 
 int quadEdge_isWall(struct Edge *edge) {
-	return  point_compare(edge_orig(e), edge_orig(edge_lNext(e))) >= 0 &&
-			point_compare(edge_orig(edge_lNext(e)), edge_orig(edge_lPrev(e))) > 0;
+	return  point_compare(edge_orig(edge), edge_orig(edge_lNext(edge))) >= 0 &&
+			point_compare(edge_orig(edge_lNext(edge)), edge_orig(edge_lPrev(edge))) > 0;
 }
 
 void quadEdge_makeEdge(struct Edge *edge) {
@@ -162,8 +162,8 @@ void quadEdge_makeEdge(struct Edge *edge) {
 
 	edge_setOrigin(edge, &p1);
 	edge_setOrigin(&e2, &p2);
-	edge_setOrigin(&e3, &e3);
-	edge_setOrigin(&e4, &e4);
+	edge_setOrigin(&e3, &p3);
+	edge_setOrigin(&e4, &p4);
 
 	edge_setRot(edge, &e2);
 	edge_setRot(&e2, &e3);
@@ -218,7 +218,7 @@ void subdivision_insertSite(struct Subdivision *s, struct Point *p) {
 		quadEdge_deleteEdge(edge_oNext(e));
 	}
 	struct Edge *base;
-	base = quadEdge_makeEdge();
+	quadEdge_makeEdge(base);
 	struct Point tmpDest = {p->x, p->y};
 	edge_setCoordinates(base, edge_orig(e), &tmpDest);
 	quadEdge_splice(base, e);
@@ -240,7 +240,7 @@ void subdivision_insertSite(struct Subdivision *s, struct Point *p) {
 	} while (1);
 }
 
-struct Edge * locate(struct Subdivision *s, struct Point *q) {
+struct Edge * subdivision_locate(struct Subdivision *s, struct Point *q) {
 	struct Edge *e = s->startingEdge;
 	if (!preciate_rightOrAhead(edge_dest(e), edge_orig(e), q)) {
 		e = edge_sym(e);
@@ -333,7 +333,8 @@ double triArea(struct Point *a, struct Point *b, struct Point *c) {
 
 ///////////////// DELAUNAY TRIANGULATION /////////////////
 struct Subdivision * triangulate(struct Point points[], int numPoints) {
-	struct Subdivision *s = subdivision_construct();
+	struct Subdivision *s;
+	subdivision_construct(s);
 	int i;
 	for (i = 0; i < numPoints; i++) {
 		subdivision_insertSite(s, &points[i]);
