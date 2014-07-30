@@ -10,10 +10,10 @@ struct Subdivision * delaunay_triangulate(struct Point points[], int numPoints) 
 	struct Subdivision *s;
 	s = subdivision_construct();
 	int i;
-	printf("constructed subdivision\n");
+	printf("  Constructed subdivision\n");
 	for (i = 0; i < numPoints; i++) {
 		subdivision_insertSite(s, &points[i]);
-		printf("  inserted point %d\n", i);
+		printf("  Inserted point %d\n", i);
 	}
 	return s;
 }

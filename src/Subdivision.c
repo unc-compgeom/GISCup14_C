@@ -6,12 +6,10 @@
 #include "Null.h"
 #include <stdlib.h> 
 
-struct Subdivision * subdivision_construct();
-	struct Subdivision *s;// = (struct Subdivision*) malloc(sizeof(struct Subdivision));
-	// struct QuadEdge *qe = quadEdge_construct();
-	// s->qe = qe;
-	// s->startingEdge = quadEdge_getFirst(&s->qe);
-	return s;
+struct Subdivision * subdivision_construct() {
+	struct Subdivision *s = (struct Subdivision*) malloc(sizeof(struct Subdivision));
+	s->qe = quadEdge_construct();
+	s->startingEdge = s->qe->first;
 }
 
 void subdivision_insertSite(struct Subdivision *s, struct Point *p) {
