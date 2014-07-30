@@ -1,9 +1,9 @@
-#include 'Point.h'
-#include 'Edge.h'
-#include 'QuadEdge.h'
-#include 'Subdivision.h'
-#include 'Predicate.h'
-#include 'Delaunay.h'
+#include "Point.h"
+#include "Edge.h"
+#include "QuadEdge.h"
+#include "Subdivision.h"
+#include "Predicate.h"
+#include "Delaunay.h"
 
 ///////////////// POINT /////////////////
 int point_compare(struct Point * point1, struct Point * point2) {

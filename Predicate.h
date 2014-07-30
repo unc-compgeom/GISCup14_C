@@ -1,8 +1,8 @@
 #ifndef CG_PREDICATE_H
 #define CG_PREDICATE_H
 
-#include 'Point.h'
-#include 'Edge.h'
+#include "Point.h"
+#include "Edge.h"
 
 int predicate_ahead(struct Point *p, struct Point *q, struct Point *r);
 

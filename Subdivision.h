@@ -1,8 +1,8 @@
 #ifndef CG_SUBDIVISION_H
 #define CG_SUBDIVISION_H
 
-#include 'Point.h'
-#include 'Edge.h'
+#include "Point.h"
+#include "Edge.h"
 
 struct Subdivision{
 	struct Edge *startingEdge;
