@@ -5,8 +5,8 @@
 
 ///////////////// DELAUNAY TRIANGULATION /////////////////
 struct Subdivision * delaunay_triangulate(struct Point points[], int numPoints) {
-	struct Subdivision *s;
-	struct QuadEdge *qe;
+	struct Subdivision *s = (struct Subdivision*) malloc(sizeof(struct Subdivision));
+	struct QuadEdge *qe = (struct QuadEdge*) malloc(sizeof(struct QuadEdge));;
 	subdivision_construct(s, qe);
 	int i;
 	for (i = 0; i < numPoints; i++) {

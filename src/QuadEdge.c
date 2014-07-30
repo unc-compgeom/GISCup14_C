@@ -8,27 +8,37 @@ void quadEdge_construct(struct QuadEdge *qe) {
 	// initialize the triangle
 	int scale;
 	scale = 536870912;
-	struct Point a = {-1 * scale - 1, 2 * scale};
-	struct Point b = {-1 * scale, -1 * scale};
-	struct Point c = {2 * scale, -1 * scale};
+	struct Point *a = (struct Point*) malloc(sizeof(struct Point));
+	a->x = -1 * scale - 1;
+	a->y = 2 * scale;
+	struct Point *b = (struct Point*) malloc(sizeof(struct Point));
+	b->x = -1 * scale;
+	b->y = -1 * scale;
+	struct Point *c = (struct Point*) malloc(sizeof(struct Point));
+	c->x = 2 * scale;
+	c->y = -1 * scale;
 
-	struct Edge *ea;
+	struct Edge *ea = (struct Edge*) malloc(sizeof(struct Edge));;
 	quadEdge_makeEdge(ea);
-	edge_setCoordinates(ea, a, b);
+	edge_setCoordinates(ea, *a, *b);
 
 	struct Edge *eb;
 	quadEdge_makeEdge(eb);
-	edge_setCoordinates(eb, b, c);
+	edge_setCoordinates(eb, *b, *c);
 	quadEdge_splice(edge_sym(ea), eb);
 
 	struct Edge *ec;
 	quadEdge_makeEdge(ec);
-	edge_setCoordinates(ec, c, a);
+	edge_setCoordinates(ec, *c, *a);
 	quadEdge_splice(edge_sym(eb), ec);
 
 	quadEdge_splice(edge_sym(ec), ea);
 
 	qe->first = ec;
+
+	free(a);
+	free(b);
+	free(c);
 }
 
 struct Edge * quadEdge_connect(struct Edge *a, struct Edge *b) {
@@ -67,27 +77,9 @@ int quadEdge_isWall(struct Edge *edge) {
 }
 
 void quadEdge_makeEdge(struct Edge *edge) {
-	struct Point *p1 = (struct Point*) malloc(sizeof(struct Point));
-	p1->x = 0.0;
-	p1->y = 0.0;
-	struct Point *p2 = (struct Point*) malloc(sizeof(struct Point));
-	p2->x = 0.0;
-	p2->y = 0.0;
-	struct Point *p3 = (struct Point*) malloc(sizeof(struct Point));
-	p3->x = 0.0;
-	p3->y = 0.0;
-	struct Point *p4 = (struct Point*) malloc(sizeof(struct Point));
-	p4->x = 0.0;
-	p4->y = 0.0;
-
 	struct Edge *e2 = (struct Edge*) malloc(sizeof(struct Edge));
 	struct Edge *e3 = (struct Edge*) malloc(sizeof(struct Edge));
 	struct Edge *e4 = (struct Edge*) malloc(sizeof(struct Edge));
-
-	edge_setOrigin(edge, *p1);
-	edge_setOrigin(e2, *p2);
-	edge_setOrigin(e3, *p3);
-	edge_setOrigin(e4, *p4);
 
 	edge_setRot(edge, e2);
 	edge_setRot(e2, e3);
@@ -98,11 +90,6 @@ void quadEdge_makeEdge(struct Edge *edge) {
 	edge_setNext(e2, e4);
 	edge_setNext(e3, e3);
 	edge_setNext(e4, e2);
-	
-	free(p1);
-	free(p2);
-	free(p3);
-	free(p4);
 }
 
 void quadEdge_splice(struct Edge *a, struct Edge *b) {
