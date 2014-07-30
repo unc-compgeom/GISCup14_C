@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 struct PointsList * readFile(char fileName[]) {
-	File * fp;
+	FILE * fp;
 	fp = fopen(fileName, "r");
 	if (!fp) {
 		printf("Error opening file %s\n", fileName);

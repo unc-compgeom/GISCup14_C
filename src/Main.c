@@ -6,14 +6,6 @@
 #include "ImportGML.h"
 
 int main() {
-/// test file
-	FILE * fp;
-
-   fp = fopen ("file.txt", "w+");
-   fprintf(fp, "%s %s %s %d", "We", "are", "in", 2014);
-   
-   fclose(fp);
-
 	struct ArcsPointsAndOffsets *importedStuff;
 	importedStuff = importGML_importGML("../td1/lines_out.txt", "../td1/points_out.txt");
 	/*
