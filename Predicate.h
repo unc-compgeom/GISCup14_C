@@ -20,6 +20,6 @@ int predicate_rightOf(struct Point *p, struct Edge *e);
 
 int predicate_rightOrAhead(struct Point *p, struct Point *q,
 		struct Point *r);
-double triArea(struct Point *a, struct Point *b, struct Point *c);
+double predicate_triArea(struct Point *a, struct Point *b, struct Point *c);
 
 #endif /* CG_PREDICATE_H */
