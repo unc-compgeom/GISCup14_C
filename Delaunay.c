@@ -126,8 +126,8 @@ struct Edge * quadEdge_connect(struct Edge *a, struct Edge *b) {
 }
 
 void quadEdge_deleteEdge(struct Edge *edge) {
-	quadEdge_splice(e, edge_oPrev(e));
-	quadEdge_splice(edge_sym(e), edge_oPrev(edge_sym(e)));
+	quadEdge_splice(edge, edge_oPrev(edge));
+	quadEdge_splice(edge_sym(edge), edge_oPrev(edge_sym(edge)));
 }
 
 struct Edge * quadEdge_getFirst(struct QuadEdge *qe) {
@@ -203,16 +203,17 @@ void quadEdge_swap(struct Edge *e) {
 }
 
 ///////////////// SUBDIVISION /////////////////
-struct Subdivision * subdivision_construct(struct QuadEdge *qe) {
+void subdivision_construct(struct Subdivision *s, struct QuadEdge *qe) {
 	quadEdge_construct(qe);
 	struct Edge *startingEdge;
 	startingEdge = quadEdge_getFirst(qe);
-	struct Subdivision s = {startingEdge, qe};
+	s = {startingEdge, qe};
+
 }
 
 void subdivision_insertSite(struct Subdivision *s, struct Point *p) {
 	struct Edge *e;
-	e = subdivision_locate(p);
+	e = subdivision_locate(s, p);
 	if (predicate_onEdge(p, e)) {
 		e = edge_oPrev(e);
 		quadEdge_deleteEdge(edge_oNext(e));
@@ -334,7 +335,8 @@ double triArea(struct Point *a, struct Point *b, struct Point *c) {
 ///////////////// DELAUNAY TRIANGULATION /////////////////
 struct Subdivision * triangulate(struct Point points[], int numPoints) {
 	struct Subdivision *s;
-	subdivision_construct(s);
+	struct QuadEdge *qe;
+	subdivision_construct(s, qe);
 	int i;
 	for (i = 0; i < numPoints; i++) {
 		subdivision_insertSite(s, &points[i]);
