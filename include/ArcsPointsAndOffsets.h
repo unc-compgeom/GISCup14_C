@@ -6,13 +6,13 @@ struct ArcsPointsAndOffsets {
 	struct PointsList *points;
 	long offsetLatitude;
 	long offsetLongitude;
-}
+};
 
 struct PointsList {
 	struct PointsList *next;
 	struct Point *points; // array
 	int numPoints;
-}
+};
 
 struct ArcsPointsAndOffsets * arcsPointsAndOffsets_construct();
 
