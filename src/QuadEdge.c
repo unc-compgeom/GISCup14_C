@@ -2,6 +2,7 @@
 #include "Edge.h"
 #include "Point.h"
 #include "Null.h"
+#include <stdlib.h> 
 
 void quadEdge_construct(struct QuadEdge *qe) {
 	// initialize the triangle
@@ -74,7 +75,7 @@ void quadEdge_makeEdge(struct Edge *edge) {
 	p2->y = 0.0;
 	struct Point *p3 = (struct Point*) malloc(sizeof(struct Point));
 	p3->x = 0.0;
-	p4->y = 0.0;
+	p3->y = 0.0;
 	struct Point *p4 = (struct Point*) malloc(sizeof(struct Point));
 	p4->x = 0.0;
 	p4->y = 0.0;
@@ -83,10 +84,10 @@ void quadEdge_makeEdge(struct Edge *edge) {
 	struct Edge *e3 = (struct Edge*) malloc(sizeof(struct Edge));
 	struct Edge *e4 = (struct Edge*) malloc(sizeof(struct Edge));
 
-	edge_setOrigin(edge, &p1);
-	edge_setOrigin(e2, &p2);
-	edge_setOrigin(e3, &p3);
-	edge_setOrigin(e4, &p4);
+	edge_setOrigin(edge, *p1);
+	edge_setOrigin(e2, *p2);
+	edge_setOrigin(e3, *p3);
+	edge_setOrigin(e4, *p4);
 
 	edge_setRot(edge, e2);
 	edge_setRot(e2, e3);
