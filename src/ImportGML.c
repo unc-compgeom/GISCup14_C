@@ -51,9 +51,9 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 	struct ArcsPointsAndOffsets *data;
 	data = arcsPointsAndOffsets_construct();
 	struct PointsList *readArcs;
-	readArcs = readFile(arcsFilename);
+	readArcs = importGML_readFile(arcsFilename);
 	struct PointsList *readPoints;
-	readPoints = readFile(pointsFilename);
+	readPoints = importGML_readFile(pointsFilename);
 
 	return data;
 }
