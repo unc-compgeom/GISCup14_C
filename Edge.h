@@ -2,7 +2,7 @@
 #define CG_EDGE_H
 
 
-#include <Point.h>
+#include 'Point.h'
 
 typedef struct {
 	struct Point *o;

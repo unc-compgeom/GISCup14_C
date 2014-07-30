@@ -1,7 +1,7 @@
 #ifndef CG_QUADEDGE_H
 #define CG_QUADEDGE_H
 
-#include <Edge.h>
+#include 'Edge.h'
 
 typedef struct {
 	struct Edge *first;
