@@ -6,7 +6,7 @@
 
 int main() {
 	struct ArcsPointsAndOffsets *importedStuff;
-	importedStuff = importGML_importGML("td1/lines_out.txt", "td1/points_out.txt");
+	importedStuff = importGML_importGML("../td1/lines_out.txt", "../td1/points_out.txt");
 	/*
 	printf("TEST:\n");
 	printf("Generate sample points\n");
