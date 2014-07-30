@@ -236,7 +236,7 @@ void subdivision_insertSite(struct Subdivision *s, struct Point *p) {
 		} else {
 			e = edge_lPrev(edge_oNext(e));
 		}
-	} while (true);
+	} while (1);
 }
 
 struct Edge * locate(struct Subdivision *s, struct Point *q) {
@@ -260,7 +260,7 @@ struct Edge * locate(struct Subdivision *s, struct Point *q) {
 		} else {
 			e = edge_sym(edge_lNext(e));
 		}
-	} while (true);
+	} while (1);
 }
 
 ///////////////// PREDICATE /////////////////
@@ -309,7 +309,7 @@ int predicate_onEdge(struct Point *p, struct Edge *e) {
 		double distSq = predicate_distSquared(a, b);
 		return 0 <= dot && dot <= distSq;
 	} else {
-		return false;
+		return 0;
 	}
 }
 
