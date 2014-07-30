@@ -7,7 +7,8 @@
 #include <stdlib.h> 
 
 void subdivision_construct(struct Subdivision *s, struct QuadEdge *qe) {
-	quadEdge_construct(qe);
+	struct QuadEdge *qe;
+	qe = quadEdge_construct();
 	struct Edge *startingEdge = (struct Edge*) malloc(sizeof(struct Edge));;
 	startingEdge = quadEdge_getFirst(qe);
 	s->startingEdge = startingEdge;

@@ -4,7 +4,8 @@
 #include "Null.h"
 #include <stdlib.h> 
 
-void quadEdge_construct(struct QuadEdge *qe) {
+struct QuadEdge * quadEdge_construct() {
+	struct QuadEdge *qe = (struct QuadEdge*) malloc(sizeof(struct QuadEdge));
 	// initialize the triangle
 	int scale;
 	scale = 536870912;
@@ -39,6 +40,8 @@ void quadEdge_construct(struct QuadEdge *qe) {
 	free(a);
 	free(b);
 	free(c);
+
+	return qe;
 }
 
 struct Edge * quadEdge_connect(struct Edge *a, struct Edge *b) {
