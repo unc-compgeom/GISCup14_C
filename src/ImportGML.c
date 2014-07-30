@@ -6,7 +6,7 @@ struct CoordinateList {
 	double x;
 	double y;
 	struct CoordinateList *next;
-}
+};
 
 struct PointsList * readFile(char fileName[]) {
 	File *file;
@@ -46,7 +46,7 @@ struct PointsList * readFile(char fileName[]) {
 	}
 }
 
-struct ArcsPointsAndOffsets * importGML(char arcsFilename[], char pointsFilename[]) {
+struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char pointsFilename[]) {
 	struct ArcsPointsAndOffsets *data = arcsPointsAndOffsets_construct();
 	struct PointsList *readArcs;
 	readArcs = readFile(arcsFilename);
