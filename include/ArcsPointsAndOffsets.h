@@ -8,12 +8,6 @@ struct ArcsPointsAndOffsets {
 	long offsetLongitude;
 };
 
-struct PointsList {
-	struct PointsList *next;
-	struct Point *points; // array
-	int numPoints;
-};
-
 struct ArcsPointsAndOffsets * arcsPointsAndOffsets_construct();
 
 #endif /* CG_ARCSPOINTSANDOFFSETS_H */

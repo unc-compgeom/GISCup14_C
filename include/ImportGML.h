@@ -3,11 +3,17 @@
 
 #include "ArcsPointsAndOffsets.h"
 
-struct CoordinateList {
+struct PointsList {
 	double x;
 	double y;
-	struct CoordinateList *next;
+	struct PointsList *next;
 };
+
+struct PointsArrayList {
+	int numPoints;
+	struct Point points[];
+	struct PointsListList *next;
+}
 
 struct PointsList * importGML_readFile(char fileName[]);
 
