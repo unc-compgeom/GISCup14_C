@@ -34,7 +34,7 @@ struct Edge * edge_oPrev(struct Edge *edge) {
 }
 
 struct Point * edge_orig(struct Edge *edge) {
-	return edge->o;
+	return &(edge->o);
 }
 
 struct Edge * edge_rNext(struct Edge *edge) {

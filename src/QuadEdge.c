@@ -66,28 +66,42 @@ int quadEdge_isWall(struct Edge *edge) {
 }
 
 void quadEdge_makeEdge(struct Edge *edge) {
-	struct Point p1 = {0, 0};
-	struct Point p2 = {0, 0};
-	struct Point p3 = {0, 0};
-	struct Point p4 = {0, 0};
+	struct Point *p1 = (struct Point*) malloc(sizeof(struct Point));
+	p1->x = 0.0;
+	p1->y = 0.0;
+	struct Point *p2 = (struct Point*) malloc(sizeof(struct Point));
+	p2->x = 0.0;
+	p2->y = 0.0;
+	struct Point *p3 = (struct Point*) malloc(sizeof(struct Point));
+	p3->x = 0.0;
+	p4->y = 0.0;
+	struct Point *p4 = (struct Point*) malloc(sizeof(struct Point));
+	p4->x = 0.0;
+	p4->y = 0.0;
 
-	struct Edge e2, e3, e4;
+	struct Edge *e2 = (struct Edge*) malloc(sizeof(struct Edge));
+	struct Edge *e3 = (struct Edge*) malloc(sizeof(struct Edge));
+	struct Edge *e4 = (struct Edge*) malloc(sizeof(struct Edge));
 
-	edge_setOrigin(edge, *p1);
-	edge_setOrigin(&e2, *p2);
-	edge_setOrigin(&e3, *p3);
-	edge_setOrigin(&e4, *p4);
+	edge_setOrigin(edge, &p1);
+	edge_setOrigin(e2, &p2);
+	edge_setOrigin(e3, &p3);
+	edge_setOrigin(e4, &p4);
 
-	edge_setRot(edge, &e2);
-	edge_setRot(&e2, &e3);
-	edge_setRot(&e3, &e4);
-	edge_setRot(&e4, edge);
+	edge_setRot(edge, e2);
+	edge_setRot(e2, e3);
+	edge_setRot(e3, e4);
+	edge_setRot(e4, edge);
 
 	edge_setNext(edge, edge);
-	edge_setNext(&e2, &e4);
-	edge_setNext(&e3, &e3);
-	edge_setNext(&e4, &e2);
+	edge_setNext(e2, e4);
+	edge_setNext(e3, e3);
+	edge_setNext(e4, e2);
 	
+	free(p1);
+	free(p2);
+	free(p3);
+	free(p4);
 }
 
 void quadEdge_splice(struct Edge *a, struct Edge *b) {
