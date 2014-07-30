@@ -16,7 +16,7 @@ struct PointsList * importGML_readFile(char fileName[]) {
 	while(1) {
 		while(1) {
 			fscanf(fp, "%c", &c);
-			printf("%c", c);
+			fputs("%c", c);
 			if (c == '>') {
 				break;
 			}
