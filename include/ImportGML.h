@@ -2,6 +2,7 @@
 #define CG_IMPORTGML_H
 
 #include "ArcsPointsAndOffsets.h"
+
 struct CoordinateList {
 	double x;
 	double y;

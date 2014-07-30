@@ -16,33 +16,29 @@ struct PointsList * importGML_readFile(char fileName[]) {
 	while(1) {
 		while(1) {
 			fscanf(fp, "%c", &c);
-			printf("%c", c);
 			if (c == '>') {
 				break;
 			}
 		}
-		printf("\n");
 		while(1) {
 			fscanf(fp, "%c", &c);
-			printf("%c", c);
 			if (c == '>') {
 				break;
 			}
 		}
-		printf("\n");
 		fscanf(fp, "%lf,%lf ", &x, &y);
 		printf("%lf, %lf ", x, y);
-		struct CoordinateList *coordinateList;
-		coordinateList->x = x;
-		coordinateList->y = y;
+		struct CoordinateList *coordinateList = (struct CoordinateList*) malloc(sizeof(struct CoordinateList));
+		coordinateList.x = x;
+		coordinateList.y = y;
 		while(1) {
 			if(fscanf(fp, "%lf,%lf ", &x, &y) == 0) {
 				break;
 			}
 			printf("%lf, %lf ", x, y);
-			struct CoordinateList *newCoords;
-			newCoords->x = x;
-			newCoords->y = y;
+			struct CoordinateList *newCoords = (struct CoordinateList*) malloc(sizeof(struct CoordinateList));
+			newCoords.x = x;
+			newCoords.y = y;
 			coordinateList->next = newCoords;
 			coordinateList = newCoords;
 		}
