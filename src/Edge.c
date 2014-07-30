@@ -49,12 +49,12 @@ struct Edge * edge_rPrev(struct Edge *edge) {
 	return edge_oNext(edge_sym(edge));
 }
 
-void edge_setCoordinates(struct Edge *edge, struct Point *origin, struct Point *destination) {
+void edge_setCoordinates(struct Edge *edge, struct Point origin, struct Point destination) {
 	edge_setOrigin(edge, origin);
 	edge_setDestination(edge, destination);
 }
 
-void edge_setOrigin(struct Edge *edge, struct Point *origin) {
+void edge_setOrigin(struct Edge *edge, struct Point origin) {
 	edge->o = origin;
 }
 
@@ -62,7 +62,7 @@ void edge_setNext(struct Edge *edge, struct Edge *next) {
 	edge->next = next;
 }
 
-void edge_setDestination(struct Edge *edge, struct Point *destination) {
+void edge_setDestination(struct Edge *edge, struct Point destination) {
 	edge_sym(edge)->o = destination;
 }
 

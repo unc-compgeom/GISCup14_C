@@ -5,7 +5,7 @@
 #include "Point.h"
 
 struct Edge {
-	struct Point *o;
+	struct Point o;
 	struct Edge *next;
 	struct Edge *rot;
 };
@@ -36,14 +36,14 @@ struct Edge * edge_rPrev(struct Edge *edge);
 
 struct Edge * edge_rNext(struct Edge *edge);
 
-void edge_setCoordinates(struct Edge *edge, struct Point *origin, 
-		struct Point * destination);
+void edge_setCoordinates(struct Edge *edge, struct Point origin, 
+		struct Point destination);
 
-void edge_setOrigin(struct Edge *edge, struct Point *origin);
+void edge_setOrigin(struct Edge *edge, struct Point origin);
 
 void edge_setNext(struct Edge *edge, struct Edge *next);
 
-void edge_setDestination(struct Edge *edge, struct Point *destination);
+void edge_setDestination(struct Edge *edge, struct Point destination);
 
 void edge_setRot(struct Edge *edge, struct Edge *rot);
 
