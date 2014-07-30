@@ -3,8 +3,8 @@
 #include "Subdivision.h"
 
 int main() {
-	printf("test\n");
-	struct Subdivision *triangulation;
+	printf("TEST:\n");
+	printf("Generate sample points\n");
 	struct Point points[10];
 	struct Point tmp1 	= 	{0,0};
 	struct Point tmp2 	= 	{1,0};
@@ -16,7 +16,7 @@ int main() {
 	struct Point tmp8 	= 	{1,7};
 	struct Point tmp9	= 	{2,4};
 	struct Point tmp10 	= 	{80, 10};
-	printf("made ten points\n");
+	printf("  Made ten points\n");
 	int i;
 	i = 0;
 	points[i++] = tmp1;
@@ -29,6 +29,8 @@ int main() {
 	points[i++] = tmp8;
 	points[i++] = tmp9;
 	points[i++] = tmp10;
-	printf("inserted ten points\n");
+	printf("  Inserted ten points\n");
+	printf("Began triangulation\n");
+	struct Subdivision *triangulation;
 	triangulation = delaunay_triangulate(points, 10);
 }
