@@ -32,10 +32,10 @@ struct PointsList * readFile(char fileName[]) {
 				break;
 			}
 		}
-		fscanf(file, "%d,%d ", &x, &y);
+		fscanf(file, "%e,%e ", &x, &y);
 		struct CoordinateList *coordinateList = {x, y, 0};
 		while(1) {
-			if(fscanf(file, "%d,%d ", &x, &y) == 0) {
+			if(fscanf(file, "%e,%e ", &x, &y) == 0) {
 				break;
 			}
 			struct CoordinateList *newCoords = {x, y, 0};
