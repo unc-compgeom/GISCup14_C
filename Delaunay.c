@@ -207,8 +207,8 @@ void subdivision_construct(struct Subdivision *s, struct QuadEdge *qe) {
 	quadEdge_construct(qe);
 	struct Edge *startingEdge;
 	startingEdge = quadEdge_getFirst(qe);
-	s = {startingEdge, qe};
-
+	s->startingEdge = startingEdge;
+	s->qe = qe;
 }
 
 void subdivision_insertSite(struct Subdivision *s, struct Point *p) {
