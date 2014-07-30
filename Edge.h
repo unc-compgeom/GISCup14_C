@@ -4,11 +4,11 @@
 
 #include 'Point.h'
 
-typedef struct {
+struct Edge {
 	struct Point *o;
 	struct Edge *next;
 	struct Edge *rot;
-} Edge;
+};
 
 struct Point * edge_dest(struct Edge *edge);
 

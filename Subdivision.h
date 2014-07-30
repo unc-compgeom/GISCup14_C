@@ -4,10 +4,10 @@
 #include 'Point.h'
 #include 'Edge.h'
 
-typedef struct {
+struct Subdivision{
 	struct Edge *startingEdge;
 	struct QuadEdge *qe;
-} Subdivision;
+};
 
 struct Subdivision * subdivision_construct();
 

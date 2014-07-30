@@ -1,10 +1,10 @@
 #ifndef CG_POINT_H
 #define CG_POINT_H
 
-typedef struct {
+struct Point {
 	float x;
 	float y;
-} Point;
+};
 
 int point_compare(struct Point * point1, struct Point * point2);
 

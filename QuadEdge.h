@@ -3,9 +3,9 @@
 
 #include 'Edge.h'
 
-typedef struct {
+struct QuadEdge {
 	struct Edge *first;
-} QuadEdge;
+};
 
 struct QuadEdge * quadEdge_construct();
 
