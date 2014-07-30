@@ -1,26 +1,26 @@
-IDIR =../include
-CC=gcc
-CFLAGS=-I$(IDIR)
+INCLUDEDIR =../include
+CCOMPILER=gcc
+CFLAGS=-I$(INCLUDEDIR)
 
-ODIR=obj
-LDIR =../lib
+OBJECTDIR=obj
+LIBRARYDIR =../lib
 
-LIBS=-lm
+LIBRARIES=-lm
 
-_DEPS = Delaunay.h Subdivision.h QuadEdge.h Edge.h Point.h Predicate.h
-DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
+_DEPENDENCIES = Delaunay.h Subdivision.h QuadEdge.h Edge.h Point.h Predicate.h
+DEPENDENCIES = $(patsubst %,$(INCLUDEDIR)/%,$(_DEPENDENCIES))
 
-_OBJ = Main.o Delaunay.o Subdivision.o QuadEdge.o Edge.o Point.o Predicate.o;
-OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
+_OBJECTS = Main.o Delaunay.o Subdivision.o QuadEdge.o Edge.o Point.o Predicate.o;
+OBJECTS = $(patsubst %,$(OBJECTDIR)/%,$(_OBJECTS))
 
 
-$(ODIR)/%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+$(OBJECTDIR)/%.o: %.c $(DEPENDENCIES)
+	$(CCOMPILER) -c -o $@ $< $(CFLAGS)
 
-hellomake: $(OBJ)
-	gcc -o $@ $^ $(CFLAGS) $(LIBS)
+triangulate: $(OBJECTS)
+	gcc -o $@ $^ $(CFLAGS) $(LIBRARIES)
 
 .PHONY: clean
 
 clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
+	rm -f $(OBJECTDIR)/*.o *~ core $(INCDIR)/*~ 
