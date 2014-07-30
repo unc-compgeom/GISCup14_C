@@ -1,16 +1,15 @@
 #ifndef CG_SUBDIVISION_H
 #define CG_SUBDIVISION_H
-
 #include "Point.h"
 #include "Edge.h"
 #include "QuadEdge.h"
 
-struct Subdivision{
+struct Subdivision {
 	struct Edge *startingEdge;
 	struct QuadEdge *qe;
 };
 
-void subdivision_construct(struct Subdivision *s, struct QuadEdge *qe);
+struct Subdivision * subdivision_construct();
 
 void subdivision_insertSite(struct Subdivision *s, struct Point *p);
 

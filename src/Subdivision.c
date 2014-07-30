@@ -6,23 +6,23 @@
 #include "Null.h"
 #include <stdlib.h> 
 
-void subdivision_construct(struct Subdivision *s, struct QuadEdge *qe) {
-	quadEdge_construct(qe);
-	struct Edge *startingEdge = (struct Edge*) malloc(sizeof(struct Edge));;
-	startingEdge = quadEdge_getFirst(qe);
-	s->startingEdge = startingEdge;
-	s->qe = qe;
+struct Subdivision * subdivision_construct();
+	struct Subdivision *s;// = (struct Subdivision*) malloc(sizeof(struct Subdivision));
+	// struct QuadEdge *qe = quadEdge_construct();
+	// s->qe = qe;
+	// s->startingEdge = quadEdge_getFirst(&s->qe);
+	return s;
 }
 
 void subdivision_insertSite(struct Subdivision *s, struct Point *p) {
-	struct Edge *e = (struct Edge*) malloc(sizeof(size Edge));
+	struct Edge *e = (struct Edge*) malloc(sizeof(struct Edge));
 	e = subdivision_locate(s, p);
 	if (predicate_onEdge(p, e)) {
 		e = edge_oPrev(e);
 		quadEdge_deleteEdge(edge_oNext(e));
 	}
-	struct Edge *base = (struct Edge*) malloc(sizeof(struct Edge));
-	quadEdge_makeEdge(base);
+	struct Edge *base;
+	base = quadEdge_makeEdge();
 	struct Point tmpDest = {p->x, p->y};
 	edge_setCoordinates(base, *edge_orig(e), tmpDest);
 	quadEdge_splice(base, e);

@@ -7,7 +7,7 @@ struct QuadEdge {
 	struct Edge *first;
 };
 
-void quadEdge_construct(struct QuadEdge *qe);
+struct QuadEdge * quadEdge_construct();
 
 struct Edge * quadEdge_connect(struct Edge *a, struct Edge *b);
 

@@ -4,8 +4,9 @@
 #include "Null.h"
 #include <stdlib.h> 
 
-void quadEdge_construct(struct QuadEdge *qe) {
+struct QuadEdge * quadEdge_construct() {
 	// initialize the triangle
+	struct QuadEdge *qe = (struct QuadEdge*) malloc(sizeof(struct QuadEdge));
 	int scale;
 	scale = 536870912;
 	struct Point *a = (struct Point*) malloc(sizeof(struct Point));
@@ -18,17 +19,17 @@ void quadEdge_construct(struct QuadEdge *qe) {
 	c->x = 2 * scale;
 	c->y = -1 * scale;
 
-	struct Edge *ea = (struct Edge*) malloc(sizeof(struct Edge));
-	quadEdge_makeEdge(ea);
+	struct Edge *ea;
+	ea = quadEdge_makeEdge();
 	edge_setCoordinates(ea, *a, *b);
 
-	struct Edge *eb = (struct Edge*) malloc(sizeof(struct Edge));
-	quadEdge_makeEdge(eb);
+	struct Edge *eb;
+	eb = quadEdge_makeEdge();
 	edge_setCoordinates(eb, *b, *c);
 	quadEdge_splice(edge_sym(ea), eb);
 
-	struct Edge *ec = (struct Edge*) malloc(sizeof(struct Edge));
-	quadEdge_makeEdge(ec);
+	struct Edge *ec;
+	ec = quadEdge_makeEdge();
 	edge_setCoordinates(ec, *c, *a);
 	quadEdge_splice(edge_sym(eb), ec);
 
@@ -39,11 +40,13 @@ void quadEdge_construct(struct QuadEdge *qe) {
 	free(a);
 	free(b);
 	free(c);
+
+	return qe;
 }
 
 struct Edge * quadEdge_connect(struct Edge *a, struct Edge *b) {
-	struct Edge *e = (struct Edge*) malloc(sizeof(struct Edge));
-	quadEdge_makeEdge(e);
+	struct Edge *e;
+	e = quadEdge_makeEdge();
 	edge_setCoordinates(e, *edge_dest(a), *edge_orig(b));
 	quadEdge_splice(edge_sym(e), b);
 	return e;
