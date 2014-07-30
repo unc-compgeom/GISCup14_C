@@ -1,24 +1,25 @@
 IDIR = ../include
-CCOMPILER = gcc
+CC = gcc
 CFLAGS = -I$(IDIR)
 
-OBJECTDIR = ./obj
+ODIR = obj
+LDIR = ../lib
 
-LIBRARIES = -lm #Math library
+LIBS = -lm #Math library
 
-_DEPENDENCIES = Delaunay.h Subdivision.h QuadEdge.h Edge.h Point.h Predicate.h
-DEPENDENCIES = $(patsubst %,$(IDIR)/%,$(_DEPENDENCIES))
+_DEPS = Delaunay.h Subdivision.h QuadEdge.h Edge.h Point.h Predicate.h
+DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJECTS = Main.o Delaunay.o Subdivision.o QuadEdge.o Edge.o Point.o Predicate.o;
-OBJECTS = $(patsubst %, $(OBJECTDIR)/%,$(_OBJ))
+_OBJ = Main.o Delaunay.o Subdivision.o QuadEdge.o Edge.o Point.o Predicate.o;
+OBJ = $(patsubst %, $(ODIR)/%,$(_OBJ))
 
-$(OBJECTDIR)/%.o: %.c $(DEPENDENCIES)
-		$(CCOMPILER) -c -o $@ $< $(CFLAGS)
+$(ODIR)/%.o: %.c $(DEPS)
+		$(CC) -c -o $@ $< $(CFLAGS)
 
-Triangulate: $(OBJECTS)
-	$(CCOMPILER) -o $@ $^ $(CFLAGS)
+Triangulate: $(OBJ)
+	gcc -o $@ $^ $(CFLAGS) $(LIBS)
 
 .PHONY: clean
 
 clean:
-	rm -f $(OBJECTDIR)/*.o *~ core $(IDIR)/*~
+	rm -f $(ODIR)/*.o *~ core $(IDIR)/*~
