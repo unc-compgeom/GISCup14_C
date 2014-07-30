@@ -9,7 +9,7 @@
 struct Subdivision * subdivision_construct() {
 	struct Subdivision *s = (struct Subdivision*) malloc(sizeof(struct Subdivision));
 	s->qe = quadEdge_construct();
-	s->startingEdge = quadEdge_getFirst(s->qe);
+	s->startingEdge = s->qe->first;
 }
 
 void subdivision_insertSite(struct Subdivision *s, struct Point *p) {

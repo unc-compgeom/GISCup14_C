@@ -7,15 +7,16 @@
 struct QuadEdge * quadEdge_construct() {
 	struct QuadEdge *qe = (struct QuadEdge*) malloc(sizeof(struct QuadEdge));
 	// initialize the triangle
+	struct Point *a = (struct Point*) malloc(sizeof(struct Point));
+	struct Point *b = (struct Point*) malloc(sizeof(struct Point));
+	struct Point *c = (struct Point*) malloc(sizeof(struct Point));
+
 	int scale;
 	scale = 536870912;
-	struct Point *a = (struct Point*) malloc(sizeof(struct Point));
 	a->x = -1 * scale - 1;
 	a->y = 2 * scale;
-	struct Point *b = (struct Point*) malloc(sizeof(struct Point));
 	b->x = -1 * scale;
 	b->y = -1 * scale;
-	struct Point *c = (struct Point*) malloc(sizeof(struct Point));
 	c->x = 2 * scale;
 	c->y = -1 * scale;
 
@@ -54,23 +55,6 @@ struct Edge * quadEdge_connect(struct Edge *a, struct Edge *b) {
 void quadEdge_deleteEdge(struct Edge *edge) {
 	quadEdge_splice(edge, edge_oPrev(edge));
 	quadEdge_splice(edge_sym(edge), edge_oPrev(edge_sym(edge)));
-}
-
-struct Edge * quadEdge_getFirst(struct QuadEdge *qe) {
-	int count;
-	count = 0;
-	struct Edge *e = qe->first;
-	do {
-		if (0 == count++) {
-			return e;
-		}
-		if (quadEdge_isWall(e) || quadEdge_isWall(edge_sym(e))) {
-			e = edge_rPrev(e);
-		} else {
-			e = edge_oNext(e);
-		}
-	} while (e != qe->first);
-	return NULL;
 }
 
 int quadEdge_isWall(struct Edge *edge) {

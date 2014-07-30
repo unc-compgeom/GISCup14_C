@@ -13,8 +13,6 @@ struct Edge * quadEdge_connect(struct Edge *a, struct Edge *b);
 
 void quadEdge_deleteEdge(struct Edge *edge);
 
-struct Edge * quadEdge_getFirst(struct QuadEdge *q);
-
 int quadEdge_isWall(struct Edge *edge);
 
 struct Edge * quadEdge_makeEdge();
