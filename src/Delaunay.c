@@ -7,8 +7,8 @@
 
 ///////////////// DELAUNAY TRIANGULATION /////////////////
 struct Subdivision * delaunay_triangulate(struct Point points[], int numPoints) {
-	struct Subdivision *s = (struct Subdivision*) malloc(sizeof(struct Subdivision));
-	subdivision_construct(s);
+	struct Subdivision *s;
+	s = subdivision_construct();
 	int i;
 	printf("constructed subdivision\n");
 	for (i = 0; i < numPoints; i++) {
