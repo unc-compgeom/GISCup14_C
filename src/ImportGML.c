@@ -1,5 +1,6 @@
 #include "ImportGML.h"
 #include "ArcsPointsAndOffsets.h"
+#include "Point.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -51,7 +52,7 @@ struct PointsList * importGML_readFile(char fileName[]) {
 
 
 		// process list into an array
-		struct Point[] points = (struct Point[]) malloc(sizeof(struct Point)*numberOfCoordinates);
+		struct Point *points = (struct Point*) malloc(sizeof(struct Point)*numberOfCoordinates);
 		importedPoints->points = points;
 		importedPoints->numPoints = numberOfCoordinates;
 		int i;
@@ -86,7 +87,7 @@ struct PointsList * importGML_readFile(char fileName[]) {
 		}
 		importedPoints->next = 	(struct PointsArrayList*) malloc(sizeof(struct PointsArrayList));	
 	}
-	return frontOfList;
+	return importedPoints;
 }
 
 struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char pointsFilename[]) {
@@ -98,6 +99,6 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 	readPoints = importGML_readFile(pointsFilename);
 
 	// find the minimum latitude and longitude
-	double minimumLatitude = 
+	double minimumLatitude = 0;
 	return data;
 }

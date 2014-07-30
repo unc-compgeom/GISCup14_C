@@ -11,9 +11,9 @@ struct PointsList {
 
 struct PointsArrayList {
 	int numPoints;
-	struct Point points[];
+	struct Point *points;
 	struct PointsListList *next;
-}
+};
 
 struct PointsList * importGML_readFile(char fileName[]);
 
