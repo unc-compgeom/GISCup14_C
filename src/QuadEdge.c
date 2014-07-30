@@ -21,18 +21,17 @@ struct QuadEdge * quadEdge_construct() {
 
 	struct Edge *ea;
 	ea = quadEdge_makeEdge();
-	edge_setCoordinates(ea, *a, *b);
-
 	struct Edge *eb;
 	eb = quadEdge_makeEdge();
-	edge_setCoordinates(eb, *b, *c);
-	quadEdge_splice(edge_sym(ea), eb);
-
 	struct Edge *ec;
 	ec = quadEdge_makeEdge();
-	edge_setCoordinates(ec, *c, *a);
-	quadEdge_splice(edge_sym(eb), ec);
 
+	edge_setCoordinates(ea, *a, *b);
+	edge_setCoordinates(eb, *b, *c);
+	edge_setCoordinates(ec, *c, *a);
+
+	quadEdge_splice(edge_sym(ea), eb);
+	quadEdge_splice(edge_sym(eb), ec);
 	quadEdge_splice(edge_sym(ec), ea);
 
 	qe->first = ec;
