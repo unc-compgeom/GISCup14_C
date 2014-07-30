@@ -5,7 +5,7 @@
 
 struct PointsList * readFile(char fileName[]) {
 	File * fp;
-	fp = fopen(fpName, "r");
+	fp = fopen(fileName, "r");
 	if (!fp) {
 		printf("Error opening file %s\n", fileName);
 		exit(1);
@@ -27,7 +27,9 @@ struct PointsList * readFile(char fileName[]) {
 			}
 		}
 		fscanf(fp, "%lf,%lf ", &x, &y);
-		struct CoordinateList *coordinateList = {x, y, 0};
+		struct CoordinateList *coordinateList;
+		coordinateList->x = x;
+		coordinateList->y = y;
 		while(1) {
 			if(fscanf(fp, "%lf,%lf ", &x, &y) == 0) {
 				break;
