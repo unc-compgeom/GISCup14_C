@@ -55,8 +55,8 @@ void edge_setCoordinates(struct Edge *edge, struct Point origin, struct Point de
 }
 
 void edge_setOrigin(struct Edge *edge, struct Point origin) {
-	edge->o->x = origin->x;
-	edge->o->y = origin->y;
+	edge->o.x = origin.x;
+	edge->o.y = origin.y;
 }
 
 void edge_setNext(struct Edge *edge, struct Edge *next) {
@@ -64,8 +64,8 @@ void edge_setNext(struct Edge *edge, struct Edge *next) {
 }
 
 void edge_setDestination(struct Edge *edge, struct Point destination) {
-	edge_sym(edge)->o->x = destination->x;
-	edge_sym(edge)->o->y = destination->y;
+	edge_sym(edge)->o.x = destination.x;
+	edge_sym(edge)->o.y = destination.y;
 }
 
 void edge_setRot(struct Edge *edge, struct Edge *rot) {
