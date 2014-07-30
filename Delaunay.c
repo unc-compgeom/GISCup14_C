@@ -243,7 +243,7 @@ void subdivision_insertSite(struct Subdivision *s, struct Point *p) {
 
 struct Edge * subdivision_locate(struct Subdivision *s, struct Point *q) {
 	struct Edge *e = s->startingEdge;
-	if (!preciate_rightOrAhead(edge_dest(e), edge_orig(e), q)) {
+	if (!predicate_rightOrAhead(edge_dest(e), edge_orig(e), q)) {
 		e = edge_sym(e);
 	}
 	struct Point *p = edge_orig(e);
@@ -324,7 +324,7 @@ int predicate_rightOrAhead(struct Point *p, struct Point *q,
 	double tmp = predicate_triArea(p, q, r);
 	return tmp < 0 || tmp == 0 && predicate_ahead(p, q, r);
 }
-double triArea(struct Point *a, struct Point *b, struct Point *c) {
+double predicate_triArea(struct Point *a, struct Point *b, struct Point *c) {
 	float bax = b->x - a->x;
 	float cay = c->y - a->y;
 	float bay = b->y - a->y;
@@ -333,7 +333,7 @@ double triArea(struct Point *a, struct Point *b, struct Point *c) {
 }
 
 ///////////////// DELAUNAY TRIANGULATION /////////////////
-struct Subdivision * triangulate(struct Point points[], int numPoints) {
+struct Subdivision * delaunay_triangulate(struct Point points[], int numPoints) {
 	struct Subdivision *s;
 	struct QuadEdge *qe;
 	subdivision_construct(s, qe);

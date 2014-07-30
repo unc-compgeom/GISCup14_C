@@ -3,6 +3,6 @@
 
 #include "Point.h"
 
-struct Subdivision * triangulate(struct Point points[], int numPoints);
+struct Subdivision * delaunay_triangulate(struct Point points[], int numPoints);
 
 #endif /* CG_DELAUNAY_H */
