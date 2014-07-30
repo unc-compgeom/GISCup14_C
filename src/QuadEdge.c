@@ -76,7 +76,8 @@ int quadEdge_isWall(struct Edge *edge) {
 			point_compare(edge_orig(edge_lNext(edge)), edge_orig(edge_lPrev(edge))) > 0;
 }
 
-void quadEdge_makeEdge(struct Edge *edge) {
+struct Edge * quadEdge_makeEdge() {
+	struct Edge *edge = (struct Edge*) malloc(sizeof(struct Edge));
 	struct Edge *e2 = (struct Edge*) malloc(sizeof(struct Edge));
 	struct Edge *e3 = (struct Edge*) malloc(sizeof(struct Edge));
 	struct Edge *e4 = (struct Edge*) malloc(sizeof(struct Edge));
@@ -90,6 +91,8 @@ void quadEdge_makeEdge(struct Edge *edge) {
 	edge_setNext(e2, e4);
 	edge_setNext(e3, e3);
 	edge_setNext(e4, e2);
+
+	return edge;
 }
 
 void quadEdge_splice(struct Edge *a, struct Edge *b) {

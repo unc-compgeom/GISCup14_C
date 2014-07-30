@@ -4,6 +4,7 @@
 #include "Point.h"
 #include "Predicate.h"
 #include "Null.h"
+#include <stdlib.h> 
 
 void subdivision_construct(struct Subdivision *s, struct QuadEdge *qe) {
 	quadEdge_construct(qe);
@@ -14,13 +15,13 @@ void subdivision_construct(struct Subdivision *s, struct QuadEdge *qe) {
 }
 
 void subdivision_insertSite(struct Subdivision *s, struct Point *p) {
-	struct Edge *e;
+	struct Edge *e = (struct Edge*) malloc(sizeof(size Edge));
 	e = subdivision_locate(s, p);
 	if (predicate_onEdge(p, e)) {
 		e = edge_oPrev(e);
 		quadEdge_deleteEdge(edge_oNext(e));
 	}
-	struct Edge *base;
+	struct Edge *base = (struct Edge*) malloc(sizeof(struct Edge));
 	quadEdge_makeEdge(base);
 	struct Point tmpDest = {p->x, p->y};
 	edge_setCoordinates(base, *edge_orig(e), tmpDest);

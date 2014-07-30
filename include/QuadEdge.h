@@ -17,7 +17,7 @@ struct Edge * quadEdge_getFirst(struct QuadEdge *q);
 
 int quadEdge_isWall(struct Edge *edge);
 
-void quadEdge_makeEdge(struct Edge *edge);
+struct Edge * quadEdge_makeEdge();
 
 void quadEdge_splice(struct Edge *a, struct Edge *b);
 
