@@ -13,7 +13,7 @@ struct Subdivision * delaunay_triangulate(struct Point points[], int numPoints) 
 	int i;
 	printf("constructed subdivision\n");
 	for (i = 0; i < numPoints; i++) {
-		subdivision_insertSite(s, points[i]);
+		subdivision_insertSite(s, &points[i]);
 		printf("inserted point %d\n", i);
 	}
 	return s;
