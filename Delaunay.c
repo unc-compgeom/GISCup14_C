@@ -4,7 +4,7 @@
 #include "Subdivision.h"
 #include "Predicate.h"
 #include "Delaunay.h"
-#include <cstdlib>
+#define NULL 0
 
 ///////////////// POINT /////////////////
 int point_compare(struct Point * point1, struct Point * point2) {
