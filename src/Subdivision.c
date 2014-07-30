@@ -6,7 +6,7 @@
 #include "Null.h"
 #include <stdlib.h> 
 
-void subdivision_construct(struct Subdivision *s, struct QuadEdge *qe) {
+void subdivision_construct(struct Subdivision *s) {
 	struct QuadEdge *qe;
 	qe = quadEdge_construct();
 	struct Edge *startingEdge = (struct Edge*) malloc(sizeof(struct Edge));;
