@@ -43,9 +43,9 @@ void edge_setOrigin(struct Edge *edge, struct Point *origin);
 
 void edge_setNext(struct Edge *edge, struct Edge *next);
 
-void edge_setDestination(struct Edge *edge, struct Point * estination);
+void edge_setDestination(struct Edge *edge, struct Point *destination);
 
-void edge_setRot(struct Edge *edge, struct Edge * ot);
+void edge_setRot(struct Edge *edge, struct Edge *rot);
 
 struct Edge * edge_sym(struct Edge *edge);
 

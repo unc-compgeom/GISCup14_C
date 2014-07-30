@@ -7,20 +7,20 @@ struct QuadEdge {
 	struct Edge *first;
 };
 
-struct QuadEdge * quadEdge_construct();
+void quadEdge_construct(struct QuadEdge *qe);
 
 struct Edge * quadEdge_connect(struct Edge *a, struct Edge *b);
 
-void quadEdge_deleteEdge(struct Edge * e);
+void quadEdge_deleteEdge(struct Edge *edge);
 
 struct Edge * quadEdge_getFirst(struct QuadEdge *q);
 
-int quadEdge_isWall(struct Edge * e);
+int quadEdge_isWall(struct Edge *edge);
 
-struct Edge * quadEdge_makeEdge();
+void quadEdge_makeEdge(struct Edge *edge);
 
 void quadEdge_splice(struct Edge *a, struct Edge *b);
 
-void quadEdge_swap(struct Edge *e);
+void quadEdge_swap(struct Edge *edge);
 
 #endif /* CG_QUADEDGE_H */

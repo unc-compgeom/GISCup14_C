@@ -3,13 +3,14 @@
 
 #include "Point.h"
 #include "Edge.h"
+#include "QuadEdge.h"
 
 struct Subdivision{
 	struct Edge *startingEdge;
 	struct QuadEdge *qe;
 };
 
-struct Subdivision * subdivision_construct();
+struct Subdivision * subdivision_construct(struct QuadEdge *qe);
 
 void subdivision_insertSite(struct Subdivision *s, struct Point *p);
 

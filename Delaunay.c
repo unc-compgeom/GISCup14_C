@@ -4,6 +4,7 @@
 #include "Subdivision.h"
 #include "Predicate.h"
 #include "Delaunay.h"
+#include <cstdlib>
 
 ///////////////// POINT /////////////////
 int point_compare(struct Point * point1, struct Point * point2) {
@@ -63,24 +64,24 @@ struct Edge * edge_rPrev(struct Edge *edge) {
 	return edge_oNext(edge_sym(edge));
 }
 
-void edge_setCoordinates(struct Edge *edge, struct Point * origin, struct Point * destination) {
+void edge_setCoordinates(struct Edge *edge, struct Point *origin, struct Point *destination) {
 	edge_setOrigin(edge, origin);
 	edge_setDestination(edge, destination);
 }
 
-void edge_setOrigin(struct Edge *edge, struct Point * origin) {
+void edge_setOrigin(struct Edge *edge, struct Point *origin) {
 	edge->o = origin;
 }
 
-void edge_setNext(struct Edge *edge, struct Edge * next) {
+void edge_setNext(struct Edge *edge, struct Edge *next) {
 	edge->next = next;
 }
 
-void edge_setDestination(struct Edge *edge, struct Point * destination) {
+void edge_setDestination(struct Edge *edge, struct Point *destination) {
 	edge_sym(edge)->o = destination;
 }
 
-void edge_setRot(struct Edge *edge, struct Edge * rot) {
+void edge_setRot(struct Edge *edge, struct Edge *rot) {
 	edge->rot = rot;
 }
 
@@ -89,7 +90,7 @@ struct Edge * edge_sym(struct Edge *edge) {
 }
 
 ///////////////// QUADEDGE /////////////////
-struct QuadEdge * quadEdge_construct() {
+void quadEdge_construct(struct QuadEdge *qe) {
 	// initialize the triangle
 	int scale;
 	scale = 536870912;
@@ -97,36 +98,39 @@ struct QuadEdge * quadEdge_construct() {
 	struct Point b = {-1 * scale, -1 * scale};
 	struct Point c = {2 * scale, -1 * scale};
 
-	struct Edge *ea = quadEdge_makeEdge();
+	struct Edge *ea;
+	quadEdge_makeEdge(ea);
 	edge_setCoordinates(ea, &a, &b);
 
-	struct Edge *eb = quadEdge_makeEdge();
-	edge_setCoordinates(&eb, &b, &c);
+	struct Edge *eb;
+	quadEdge_makeEdge(eb);
+	edge_setCoordinates(eb, &b, &c);
 	quadEdge_splice(edge_sym(ea), eb);
 
-	struct Edge *ec = quadEdge_makeEdge();
-	edge_setCoordinates(&ec, &c, &a);
+	struct Edge *ec;
+	quadEdge_makeEdge(ec);
+	edge_setCoordinates(ec, &c, &a);
 	quadEdge_splice(edge_sym(eb), ec);
 
 	quadEdge_splice(edge_sym(ec), ea);
 
-	struct QuadEdge qe = {&ec};
-	return &qe;
+	qe->first = ec;
 }
 
 struct Edge * quadEdge_connect(struct Edge *a, struct Edge *b) {
-	struct Edge *e = quadEdge_makeEdge();
+	struct Edge *e;
+	quadEdge_makeEdge(e);
 	edge_setCoordinates(e, edge_dest(a), edge_orig(b));
 	quadEdge_splice(edge_sym(e), b);
 	return e;
 }
 
-void quadEdge_deleteEdge(struct Edge * e) {
+void quadEdge_deleteEdge(struct Edge *edge) {
 	quadEdge_splice(e, edge_oPrev(e));
 	quadEdge_splice(edge_sym(e), edge_oPrev(edge_sym(e)));
 }
 
-struct Edge * quadEdge_getFirst(struct QuadEdge *q) {
+struct Edge * quadEdge_getFirst(struct QuadEdge *qe) {
 	int count;
 	count = 0;
 	struct Edge *e = q->first;
@@ -143,35 +147,34 @@ struct Edge * quadEdge_getFirst(struct QuadEdge *q) {
 	return NULL;
 }
 
-int quadEdge_isWall(struct Edge * e) {
+int quadEdge_isWall(struct Edge *edge) {
 	return  point_compare(edge_orig(e), edge_orig(edge_lNext(e))) >= 0 &&
 			point_compare(edge_orig(edge_lNext(e)), edge_orig(edge_lPrev(e))) > 0;
 }
 
-struct Edge * quadEdge_makeEdge() {
+void quadEdge_makeEdge(struct Edge *edge) {
 	struct Point p1 = {0, 0};
 	struct Point p2 = {0, 0};
 	struct Point p3 = {0, 0};
 	struct Point p4 = {0, 0};
 
-	struct Edge e1, e2, e3, e4;
+	struct Edge e2, e3, e4;
 
-	edge_setOrigin(&e1, &p1);
+	edge_setOrigin(edge, &p1);
 	edge_setOrigin(&e2, &p2);
 	edge_setOrigin(&e3, &e3);
 	edge_setOrigin(&e4, &e4);
 
-	edge_setRot(&e1, &e2);
+	edge_setRot(edge, &e2);
 	edge_setRot(&e2, &e3);
 	edge_setRot(&e3, &e4);
-	edge_setRot(&e4, &e1);
+	edge_setRot(&e4, edge);
 
-	edge_setNext(&e1, &e1);
+	edge_setNext(edge, edge);
 	edge_setNext(&e2, &e4);
 	edge_setNext(&e3, &e3);
 	edge_setNext(&e4, &e2);
 	
-	return &e1;
 }
 
 void quadEdge_splice(struct Edge *a, struct Edge *b) {
@@ -200,19 +203,22 @@ void quadEdge_swap(struct Edge *e) {
 }
 
 ///////////////// SUBDIVISION /////////////////
-struct Subdivision * subdivision_construct() {
-	QuadEdge *qe = quadEdge_construct();
-	struct Edge *startingEdge = quadEdge_getFirst(qe);
-	Subdivision s = {startingEdge, qe};
+struct Subdivision * subdivision_construct(struct QuadEdge *qe) {
+	quadEdge_construct(qe);
+	struct Edge *startingEdge;
+	startingEdge = quadEdge_getFirst(qe);
+	struct Subdivision s = {startingEdge, qe};
 }
 
 void subdivision_insertSite(struct Subdivision *s, struct Point *p) {
-	struct Edge *e = subdivision_locate(p);
+	struct Edge *e;
+	e = subdivision_locate(p);
 	if (predicate_onEdge(p, e)) {
 		e = edge_oPrev(e);
 		quadEdge_deleteEdge(edge_oNext(e));
 	}
-	struct Edge *base = quadEdge_makeEdge();
+	struct Edge *base;
+	base = quadEdge_makeEdge();
 	struct Point tmpDest = {p->x, p->y};
 	edge_setCoordinates(base, edge_orig(e), &tmpDest);
 	quadEdge_splice(base, e);
@@ -226,7 +232,7 @@ void subdivision_insertSite(struct Subdivision *s, struct Point *p) {
 		if (predicate_rightOf(edge_dest(t), e) && predicate_isPointInCircle(p, edge_orig(e), edge_dest(t), edge_dest(e))) {
 			quadEdge_swap(e);
 			e = edge_oPrev(e);
-		} else if (edge_oNext(e) == startingEdge) {
+		} else if (edge_oNext(e) == s->startingEdge) {
 			return;
 		} else {
 			e = edge_lPrev(edge_oNext(e));
