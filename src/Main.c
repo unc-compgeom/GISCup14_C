@@ -1,8 +1,13 @@
 #include <stdio.h>
 #include "Delaunay.h"
 #include "Subdivision.h"
+#include "ArcsPointsAndOffsets.h"
+#include "ImportGML.h"
 
 int main() {
+	struct ArcsPointsAndOffsets *importedStuff;
+	importedStuff = importGML_importGML("td1/lines_out.txt", "td1/points_out.txt");
+	/*
 	printf("TEST:\n");
 	printf("Generate sample points\n");
 	struct Point points[10];
@@ -33,4 +38,5 @@ int main() {
 	printf("Began triangulation\n");
 	struct Subdivision *triangulation;
 	triangulation = delaunay_triangulate(points, 10);
+	*/
 }
