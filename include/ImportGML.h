@@ -8,7 +8,8 @@ struct CoordinateList {
 	struct CoordinateList *next;
 };
 
-struct PointsList * readFile(char fileName[]);
+struct PointsList * importGML_readFile(char fileName[]);
+
 struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char pointsFilename[]);
 
 #endif /* #ifndef CG_IMPORTGML_H */
