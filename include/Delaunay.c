@@ -14,7 +14,3 @@ struct Subdivision * delaunay_triangulate(struct Point points[], int numPoints) 
 	}
 	return s;
 }
-
-int main() {
-
-}
