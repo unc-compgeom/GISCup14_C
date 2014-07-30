@@ -3,12 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct CoordinateList {
-	double x;
-	double y;
-	struct CoordinateList *next;
-};
-
 struct PointsList * readFile(char fileName[]) {
 	File *file;
 	file = fopen(fileName, "r");
@@ -32,10 +26,10 @@ struct PointsList * readFile(char fileName[]) {
 				break;
 			}
 		}
-		fscanf(file, "%e,%e ", &x, &y);
+		fscanf(file, "%lf,%lf ", &x, &y);
 		struct CoordinateList *coordinateList = {x, y, 0};
 		while(1) {
-			if(fscanf(file, "%e,%e ", &x, &y) == 0) {
+			if(fscanf(file, "%lf,%lf ", &x, &y) == 0) {
 				break;
 			}
 			struct CoordinateList *newCoords = {x, y, 0};
@@ -43,12 +37,14 @@ struct PointsList * readFile(char fileName[]) {
 			coordinateList = newCoords;
 		}
 
-
+		struct PointsList *p = (struct PointsList*) malloc(sizeof(struct PointsList));
+		return p;
 	}
 }
 
 struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char pointsFilename[]) {
-	struct ArcsPointsAndOffsets *data = arcsPointsAndOffsets_construct();
+	struct ArcsPointsAndOffsets *data;
+	data = arcsPointsAndOffsets_construct();
 	struct PointsList *readArcs;
 	readArcs = readFile(arcsFilename);
 	struct PointsList *readPoints;
