@@ -92,8 +92,10 @@ int main() {
 	arcIterator = importedStuff->arcs;
 
 	while(arcIterator->next != 0) {
+		simplifiedArcsEnd->numPoints = 0;
 		if (arcIterator->numPoints < 4) {
 			simplifiedArcsEnd->points = arcIterator->points;
+			simplifiedArcsEnd->numPoints = arcIterator->numPoints;
 		} else {
 			// locate each edge;
 			struct Edge *locatedEdges[arcIterator->numPoints];
@@ -155,6 +157,7 @@ int main() {
 				simplified[0] = arcIterator->points[0];
 				simplified[1] = arcIterator->points[arcIterator->numPoints - 1];
 				simplifiedArcsEnd->points = simplified;
+				simplifiedArcsEnd->numPoints = 2;
 			} else {
 				int size;
 				size = term - start + 3;
@@ -167,6 +170,7 @@ int main() {
 				}
 				simplified[index] = arcIterator->points[arcIterator->numPoints - 1];
 				simplifiedArcsEnd->points = simplified;
+				simplifiedArcsEnd->numPoints = size;
 			}
 
 		}
@@ -175,7 +179,6 @@ int main() {
 		arcIterator = arcIterator->next;
 	}
 	// tmp debugging code to print all points
-	struct PointArrayList *arcIterator;
 	arcIterator = simplifiedArcs;
 	while(arcIterator->next != 0) {
 		int n;
