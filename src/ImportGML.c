@@ -112,15 +112,15 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 	double minimumLatitude = readArcs->points[0].x;
 	double minimumLongitude = readArcs->points[0].y;
 	int i;
-	struct PointsArrayList listIterator*;
+	struct PointsArrayList *listIterator;
 	listIterator = readArcs;
 	while(listIterator->next != 0) {
 		for (i = 0; i < listIterator->numPoints; i++) {
-			if (listIterator->points[i]->x < minimumLatitude) {
-				minimumLatitude = listIterator->points[i]->x;
+			if (listIterator->points[i].x < minimumLatitude) {
+				minimumLatitude = listIterator->points[i].x;
 			}
-			if (listIterator->points[i]->y < minimumLongitude) {
-				minimumLongitude = listIterator->points[i]->y;
+			if (listIterator->points[i].y < minimumLongitude) {
+				minimumLongitude = listIterator->points[i].y;
 			}
 		}
 		listIterator = listIterator->next;
@@ -128,11 +128,11 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 	listIterator = readPoints;
 	while(listIterator->next != 0) {
 		for (i = 0; i < listIterator->numPoints; i++) {
-			if (listIterator->points[i]->x < minimumLatitude) {
-				minimumLatitude = listIterator->points[i]->x;
+			if (listIterator->points[i].x < minimumLatitude) {
+				minimumLatitude = listIterator->points[i].x;
 			}
-			if (listIterator->points[i]->y < minimumLongitude) {
-				minimumLongitude = listIterator->points[i]->y;
+			if (listIterator->points[i].y < minimumLongitude) {
+				minimumLongitude = listIterator->points[i].y;
 			}
 		}
 		listIterator = listIterator->next;
