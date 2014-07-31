@@ -22,6 +22,7 @@ int main() {
 	listIterator = importedStuff->points;
 	while(listIterator->next != 0) {
 		for (i = 0; i < listIterator->numPoints; i++) {
+			printf("%lf, %lf\n", listIterator->points[i].x, listIterator->points[i].y);
 			triangulationPointsEnd->point = listIterator->points[i];
 			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(struct PointList));
 			triangulationPointsEnd = triangulationPointsEnd->next;
@@ -33,8 +34,10 @@ int main() {
 	while(listIterator->next != 0) {
 		struct Point *front;
 		front = &listIterator->points[0];
+		printf("%lf, %lf", front.x, front.y);
 		struct Point *end;
 		end = &listIterator->points[listIterator->numPoints-1];
+		printf("%lf, %lf", end.x, end.y);
 		// test if these points are already in the list
 		struct PointList *secondListIterator = triangulationPoints;
 		int shouldInsertFront;
@@ -74,7 +77,7 @@ int main() {
 	iter = triangulationPoints;
 	for(n = 0; n < triangulationPointsCount; n++) {
 		printf("%lf, %lf\n",iter->point.x, iter->point.y);
-		iter = iter.next;
+		iter = iter->next;
 	}
 
 	struct Subdivision *triangulation;
