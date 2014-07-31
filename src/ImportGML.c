@@ -106,8 +106,8 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 	importGML_readFile(data->points, pointsFilename);
 
 	// find the minimum latitude and longitude
-	double minimumLongitude = data->arcs->points[0].x;
-	double minimumLatitude = data->arcs->points[0].y;
+	double minimumLongitude = data->points->points[0].x;
+	double minimumLatitude = data->points->points[0].y;
 	int i;
 	struct PointArrayList *listIterator;
 	listIterator = data->arcs;
