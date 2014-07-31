@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "Delaunay.h"
 #include "Subdivision.h"
-#include "ArcsPointsAndOffsets.h"
 #include "ImportGML.h"
 
 int main() {

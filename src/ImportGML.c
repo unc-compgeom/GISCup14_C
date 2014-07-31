@@ -1,5 +1,4 @@
 #include "ImportGML.h"
-#include "ArcsPointsAndOffsets.h"
 #include "Point.h"
 #include <stdio.h>
 #include <stdlib.h>
