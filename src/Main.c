@@ -124,13 +124,9 @@ int main() {
 	// print out the points to triangulate
 	struct PointList *tmpTriIt;
 	tmpTriIt = triPoints;
-	tmpI2 = 1;
 	printf("triangulation points\n");
 	while (tmpTriIt) {
-		printf(" row %d\n", tmpI2++);
-		for (tmpI = 0; tmpI < tmpTriIt->numPoints; tmpI++) {
-			printf("  %lf, %lf\n", tmpTriIt->points[tmpI].x + importedStuff->offsetLongitude, tmpTriIt->points[tmpI].y + importedStuff->offsetLatitude);
-		}
+		printf("  %lf, %lf\n", tmpTriIt->point.x + importedStuff->offsetLongitude, tmpTriIt->point.y + importedStuff->offsetLatitude);
 		tmpTriIt = tmpTriIt->next;
 	}
 
