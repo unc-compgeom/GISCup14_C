@@ -19,6 +19,19 @@ int main() {
 	struct ArcsPointsAndOffsets *importedStuff;
 	importedStuff = importGML_importGML(DIR ARCS, DIR POINTS);
 	
+
+	// one more time, print out the points we just read in
+	struct PointArrayList *tmpIt;
+	tmpIt = importedStuff->arcs;
+	int tmpI;
+	int tmpI2;
+	tmpI2 = 1;
+	while (tmpIt) {
+		printf("row %d\n", tmpI2++);
+		for (tmpI = 0; tmpI < tmpIt->numPoints; tmpI++) {
+			printf("  %ld, %ld\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
+		}
+	}
 	printf("done\n");
 	
 	printf("Triangulating points...");
