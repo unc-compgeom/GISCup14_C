@@ -15,7 +15,8 @@ struct PointArrayList * importGML_readFile(char fileName[]) {
 	}
 
 	struct PointArrayList *importedPoints = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
-	
+	struct PointArrayList *importedPointsEnd;
+	importedPointsEnd = importedPoints;
 	while(1) {
 		char c;
 		double x, y;
@@ -55,8 +56,8 @@ struct PointArrayList * importGML_readFile(char fileName[]) {
 		}
 		// process list into an array
 		struct Point *points = (struct Point*) malloc(sizeof(struct Point)*numberOfCoordinates);
-		importedPoints->points = points;
-		importedPoints->numPoints = numberOfCoordinates;
+		importedPointsEnd->points = points;
+		importedPointsEnd->numPoints = numberOfCoordinates;
 		int i;
 		struct PointList *listIterator;
 		listIterator = frontOfList;
@@ -64,12 +65,12 @@ struct PointArrayList * importGML_readFile(char fileName[]) {
 			struct Point *tmpPoint = (struct Point*) malloc(sizeof(struct Point));
 			tmpPoint->x = listIterator->point.x;
 			tmpPoint->y = listIterator->point.y;
-			importedPoints->points[i] = *tmpPoint;
+			importedPointsEnd->points[i] = *tmpPoint;
 			free(tmpPoint);
 			listIterator = listIterator->next;
 		}
-		importedPoints->numPoints = numberOfCoordinates;
-		importedPoints->points = points;
+		importedPointsEnd->numPoints = numberOfCoordinates;
+		importedPointsEnd->points = points;
 
 		// finish line
 		while(1) {
@@ -91,7 +92,7 @@ struct PointArrayList * importGML_readFile(char fileName[]) {
 		if (c == '\n') {
 			break;
 		}
-		importedPoints->next = 	(struct PointArrayList*) malloc(sizeof(struct PointArrayList));	
+		importedPointsEnd->next = 	(struct PointArrayList*) malloc(sizeof(struct PointArrayList));	
 	}
 	return importedPoints;
 }
@@ -121,7 +122,7 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 		}
 		listIterator = listIterator->next;
 	}
-	printf("points");
+	printf("points\n");
 	listIterator = data->points;
 	while(listIterator->next != 0) {
 		for (i = 0; i < listIterator->numPoints; i++) {
