@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct PointArrayList * importGML_readFile(char fileName[]) {
+ importGML_readFile(struct PointArrayList *destination, char fileName[]) {
 	FILE * fp;
 	fp = fopen(fileName, "r");
 	if (!fp) {
@@ -14,9 +14,8 @@ struct PointArrayList * importGML_readFile(char fileName[]) {
 		exit(1);
 	}
 
-	struct PointArrayList *importedPoints = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
-	struct PointArrayList *importedPointsEnd;
-	importedPointsEnd = importedPoints;
+	struct PointArrayList *destinationEnd;
+	destinationEnd = destination;
 	while(1) {
 		char c;
 		double x, y;
@@ -56,8 +55,8 @@ struct PointArrayList * importGML_readFile(char fileName[]) {
 		}
 		// process list into an array
 		struct Point *points = (struct Point*) malloc(sizeof(struct Point)*numberOfCoordinates);
-		importedPointsEnd->points = points;
-		importedPointsEnd->numPoints = numberOfCoordinates;
+		destinationEnd->points = points;
+		destinationEnd->numPoints = numberOfCoordinates;
 		int i;
 		struct PointList *listIterator;
 		listIterator = frontOfList;
@@ -65,12 +64,12 @@ struct PointArrayList * importGML_readFile(char fileName[]) {
 			struct Point *tmpPoint = (struct Point*) malloc(sizeof(struct Point));
 			tmpPoint->x = listIterator->point.x;
 			tmpPoint->y = listIterator->point.y;
-			importedPointsEnd->points[i] = *tmpPoint;
+			destinationEnd->points[i] = *tmpPoint;
 			free(tmpPoint);
 			listIterator = listIterator->next;
 		}
-		importedPointsEnd->numPoints = numberOfCoordinates;
-		importedPointsEnd->points = points;
+		destinationEnd->numPoints = numberOfCoordinates;
+		destinationEnd->points = points;
 
 		// finish line
 		while(1) {
@@ -92,8 +91,8 @@ struct PointArrayList * importGML_readFile(char fileName[]) {
 		if (c == '\n') {
 			break;
 		}
-		importedPointsEnd->next = 	(struct PointArrayList*) malloc(sizeof(struct PointArrayList));	
-		importedPointsEnd = importedPointsEnd->next;
+		destinationEnd->next = 	(struct PointArrayList*) malloc(sizeof(struct PointArrayList));	
+		destinationEnd = destinationEnd->next;
 	}
 	fclose(fp);
 	return importedPoints;
@@ -102,8 +101,10 @@ struct PointArrayList * importGML_readFile(char fileName[]) {
 struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char pointsFilename[]) {
 	struct ArcsPointsAndOffsets *data;
 	data = arcsPointsAndOffsets_construct();
-	data->arcs = importGML_readFile(arcsFilename);
-	data->points = importGML_readFile(pointsFilename);
+	data->arcs 		= (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
+	data->points 	= (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
+	importGML_readFile(data->arcs, arcsFilename);
+	importGML_readFile(data->points, pointsFilename);
 
 	// find the minimum latitude and longitude
 	double minimumLatitude = data->arcs->points[0].x;

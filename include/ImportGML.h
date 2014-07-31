@@ -6,7 +6,7 @@
 
 struct ArcsPointsAndOffsets * arcsPointsAndOffsets_construct();
 
-struct PointArrayList * importGML_readFile(char fileName[]);
+void importGML_readFile(struct PointArrayList *destination, char fileName[]);
 
 struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char pointsFilename[]);
 

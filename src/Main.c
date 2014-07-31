@@ -183,8 +183,8 @@ int main() {
 	while(arcIterator->next != 0) {
 		int n;
 		for (n = 0; n < arcIterator->numPoints; n++) {
-			arcIterator->point[n].x += importedStuff.offsetLatitude;
-			arcIterator->point[n].y += importedStuff.offsetLongitude;
+			arcIterator->points[n].x += importedStuff->offsetLatitude;
+			arcIterator->points[n].y += importedStuff->offsetLongitude;
 			// tmp debugging code to print all points
 			printf("%lf, %lf\n", arcIterator->points[n].x, arcIterator->points[n].y);
 		}
