@@ -65,7 +65,12 @@ int main() {
 		}
 		listIterator = listIterator->next;
 	}
-	
+	///////// for testing
+
+	triangulationPoints->point.x = 0;
+	triangulationPoints->point.y = 0;
+	triangulationPointsCount = 1;
+	/////////
 	struct Subdivision *triangulation;
 	triangulation = delaunay_triangulate(triangulationPoints, triangulationPointsCount);
 }
