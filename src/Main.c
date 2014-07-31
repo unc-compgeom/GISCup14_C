@@ -23,11 +23,14 @@ int main() {
 	// TMP DEBUG
 	struct PointArrayList *tmpIt;
 	tmpIt = importedStuff->arcs;
+	int iterationCount;
+	iterationCount = 0;
 	while(tmpIt->next != 0) {
 		int n;
+		iterationCount++;
 		for (n = 0; n < tmpIt->numPoints; n++) {
 			// tmp debugging code to print all points
-			printf("%lf, %lf\n", tmpIt>points[n].x + importedStuff->offsetLatitude, tmpIt->points[n].y + importedStuff->offsetLongitude);
+			printf("%lf, %lf\n", tmpIt->points[n].x + importedStuff->offsetLatitude, tmpIt->points[n].y + importedStuff->offsetLongitude);
 		}
 		tmpIt = tmpIt->next;
 	}
