@@ -2,8 +2,8 @@
 #define CG_POINT_H
 
 struct Point {
-	float x;
-	float y;
+	double x;
+	double y;
 };
 
 int point_compare(struct Point * point1, struct Point * point2);

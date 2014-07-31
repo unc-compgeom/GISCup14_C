@@ -2,8 +2,8 @@
 #define CG_IMPORTGML_H
 
 struct ArcsPointsAndOffsets {
-	struct PointsList *arcs;
-	struct PointsList *points;
+	struct PointsArrayList *arcs;
+	struct PointsArrayList *points;
 	long offsetLatitude;
 	long offsetLongitude;
 };
