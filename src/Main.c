@@ -101,7 +101,7 @@ int main() {
 			// do the stacking/popping of triangles to getFirst a sequence
 			// of triangles that the shortest path must visit on its way
 			// from start to end
-			struct Edge edgeStack[arcIterator->numPoints+1];
+			struct Edge *edgeStack[arcIterator->numPoints+1];
 			int edgeNumberStack[arcIterator->numPoints+1];
 			int sp;
 			sp = 0;
@@ -109,10 +109,10 @@ int main() {
 			edgeStack[sp++] = locatedEdges[0];
 			// for each subsequent edge
 			for (i = 1; i < arcIterator->numPoints; i++) {
-				if (edge_sym(&edgeStack[sp - 1]) == &locatedEdges[i]) {
+				if (edge_sym(edgeStack[sp - 1]) == locatedEdges[i]) {
 					// if this edge's reverse is on top of the stac, pop it
 					sp--;
-				} else if (&edgeStack[sp - 1] == &locatedEdges[i]) {
+				} else if (edgeStack[sp - 1] == locatedEdges[i]) {
 					// if this edge is on top of the stack then do nothing
 				} else {
 					// else we're crossing a new edge, push it
