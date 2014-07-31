@@ -31,13 +31,13 @@ int main() {
 	listIterator = importedStuff->arcs;
 	while(listIterator->next != 0) {
 		struct Point *front;
-		front = listIterator->points[0];
+		front = &listIterator->points[0];
 		struct Point *end;
-		end = listIterator->points[listIterator->numPoints-1];
+		end = &listIterator->points[listIterator->numPoints-1];
 		// test if these points are already in the list
 		struct PointList *secondListIterator = triangulationPoints;
 		int shouldInsertFront;
-		int shouldInsertEnd
+		int shouldInsertEnd;
 		shouldInsertFront = 1;
 		shouldInsertEnd = 1;
 		while (secondListIterator != 0) {
@@ -45,7 +45,7 @@ int main() {
 				// front is a duplicate
 				shouldInsertFront = 0;
 			}
-			if (shouldInsertEnd && secondListIterator->point->x == end.x && secondListIterator->point->y == end.y) {
+			if (shouldInsertEnd && secondListIterator->point.x == end->x && secondListIterator->point.y == end->y) {
 				shouldInsertEnd = 0;
 			}
 			if (!shouldInsertFront && !shouldInsertEnd) {
@@ -54,12 +54,12 @@ int main() {
 		}
 		if (shouldInsertFront) {
 			triangulationPointsEnd->point = *front;
-			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(PointList));
-			triangulationPointsCount++
+			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(struct PointList));
+			triangulationPointsCount++;
 		}
 		if (shouldInsertEnd) {
 			triangulationPointsEnd->point = *end;
-			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(PointList));
+			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(struct PointList));
 			triangulationPointsCount++;
 		}
 		listIterator = listIterator->next;
