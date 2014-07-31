@@ -39,16 +39,16 @@ struct PointArrayList * importGML_readFile(char fileName[]) {
 		struct PointList *pointsList = (struct PointList*) malloc(sizeof(struct PointList));
 		struct PointList *frontOfList;
 		frontOfList = pointsList;
-		pointsList->x = x;
-		pointsList->y = y;
+		pointsList->point.x = x;
+		pointsList->point.y = y;
 		numberOfCoordinates++;
 		while(1) {
 			if(fscanf(fp, "%lf,%lf ", &x, &y) == 0) {
 				break;
 			}
 			struct PointList *newCoords = (struct PointList*) malloc(sizeof(struct PointList));
-			newCoords->x = x;
-			newCoords->y = y;
+			newCoords->point.x = x;
+			newCoords->point.y = y;
 			pointsList->next = newCoords;
 			pointsList = newCoords;
 			numberOfCoordinates++;
@@ -62,8 +62,8 @@ struct PointArrayList * importGML_readFile(char fileName[]) {
 		listIterator = frontOfList;
 		for (i = 0; i < numberOfCoordinates; i++) {
 			struct Point *tmpPoint = (struct Point*) malloc(sizeof(struct Point));
-			tmpPoint->x = listIterator->x;
-			tmpPoint->y = listIterator->y;
+			tmpPoint->point.x = listIterator->point.x;
+			tmpPoint->point.y = listIterator->point.y;
 			importedPoints->points[i] = *tmpPoint;
 			free(tmpPoint);
 			listIterator = listIterator->next;

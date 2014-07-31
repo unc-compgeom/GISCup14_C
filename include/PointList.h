@@ -2,8 +2,7 @@
 #define CG_POINTLIST_H
 
 struct PointList {
-	double x;
-	double y;
+	struct Point point;
 	struct PointList *next;
 };
 
