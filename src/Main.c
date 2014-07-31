@@ -9,7 +9,7 @@
 #include "PointList.h"
 #include "Edge.h"
 
-#define DIR "../td3"
+#define DIR "../td1"
 #define ARCS "/lines_out.txt"
 #define POINTS "/points_out.txt"
 
