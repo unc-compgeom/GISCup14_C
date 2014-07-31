@@ -77,15 +77,6 @@ int main() {
 	// set the next pointer to null
 	triIterator->next = 0;
 
-	// print out the points to triangulate
-	struct PointList *tmpTriIt;
-	tmpTriIt = triPoints;
-	printf("triangulation points\n");
-	while (tmpTriIt) {
-		printf("  %lf, %lf\n", tmpTriIt->point.x + importedStuff->offsetLongitude, tmpTriIt->point.y + importedStuff->offsetLatitude);
-		tmpTriIt = tmpTriIt->next;
-	}
-
 	// copy unique endpoints from arcs list
 	arrayListIterator = importedStuff->arcs;
 	while (arrayListIterator) {
@@ -129,6 +120,16 @@ int main() {
 		}
 		arrayListIterator = arrayListIterator->next;
 	}
+
+	// print out the points to triangulate
+	struct PointList *tmpTriIt;
+	tmpTriIt = triPoints;
+	printf("triangulation points\n");
+	while (tmpTriIt) {
+		printf("  %lf, %lf  (%lf, %lf)\n", tmpTriIt->point.x + importedStuff->offsetLongitude, tmpTriIt->point.y + importedStuff->offsetLatitude, tmpTriIt->point.x, tmpTriIt->point.y);
+		tmpTriIt = tmpTriIt->next;
+	}
+
 	// TRIANGULATE
 	struct Subdivision *triangulation;
 	triangulation = delaunay_triangulate(triPoints, triPointsSize);
