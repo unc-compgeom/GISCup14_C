@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
- importGML_readFile(struct PointArrayList *destination, char fileName[]) {
+ void importGML_readFile(struct PointArrayList *destination, char fileName[]) {
 	FILE * fp;
 	fp = fopen(fileName, "r");
 	if (!fp) {
@@ -95,7 +95,6 @@
 		destinationEnd = destinationEnd->next;
 	}
 	fclose(fp);
-	return importedPoints;
 }
 
 struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char pointsFilename[]) {

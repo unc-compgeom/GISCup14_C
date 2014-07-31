@@ -9,9 +9,7 @@
 void exportGML_exportGML(struct PointArrayList *pointArrayList, char directoryName[]) {
 	FILE * fp;
 
-	int newFileNameLength;
-	newFileNameLength = strlen(directoryName) + strlen(FILENAME);
-	char newFileName[newFileNameLength];
+	char *newFileName;
 	strcat(newFileName, directoryName);
 	strcat(newFileName, FILENAME);
 	fp = fopen(newFileName, "w");
@@ -21,7 +19,6 @@ void exportGML_exportGML(struct PointArrayList *pointArrayList, char directoryNa
 	int i;
 	int j;
 	i = 1;
-	j = 0;
 	
 	struct PointArrayList *listIterator;
 	listIterator = pointArrayList;
@@ -29,7 +26,7 @@ void exportGML_exportGML(struct PointArrayList *pointArrayList, char directoryNa
 		fprintf(fp, "%d:<gml:LineString srsName=\"EPSG:54004\" xmlns:gml=\"http://www.opengis.net/gml\"><gml:coordinates decimal=\".\" cs=\",\" ts=\" \">", i++);
 		for (j = 0; j < listIterator->numPoints; j++) {
 			fprintf(fp, "%lf,%lf ", listIterator->points[j].x, listIterator->points[j].y);
-			printf("%lf,%lf ", listIterator->points[j].x, listIterator->points[j].y);
+			printf("%lf,%lf\n ", listIterator->points[j].x, listIterator->points[j].y);
 		}
 		fprintf(fp, "</gml:coordinates></gml:LineString>\n");
 		listIterator = listIterator->next;
