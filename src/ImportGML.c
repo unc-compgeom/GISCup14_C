@@ -108,7 +108,8 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 	readPoints = importGML_readFile(pointsFilename);
 
 	// find the minimum latitude and longitude
-	double minimumLatitude = 0;
+	double minimumLatitude = readArcs->arcs[0]->x;
+	double minimumLongitude = readArds->arcs[0]->y;
 	return data;
 }
 
