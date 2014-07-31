@@ -156,7 +156,7 @@ int main() {
 			simpArcIter->numPoints = arrayListIterator->numPoints;
 		} else {
 			// locate each edge;
-			struct Edge *locatedEdges[arrayListIterator->numPoints];
+			struct Edge *[arrayListIterator->numPoints];
 			int i;
 			for (i = 0; i < arrayListIterator->numPoints; i++) {
 				locatedEdges[i] = subdivision_locate(triangulation, &arrayListIterator->points[i]);
@@ -164,13 +164,14 @@ int main() {
 			// do the stacking/popping of triangles to get a sequence
 			// of triangles that the shortest path must visit on its way
 			// from start to end
-			struct Edge *edgeStack[arrayListIterator->numPoints + 1];
-			int edgeNumberStack[arrayListIterator->numPoints + 1];
+			struct Edge *edgeStack[arrayListIterator->numPoints + 1] = (struct Edge *) malloc(sizeof(struct Edge *));
+			int edgeNumberStack[arrayListIterator->numPoints + 1] = (int []) malloc(sizeof(int));
 			int sp;
 			sp = 0;
+			i = 0
 			// push the first edge crossed
-			edgeStack[sp] = locatedEdges[0];
-			edgeNumberStack[sp++] = 0;
+			edgeStack[sp] = locatedEdges[i];
+			edgeNumberStack[sp++] = i;
 			// for each subsequent edge
 			for (i = 1; i < arrayListIterator->numPoints; i++) {
 				if (edge_sym(edgeStack[sp - 1]) == locatedEdges[i]) {
