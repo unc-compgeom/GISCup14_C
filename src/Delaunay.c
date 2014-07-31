@@ -10,13 +10,11 @@ struct Subdivision * delaunay_triangulate(struct PointList *points, int numPoint
 	struct Subdivision *s;
 	s = subdivision_construct();
 	int i;
-	printf("  Constructed subdivision\n");
 	struct PointList *listIterator;
 	listIterator = points;
 	for (i = 0; i < numPoints; i++) {
 		subdivision_insertSite(s, &listIterator->point);
 		listIterator = listIterator->next;
-		printf("  Inserted point %d\n", i);
 	}
 	return s;
 }
