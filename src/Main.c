@@ -138,7 +138,6 @@ int main() {
 	printf("done\n");
 	// SIMPLIFY
 
-
 	printf("Simplifying arcs...");
 	// make a struct to hold the simplified data
 	struct PointArrayList *simplifiedArcs = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
@@ -170,7 +169,8 @@ int main() {
 			int sp;
 			sp = 0;
 			// push the first edge crossed
-			edgeStack[sp++] = locatedEdges[0];
+			edgeStack[sp] = locatedEdges[0];
+			edgeNumberStack[sp++] = 0;
 			// for each subsequent edge
 			for (i = 1; i < arrayListIterator->numPoints; i++) {
 				if (edge_sym(edgeStack[sp - 1]) == locatedEdges[i]) {
@@ -257,5 +257,19 @@ int main() {
 		}
 		arrayListIterator = arrayListIterator->next;
 	}
-	exportGML_exportGML(simplifiedArcs, DIR);
+	// exportGML_exportGML(simplifiedArcs, DIR);
 }
+
+struct PointArrayList *tmpIt;
+	tmpIt = importedStuff->points;
+	int tmpI;
+	int tmpI2;
+	tmpI2 = 1;
+	printf("points\n");
+	while (tmpIt) {
+		printf(" row %d\n", tmpI2++);
+		for (tmpI = 0; tmpI < tmpIt->numPoints; tmpI++) {
+			printf("  %lf, %lf\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
+		}
+		tmpIt = tmpIt->next;
+	}
