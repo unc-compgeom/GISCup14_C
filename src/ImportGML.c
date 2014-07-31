@@ -41,6 +41,7 @@ struct PointsArrayList * importGML_readFile(char fileName[]) {
 		pointsList->x = x;
 		pointsList->y = y;
 		numberOfCoordinates++;
+		printf("%3d", numberOfCoordinates);
 		while(1) {
 			if(fscanf(fp, "%lf,%lf ", &x, &y) == 0) {
 				break;
@@ -108,8 +109,42 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 	readPoints = importGML_readFile(pointsFilename);
 
 	// find the minimum latitude and longitude
-	double minimumLatitude = readArcs->arcs[0]->x;
-	double minimumLongitude = readArds->arcs[0]->y;
+	double minimumLatitude = readArcs->points[0].x;
+	double minimumLongitude = readArcs->points[0].y;
+	int i;
+	struct PointsArrayList listIterator*;
+	listIterator = readArcs;
+	while(listIterator->next != 0) {
+		for (i = 0; i < listIterator->numPoints; i++) {
+			if (listIterator->points[i]->x < minimumLatitude) {
+				minimumLatitude = listIterator->points[i]->x;
+			}
+			if (listIterator->points[i]->y < minimumLongitude) {
+				minimumLongitude = listIterator->points[i]->y;
+			}
+		}
+		listIterator = listIterator->next;
+	}
+	listIterator = readPoints;
+	while(listIterator->next != 0) {
+		for (i = 0; i < listIterator->numPoints; i++) {
+			if (listIterator->points[i]->x < minimumLatitude) {
+				minimumLatitude = listIterator->points[i]->x;
+			}
+			if (listIterator->points[i]->y < minimumLongitude) {
+				minimumLongitude = listIterator->points[i]->y;
+			}
+		}
+		listIterator = listIterator->next;
+	}
+	long dX = (long) minimumLatitude;
+	long dY = (long) minimumLongitude;
+
+	printf("minimum lat = %ld minimum long = %ld\n", dX, dY);
+
+
+
+	// done!
 	return data;
 }
 
