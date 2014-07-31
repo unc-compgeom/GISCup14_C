@@ -53,26 +53,25 @@ int main() {
 	int triPointsSize;
 	triPointsSize = 0;
 	struct PointList *triIterator = triPoints;
-	
-	// add all constraint points and unique arc endpoints to the triangulation list
-	int i;
 	struct PointArrayList *arrayListIterator;
 	arrayListIterator = importedStuff->points;
+	// add all constraint points and unique arc endpoints to the triangulation list
+	
 	// copy the first point to initialize the list
 	triIterator->point = arrayListIterator->points[0];
 	triPointsSize++;
-	// copy all remaining points from points list
-	while (arrayListIterator) {
-		for (i = 1; i < arrayListIterator->numPoints; i++) {
-			// make next list entry
-			triIterator->next = (struct PointList*) malloc(sizeof(struct PointList));
-			// advance the list iterator
-			triIterator = triIterator->next;
-			// copy pointers
-			triIterator->point = arrayListIterator->points[i];
-			// increase the count
+	// copy all points
+	while (arrayListIterator) {		
+		// copy all remaining points from points list
+
+		// make next list entry
+		triIterator->next = (struct PointList*) malloc(sizeof(struct PointList));
+		// advance the list iterator
+		triIterator = triIterator->next;
+		// copy pointers
+		triIterator->point = arrayListIterator->points[0];
+		// increase the count
 			triPointsSize++;
-		}
 		arrayListIterator = arrayListIterator->next;
 	}
 	// set the next pointer to null
