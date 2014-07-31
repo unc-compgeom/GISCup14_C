@@ -60,6 +60,7 @@ int main() {
 	// copy the first point to initialize the list
 	triIterator->point = arrayListIterator->points[0];
 	triPointsSize++;
+	arrayListIterator = arrayListIterator->next;
 	// copy all points
 	while (arrayListIterator) {		
 		// copy all remaining points from points list
@@ -71,7 +72,7 @@ int main() {
 		// copy pointers
 		triIterator->point = arrayListIterator->points[0];
 		// increase the count
-			triPointsSize++;
+		triPointsSize++;
 		arrayListIterator = arrayListIterator->next;
 	}
 	// set the next pointer to null
