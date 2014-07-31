@@ -208,13 +208,13 @@ int main() {
 	printf("done\n");
 	// restore offset
 	arrayListIterator = simplifiedArcs;
-	while(arrayListIterator->next != 0) {
-		int n;
-		for (n = 0; n < arrayListIterator->numPoints; n++) {
-			arrayListIterator->points[n].x += importedStuff->offsetLatitude;
-			arrayListIterator->points[n].y += importedStuff->offsetLongitude;
+	int i;
+	while(arrayListIterator) {
+		for (i = 0; i < arrayListIterator->numPoints; i++) {
+			arrayListIterator->points[i].x += importedStuff->offsetLatitude;
+			arrayListIterator->points[i].y += importedStuff->offsetLongitude;
 			// tmp debugging code to print all points
-			printf("%lf, %lf\n", arrayListIterator->points[n].x, arrayListIterator->points[n].y);
+			printf("%lf, %lf\n", arrayListIterator->points[i].x, arrayListIterator->points[i].y);
 		}
 		arrayListIterator = arrayListIterator->next;
 	}
