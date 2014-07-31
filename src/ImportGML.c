@@ -138,7 +138,7 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 	data->offsetLatitude= (long) minimumLatitude;
 	// subtract offset from points
 	listIterator = data->arcs;
-	while(listIterator->next != 0) {
+	while (listIterator) {
 		for (i = 0; i < listIterator->numPoints; i++) {
 			listIterator->points[i].x -= data->offsetLongitude;
 			listIterator->points[i].y -= data->offsetLatitude;
@@ -146,7 +146,7 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 		listIterator = listIterator->next;
 	}
 	listIterator = data->points;
-	while(listIterator->next != 0) {
+	while (listIterator) {
 		for (i = 0; i < listIterator->numPoints; i++) {
 			listIterator->points[i].x -= data->offsetLongitude;
 			listIterator->points[i].y -= data->offsetLatitude;
