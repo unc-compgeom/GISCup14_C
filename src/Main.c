@@ -81,8 +81,8 @@ int main() {
 	// SIMPLIFY
 
 	struct PointArrayList *simplifiedArcs = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
-	struct PointArrayList *simplifedArcsEnd;
-	simplifedArcsEnd = simplifiedArcs;
+	struct PointArrayList *simplifiedArcsEnd;
+	simplifiedArcsEnd = simplifiedArcs;
 
 	struct PointArrayList *arcIterator;
 	arcIterator = importedStuff->arcs;
@@ -95,7 +95,7 @@ int main() {
 			struct Edge locatedEdges[arcIterator->numPoints];
 			int i;
 			for (i = 0; i < arcIterator->numPoints; i++) {
-				locatedEdges[i] = subdivision_locate(triangulation, arcIterator->points[i]);
+				locatedEdges[i] = subdivision_locate(triangulation, &arcIterator->points[i]);
 			}
 			// do the stacking/popping of triangles to getFirst a sequence
 			// of triangles that the shortest path must visit on its way
@@ -108,10 +108,10 @@ int main() {
 			edgeStack[sp++] = locatedEdges[0];
 			// for each subsequent edge
 			for (i = 1; i < arcIterator->numPoints; i++) {
-				if (edge_sym(edgeStack[sp - 1]) == locatedEdges[i]) {
+				if (edge_sym(&edgeStack[sp - 1]) == &locatedEdges[i]) {
 					// if this edge's reverse is on top of the stac, pop it
 					sp--;
-				} else if (edgeStack[sp - 1] == locatedEdges[i]) {
+				} else if (&edgeStack[sp - 1] == &locatedEdges[i]) {
 					// if this edge is on top of the stack then do nothing
 				} else {
 					// else we're crossing a new edge, push it
@@ -156,12 +156,12 @@ int main() {
 				int index;
 				index = 0;
 				struct Point simplified[size];
-				simplified[index++] = arc[0];
+				simplified[index++] = arcIterator->points[0];
 				for (i = start; i <= term; i++) {
-					simplified[index++] = arc[edgeNumberStack[i]];
+					simplified[index++] = arcIterator->points[edgeNumberStack[i]];
 				}
-				simplified[index] = arc[arc.length - 1];
-				simplifiedArcs->arc = simplified;
+				simplified[index] = arcIterator->points[arcIterator->numPoints - 1];
+				simplifiedArcs->point = simplified;
 			}
 
 		}
