@@ -7,15 +7,16 @@
 #include "PointList.h"
 #include "Edge.h"
 
-#define ARCSFILE "../td3/lines_out.txt"
-#define POINTSFILE "../td3/points_out.txt"
+#define DIR "../td3"
+#define ARCS "/lines_out.txt"
+#define POINTS "/points_out.txt"
 
-int edgeisPartOfRing(struct Edge *test, struct Edge *fromOrigin);
+int edgeIsPartOfRing(struct Edge *test, struct Edge *fromOrigin);
 
 int main() {
 	// IMPORT COORDINATES
 	struct ArcsPointsAndOffsets *importedStuff;
-	importedStuff = importGML_importGML(ARCSFILE, POINTSFILE);
+	importedStuff = importGML_importGML(DIR ARCS, DIR POINTS);
 	
 	int triangulationPointsCount;
 	triangulationPointsCount = 0;
@@ -172,9 +173,10 @@ int main() {
 		simplifiedArcsEnd = simplifiedArcsEnd->next;
 		arcIterator = arcIterator->next;
 	}
+	exportGML_exportGML()
 }
 
-int edgeisPartOfRing(struct Edge *test, struct Edge *fromOrigin) {
+int edgeIsPartOfRing(struct Edge *test, struct Edge *fromOrigin) {
 	struct Edge *e;
 	e = fromOrigin;
 	do {
