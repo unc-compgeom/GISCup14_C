@@ -5,7 +5,7 @@
 
 #define FILENAME simplified.txt
 
-void exportGML_exportGML(struct PointArrayList *PointArrayList, char[] directoryName) {
+void exportGML_exportGML(struct PointArrayList *PointArrayList, char directoryName[]) {
 	FILE * fp;
 
 	int newFileNameLength;
