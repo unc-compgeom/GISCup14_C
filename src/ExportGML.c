@@ -1,4 +1,5 @@
 #include "ExportGML.h"
+#include "Point.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -27,7 +28,8 @@ void exportGML_exportGML(struct PointArrayList *pointArrayList, char directoryNa
 	while(listIterator->next != 0) {
 		fprintf(fp, "%d:<gml:LineString srsName=\"EPSG:54004\" xmlns:gml=\"http://www.opengis.net/gml\"><gml:coordinates decimal=\".\" cs=\",\" ts=\" \">", i++);
 		for (j = 0; j < listIterator->numPoints; j++) {
-			fprintf(fp, "%d,%d ", listIterator->points[j].x, listIterator->points[j].y);
+			fprintf(fp, "%lf,%lf ", listIterator->points[j].x, listIterator->points[j].y);
+			printf("%lf,%lf ", listIterator->points[j].x, listIterator->points[j].y);
 		}
 		fprintf(fp, "</gml:coordinates></gml:LineString>\n");
 		listIterator = listIterator->next;
