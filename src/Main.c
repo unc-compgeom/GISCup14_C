@@ -10,6 +10,8 @@
 #define ARCSFILE "../td3/lines_out.txt"
 #define POINTSFILE "../td3/points_out.txt"
 
+int edgeisPartOfRing(struct Edge *test, struct Edge *fromOrigin);
+
 int main() {
 	// IMPORT COORDINATES
 	struct ArcsPointsAndOffsets *importedStuff;
@@ -170,4 +172,16 @@ int main() {
 		simplifiedArcsEnd = simplifiedArcsEnd->next;
 		arcIterator = arcIterator->next;
 	}
+}
+
+int edgeisPartOfRing(struct Edge *test, struct Edge *fromOrigin) {
+	struct Edge *e;
+	e = fromOrigin;
+	do {
+		if (e == test || edge_lNext(e) == test || edge_lNext(edge_lNext(e)) == test) {
+			return 1;
+		}
+		e = edge_oNext(e);
+	} while (e != fromOrigin);
+	return 0;
 }
