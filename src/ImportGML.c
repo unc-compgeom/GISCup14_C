@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct PointsList * importGML_readFile(char fileName[]) {
+struct PointsArrayList * importGML_readFile(char fileName[]) {
 	FILE * fp;
 	fp = fopen(fileName, "r");
 	if (!fp) {
@@ -51,7 +51,7 @@ struct PointsList * importGML_readFile(char fileName[]) {
 			pointsList->next = newCoords;
 			pointsList = newCoords;
 			numberOfCoordinates++;
-			printf("  \b\b\b%3d", numberOfCoordinates);
+			printf("\b\b\b%3d", numberOfCoordinates);
 		}
 		printf("\n");
 
