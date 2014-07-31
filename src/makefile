@@ -7,10 +7,10 @@ LIBRARYDIR =../lib
 
 LIBRARIES=-lm
 
-_DEPENDENCIES = Delaunay.h Subdivision.h QuadEdge.h Edge.h Point.h Predicate.h
+_DEPENDENCIES = ArcsPointsAndOffsets.h PointArrayList.h PointList.h ImportGML.h Delaunay.h Subdivision.h QuadEdge.h Edge.h Point.h Predicate.h
 DEPENDENCIES = $(patsubst %,$(INCLUDEDIR)/%,$(_DEPENDENCIES))
 
-_OBJECTS = Main.o Delaunay.o Subdivision.o QuadEdge.o Edge.o Point.o Predicate.o;
+_OBJECTS = ImportGML.o Main.o Delaunay.o Subdivision.o QuadEdge.o Edge.o Point.o Predicate.o;
 OBJECTS = $(patsubst %,$(OBJECTDIR)/%,$(_OBJECTS))
 
 

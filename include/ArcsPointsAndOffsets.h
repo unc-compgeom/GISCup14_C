@@ -1,0 +1,11 @@
+#ifndef CG_ARCSPOINTSANDOFFSETS_H
+#define CG_ARCSPOINTSANDOFFSETS_H
+
+struct ArcsPointsAndOffsets {
+	struct PointArrayList *arcs;
+	struct PointArrayList *points;
+	long offsetLatitude;
+	long offsetLongitude;
+};
+
+#endif /* CG_ARCSPOINTSANDOFFSETS_H */

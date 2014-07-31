@@ -2,7 +2,8 @@
 #define CG_DELAUNAY_H
 
 #include "Point.h"
+#include "PointList.h"
 
-struct Subdivision * delaunay_triangulate(struct Point points[], int numPoints);
+struct Subdivision * delaunay_triangulate(struct PointList *points, int numPoints);
 
 #endif /* CG_DELAUNAY_H */
