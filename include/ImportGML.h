@@ -1,7 +1,14 @@
 #ifndef CG_IMPORTGML_H
 #define CG_IMPORTGML_H
 
-#include "ArcsPointsAndOffsets.h"
+struct ArcsPointsAndOffsets {
+	struct PointsList *arcs;
+	struct PointsList *points;
+	long offsetLatitude;
+	long offsetLongitude;
+};
+
+struct ArcsPointsAndOffsets * arcsPointsAndOffsets_construct();
 
 struct PointsList {
 	double x;
@@ -15,7 +22,7 @@ struct PointsArrayList {
 	struct PointsArrayList *next;
 };
 
-struct PointsList * importGML_readFile(char fileName[]);
+struct PointsArrayList * importGML_readFile(char fileName[]);
 
 struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char pointsFilename[]);
 

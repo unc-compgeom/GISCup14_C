@@ -108,3 +108,9 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 	double minimumLatitude = 0;
 	return data;
 }
+
+
+struct ArcsPointsAndOffsets * arcsPointsAndOffsets_construct() {
+	struct ArcsPointsAndOffsets *data = (struct ArcsPointsAndOffsets*) malloc(sizeof(struct ArcsPointsAndOffsets));
+	return data;
+}
