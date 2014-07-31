@@ -36,7 +36,7 @@ int main() {
 	struct PointArrayList *arrayListIterator;
 	arrayListIterator = importedStuff->points;
 	// copy the first point to initialize the list
-	triIterator->point = arrayListLiterator->points[0];
+	triIterator->point = arrayListIterator->points[0];
 	triPointsSize++;
 	// copy all remaining points from points list
 	while (arrayListIterator) {
@@ -47,6 +47,7 @@ int main() {
 			triIterator = triIterator->next;
 			// copy pointers
 			triIterator->point = arrayListIterator->points[i];
+			triIterator->next = 0;
 			// increase the count
 			triPointsSize++;
 		}
@@ -83,12 +84,14 @@ int main() {
 			triIterator->next = (struct PointList*) malloc(sizeof(struct PointList));
 			triIterator = triIterator->next;
 			triIterator->point = *front;
+			triIterator->next = 0;
 			triPointsSize++;
 		}
 		if (shouldInsertEnd) {
 			triIterator->next = (struct PointList*) malloc(sizeof(struct PointList));
 			triIterator = triIterator->next;
 			triIterator->point = *end;
+			triIterator->next = 0;
 			triPointsSize++;
 		}
 		arrayListIterator = arrayListIterator->next;
