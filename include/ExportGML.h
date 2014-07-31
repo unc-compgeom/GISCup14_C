@@ -3,6 +3,6 @@
 
 #include "PointArrayList.h"
 
-void exportGML_exportGML(struct PointArrayList *PointArrayList), char[] fileName);
+void exportGML_exportGML(struct PointArrayList *PointArrayList, char[] directoryName);
 
 #endif /* CG_EXPORTGML_H */
