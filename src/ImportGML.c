@@ -136,6 +136,8 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 	}
 	data->offsetLongitude = (long) minimumLongitude;
 	data->offsetLatitude= (long) minimumLatitude;
+	printf("offsetLongitude %ld\n", data->offsetLongitude);
+	printf("offsetLatitude %ld\n", data->offsetLatitude);
 	// subtract offset from points
 	listIterator = data->arcs;
 	while (listIterator) {
