@@ -174,6 +174,16 @@ int main() {
 		simplifiedArcsEnd = simplifiedArcsEnd->next;
 		arcIterator = arcIterator->next;
 	}
+	// tmp debugging code to print all points
+	struct PointArrayList *arcIterator;
+	arcIterator = simplifiedArcs;
+	while(arcIterator->next != 0) {
+		int n;
+		for (n = 0; n < arcIterator->numPoints; n++) {
+			printf("%lf, %lf\n", arcIterator->points[n].x, arcIterator->points[n].y);
+		}
+		arcIterator = arcIterator->next;
+	}
 	exportGML_exportGML(simplifiedArcs, DIR);
 }
 
