@@ -23,7 +23,7 @@ int main() {
 	
 	printf("done\n");
 	
-	printf("Triangulating points...")
+	printf("Triangulating points...");
 
 	// Maintain a list of points to triangulate
 	struct PointList *triPoints = (struct PointList*) malloc(sizeof(struct PointList));
@@ -36,7 +36,7 @@ int main() {
 	struct PointArrayList *arrayListIterator;
 	arrayListIterator = importedStuff->points;
 	// copy the first point to initialize the list
-	triIter->point = arrayListLiterator->points[0];
+	triIterator->point = arrayListLiterator->points[0];
 	triPointsSize++;
 	// copy all remaining points from points list
 	while (arrayListIterator) {
