@@ -5,6 +5,7 @@
 #include "ArcsPointsAndOffsets.h"
 #include "ImportGML.h"
 #include "PointList.h"
+#include "Edge.h"
 
 #define ARCSFILE "../td3/lines_out.txt"
 #define POINTSFILE "../td3/points_out.txt"
@@ -73,11 +74,99 @@ int main() {
 		listIterator = listIterator->next;
 	}
 
-	int n;
-	struct PointList *iter;
-	iter = triangulationPoints;
-
 	// TRIANGULATE
 	struct Subdivision *triangulation;
 	triangulation = delaunay_triangulate(triangulationPoints, triangulationPointsCount);
+
+	// SIMPLIFY
+
+	struct PointArrayList *simplifiedArcs = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
+	struct PointArrayList *simplifedArcsEnd;
+	simplifedArcsEnd = simplifiedArcs;
+
+	struct PointArrayList *arcIterator;
+	arcIterator = importedStuff->arcs;
+
+	while(arcIterator->next != 0) {
+		if (arcIterator->arc->numPoints < 4) {
+			simplifiedArcsEnd->arc = arcIterator->arc;
+		} else {
+			// locate each edge;
+			struct Edge locatedEdges[arcIterator->numPoints];
+			int i;
+			for (i = 0; i < arcIterator->numPoints; i++) {
+				locatedEdges[i] = subdivision_locate(triangulation, arcIterator->arc[i]);
+			}
+			// do the stacking/popping of triangles to getFirst a sequence
+			// of triangles that the shortest path must visit on its way
+			// from start to end
+			struct Edge edgeStack[arcIterator->arc->numPoints+1];
+			int edgeNumberStack[arcIterator->arc->numPoints+1];
+			int sp;
+			sp = 0;
+			// push the first edge crossed
+			edgeStack[sp++] = locatedEdges[0];
+			// for each subsequent edge
+			for (i = 1; i < arcIterator->arc->numPoints; i++) {
+				if (edge_sym(edgeStack[sp - 1]) == locatedEdges[i]) {
+					// if this edge's reverse is on top of the stac, pop it
+					sp--;
+				} else if (edgeStack[sp - 1] == locatedEdges[i]) {
+					// if this edge is on top of the stack then do nothing
+				} else {
+					// else we're crossing a new edge, push it
+					edgeNumberStack[sp] = i;
+					edgeStack[sp++] = locatedEdges[i];
+				}
+			}
+
+			// eliminate any looping around the start point
+			// leave the first point, remove up to index sp - 2
+			int start;
+			start = 1;
+			for (i = 2; i < sp - 1; i++) {
+				if (edgeIsPartOfRing(edgeStack[i], edgeStack[0])) {
+					start = i;
+				} else {
+					break;
+				}
+			}
+			// eliminate any looping around the end point
+			// leave the last point remove up to index 1
+			int term;
+			term = sp - 2;
+			for (i = term - 1; i > 0; i--) {
+				if (edgeIsPartOfRing(edgeStack[i], edgeStack[sp - 1])) {
+					term = i;
+				} else {
+					break;
+				}
+			}
+			if (term < start) {
+				term = start;
+			}
+			if (sp < 1) {
+				struct Point simplified[2];
+				simplified[0] = arc[0];
+				simplified[1] = arc[arc.length - 1];
+				simplifiedArcsEnd->arc = simplified;
+			} else {
+				int size;
+				size = term - start + 3;
+				int index;
+				index = 0;
+				struct Point simplified[size];
+				simplified[index++] = arc[0];
+				for (i = start; i <= term; i++) {
+					simplified[index++] = arc[edgeNumberStack[i]];
+				}
+				simplified[index] = arc[arc.length - 1];
+				simplifiedArcs->arc = simplified;
+			}
+
+		}
+		simplifiedArcsEnd->next = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
+		simplifiedArcsEnd = simplifiedArcsEnd->next;
+		arcIterator = arcIterator->next;
+	}
 }
