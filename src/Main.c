@@ -7,70 +7,65 @@
 #include "PointList.h"
 
 int main() {
-	// struct ArcsPointsAndOffsets *importedStuff;
-	// importedStuff = importGML_importGML("../td1/lines_out.txt", "../td1/points_out.txt");
+	struct ArcsPointsAndOffsets *importedStuff;
+	importedStuff = importGML_importGML("../td1/lines_out.txt", "../td1/points_out.txt");
 	
-	// int triangulationPointsCount;
-	// triangulationPointsCount = 0;
+	int triangulationPointsCount;
+	triangulationPointsCount = 0;
 
-	// struct PointList *triangulationPoints = (struct PointList*) malloc(sizeof(struct PointList));
-	// struct PointList *triangulationPointsEnd = triangulationPoints;
-	
-	// // add all constraint points and unique arc endpoints to the triangulation list
-	// int i;
-	// struct PointArrayList *listIterator;
-	// listIterator = importedStuff->points;
-	// while(listIterator->next != 0) {
-	// 	for (i = 0; i < listIterator->numPoints; i++) {
-	// 		triangulationPointsEnd->point = listIterator->points[i];
-	// 		triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(struct PointList));
-	// 		triangulationPointsCount++;
-	// 	}
-	// 	listIterator = listIterator->next;
-	// }
-	// listIterator = importedStuff->arcs;
-	// while(listIterator->next != 0) {
-	// 	struct Point *front;
-	// 	front = &listIterator->points[0];
-	// 	struct Point *end;
-	// 	end = &listIterator->points[listIterator->numPoints-1];
-	// 	// test if these points are already in the list
-	// 	struct PointList *secondListIterator = triangulationPoints;
-	// 	int shouldInsertFront;
-	// 	int shouldInsertEnd;
-	// 	shouldInsertFront = 1;
-	// 	shouldInsertEnd = 1;
-	// 	while (secondListIterator != 0) {
-	// 		if (shouldInsertFront && secondListIterator->point.x == front->x && secondListIterator->point.y == front->y) {
-	// 			// front is a duplicate
-	// 			shouldInsertFront = 0;
-	// 		}
-	// 		if (shouldInsertEnd && secondListIterator->point.x == end->x && secondListIterator->point.y == end->y) {
-	// 			shouldInsertEnd = 0;
-	// 		}
-	// 		if (!shouldInsertFront && !shouldInsertEnd) {
-	// 			break;
-	// 		}
-	// 		secondListIterator = secondListIterator->next;
-	// 	}
-	// 	if (shouldInsertFront) {
-	// 		triangulationPointsEnd->point = *front;
-	// 		triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(struct PointList));
-	// 		triangulationPointsCount++;
-	// 	}
-	// 	if (shouldInsertEnd) {
-	// 		triangulationPointsEnd->point = *end;
-	// 		triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(struct PointList));
-	// 		triangulationPointsCount++;
-	// 	}
-	// 	listIterator = listIterator->next;
-	// }
-	///////// for testing
 	struct PointList *triangulationPoints = (struct PointList*) malloc(sizeof(struct PointList));
-	triangulationPoints->point.x = 0;
-	triangulationPoints->point.y = 0;
-	triangulationPointsCount = 1;
-	/////////
+	struct PointList *triangulationPointsEnd = triangulationPoints;
+	
+	// add all constraint points and unique arc endpoints to the triangulation list
+	int i;
+	struct PointArrayList *listIterator;
+	listIterator = importedStuff->points;
+	while(listIterator->next != 0) {
+		for (i = 0; i < listIterator->numPoints; i++) {
+			triangulationPointsEnd->point = listIterator->points[i];
+			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(struct PointList));
+			triangulationPointsCount++;
+		}
+		listIterator = listIterator->next;
+	}
+	listIterator = importedStuff->arcs;
+	while(listIterator->next != 0) {
+		struct Point *front;
+		front = &listIterator->points[0];
+		struct Point *end;
+		end = &listIterator->points[listIterator->numPoints-1];
+		// test if these points are already in the list
+		struct PointList *secondListIterator = triangulationPoints;
+		int shouldInsertFront;
+		int shouldInsertEnd;
+		shouldInsertFront = 1;
+		shouldInsertEnd = 1;
+		while (secondListIterator != 0) {
+			if (shouldInsertFront && secondListIterator->point.x == front->x && secondListIterator->point.y == front->y) {
+				// front is a duplicate
+				shouldInsertFront = 0;
+			}
+			if (shouldInsertEnd && secondListIterator->point.x == end->x && secondListIterator->point.y == end->y) {
+				shouldInsertEnd = 0;
+			}
+			if (!shouldInsertFront && !shouldInsertEnd) {
+				break;
+			}
+			secondListIterator = secondListIterator->next;
+		}
+		if (shouldInsertFront) {
+			triangulationPointsEnd->point = *front;
+			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(struct PointList));
+			triangulationPointsCount++;
+		}
+		if (shouldInsertEnd) {
+			triangulationPointsEnd->point = *end;
+			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(struct PointList));
+			triangulationPointsCount++;
+		}
+		listIterator = listIterator->next;
+	}
+	
 	struct Subdivision *triangulation;
 	triangulation = delaunay_triangulate(triangulationPoints, triangulationPointsCount);
 }
