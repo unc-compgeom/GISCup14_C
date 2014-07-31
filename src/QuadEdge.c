@@ -49,6 +49,7 @@ struct Edge * quadEdge_connect(struct Edge *a, struct Edge *b) {
 	struct Edge *e;
 	e = quadEdge_makeEdge();
 	edge_setCoordinates(e, *edge_dest(a), *edge_orig(b));
+	quadEdge_splice(e, edge_lNext(a));
 	quadEdge_splice(edge_sym(e), b);
 	return e;
 }
