@@ -4,6 +4,7 @@
 #include "Subdivision.h"
 #include "ArcsPointsAndOffsets.h"
 #include "ImportGML.h"
+#include "ExportGML.h"
 #include "PointList.h"
 #include "Edge.h"
 
@@ -173,7 +174,7 @@ int main() {
 		simplifiedArcsEnd = simplifiedArcsEnd->next;
 		arcIterator = arcIterator->next;
 	}
-	exportGML_exportGML()
+	exportGML_exportGML(simplifiedArcs, DIR);
 }
 
 int edgeIsPartOfRing(struct Edge *test, struct Edge *fromOrigin) {

@@ -3,7 +3,6 @@
 #include "Subdivision.h"
 #include "Delaunay.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 ///////////////// DELAUNAY TRIANGULATION /////////////////
 struct Subdivision * delaunay_triangulate(struct PointList *points, int numPoints) {
