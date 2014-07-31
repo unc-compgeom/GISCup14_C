@@ -3,6 +3,7 @@
 #include "Delaunay.h"
 #include "Subdivision.h"
 #include "ArcsPointsAndOffsets.h"
+#include "PointArrayList.h"
 #include "ImportGML.h"
 #include "ExportGML.h"
 #include "PointList.h"
@@ -19,6 +20,20 @@ int main() {
 	struct ArcsPointsAndOffsets *importedStuff;
 	importedStuff = importGML_importGML(DIR ARCS, DIR POINTS);
 	
+	// TMP DEBUG
+	struct PointArrayList *tmpIt;
+	tmpIt = importedStuff->arcs;
+	while(tmpIt->next != 0) {
+		int n;
+		for (n = 0; n < tmpIt->numPoints; n++) {
+			// tmp debugging code to print all points
+			printf("%lf, %lf\n", tmpIt>points[n].x + importedStuff->offsetLatitude, tmpIt->points[n].y + importedStuff->offsetLongitude);
+		}
+		tmpIt = tmpIt->next;
+	}
+
+
+
 	int triangulationPointsCount;
 	triangulationPointsCount = 0;
 
