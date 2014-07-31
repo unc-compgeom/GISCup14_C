@@ -24,6 +24,7 @@ int main() {
 		for (i = 0; i < listIterator->numPoints; i++) {
 			triangulationPointsEnd->point = listIterator->points[i];
 			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(struct PointList));
+			triangulationPointsEnd = triangulationPointsEnd->next;
 			triangulationPointsCount++;
 		}
 		listIterator = listIterator->next;
@@ -56,11 +57,13 @@ int main() {
 		if (shouldInsertFront) {
 			triangulationPointsEnd->point = *front;
 			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(struct PointList));
+			triangulationPointsEnd = triangulationPointsEnd->next;
 			triangulationPointsCount++;
 		}
 		if (shouldInsertEnd) {
 			triangulationPointsEnd->point = *end;
 			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(struct PointList));
+			triangulationPointsEnd = triangulationPointsEnd->next;
 			triangulationPointsCount++;
 		}
 		listIterator = listIterator->next;
@@ -71,6 +74,7 @@ int main() {
 	iter = triangulationPoints;
 	for(n = 0; n < triangulationPointsCount; n++) {
 		printf("%lf, %lf\n",iter->point.x, iter->point.y);
+		iter = iter.next;
 	}
 
 	struct Subdivision *triangulation;
