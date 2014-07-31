@@ -2,8 +2,8 @@
 #define CG_ARCSPOINTSANDOFFSETS_H
 
 struct ArcsPointsAndOffsets {
-	struct PointsArrayList *arcs;
-	struct PointsArrayList *points;
+	struct PointArrayList *arcs;
+	struct PointArrayList *points;
 	long offsetLatitude;
 	long offsetLongitude;
 };
