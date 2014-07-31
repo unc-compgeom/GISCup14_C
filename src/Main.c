@@ -212,7 +212,7 @@ int main() {
 				term = start;
 			}
 			if (sp < 1) {
-				struct Point simplified[2];
+				struct Point *simplified = (struct Point *) malloc(sizeof(struct Point)*2);
 				simplified[0] = arrayListIterator->points[0];
 				simplified[1] = arrayListIterator->points[arrayListIterator->numPoints - 1];
 				simpArcIter->points = simplified;
@@ -222,7 +222,7 @@ int main() {
 				size = term - start + 3;
 				int index;
 				index = 0;
-				struct Point simplified[size];
+				struct Point *simplified = (struct Point *) malloc(sizeof(struct Point)*size);
 				simplified[index++] = arrayListIterator->points[0];
 				for (i = start; i <= term; i++) {
 					simplified[index++] = arrayListIterator->points[edgeNumberStack[i]];
