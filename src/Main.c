@@ -247,8 +247,9 @@ int main() {
 	arrayListIterator = simplifiedArcs;
 	int simpCount;
 	simpCount = 1;
-	while(arrayListIterator->next != 0) {
-		printf("line %d\n", simpCount++);
+	printf("Simplified arcs\n");
+	while(arrayListIterator) {
+		printf(" line %d\n", simpCount++);
 		int n;
 		for (n = 0; n < arrayListIterator->numPoints; n++) {
 			arrayListIterator->points[n].x += importedStuff->offsetLongitude;
@@ -258,5 +259,5 @@ int main() {
 		}
 		arrayListIterator = arrayListIterator->next;
 	}
-	// exportGML_exportGML(simplifiedArcs, DIR);
+	exportGML_exportGML(simplifiedArcs, DIR);
 }
