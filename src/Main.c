@@ -208,7 +208,6 @@ int main() {
 	printf("done\n");
 	// restore offset
 	arrayListIterator = simplifiedArcs;
-	int i;
 	while(arrayListIterator) {
 		for (i = 0; i < arrayListIterator->numPoints; i++) {
 			arrayListIterator->points[i].x += importedStuff->offsetLatitude;
