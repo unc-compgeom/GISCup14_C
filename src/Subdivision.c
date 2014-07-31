@@ -58,7 +58,6 @@ struct Edge * subdivision_locate(struct Subdivision *s, struct Point *q) {
 			return NULL;
 		} else if (!predicate_leftOrAhead(q, edge_orig(e), edge_dest(e))) {
 			s->startingEdge = edge_sym(e); // reassign starting edge so we don't have to look as far next time
-			printf("located %s", *edge_sym(e));
 			return edge_sym(e);
 		} else if (predicate_rightOrAhead(edge_dest(edge_oNext(e)), p, q)) {
 			e = edge_oNext(e);
