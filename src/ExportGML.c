@@ -3,9 +3,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#define FILENAME simplified.txt
+#define FILENAME "simplified.txt"
 
-void exportGML_exportGML(struct PointArrayList *PointArrayList, char directoryName[]) {
+void exportGML_exportGML(struct PointArrayList *pointArrayList, char directoryName[]) {
 	FILE * fp;
 
 	int newFileNameLength;
@@ -17,5 +17,20 @@ void exportGML_exportGML(struct PointArrayList *PointArrayList, char directoryNa
 	if (!fp) {
 		exit(1);
 	}
-
+	int i;
+	int j;
+	i = 1;
+	j = 0;
+	
+	struct PointArrayList *listIterator;
+	listIterator = pointArrayList;
+	while(listIterator->next != 0) {
+		fprintf(fp, "%d:<gml:LineString srsName=\"EPSG:54004\" xmlns:gml=\"http://www.opengis.net/gml\"><gml:coordinates decimal=\".\" cs=\",\" ts=\" \">", i++);
+		for (j = 0; j < listIterator->numPoints; j++) {
+			fprintf(fp, "%d,%d ", listIterator->points[j].x, listIterator->points[j].y);
+		}
+		fprintf(fp, "</gml:coordinates></gml:LineString>\n");
+		listIterator = listIterator->next;
+	}
+	fclose(fp);
 }

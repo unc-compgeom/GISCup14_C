@@ -95,6 +95,7 @@ struct PointArrayList * importGML_readFile(char fileName[]) {
 		importedPointsEnd->next = 	(struct PointArrayList*) malloc(sizeof(struct PointArrayList));	
 		importedPointsEnd = importedPointsEnd->next;
 	}
+	fclose(fp);
 	return importedPoints;
 }
 
