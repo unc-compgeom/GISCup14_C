@@ -92,10 +92,10 @@ int main() {
 			simplifiedArcsEnd->points = arcIterator->points;
 		} else {
 			// locate each edge;
-			struct Edge locatedEdges[arcIterator->numPoints];
+			struct Edge *locatedEdges[arcIterator->numPoints];
 			int i;
 			for (i = 0; i < arcIterator->numPoints; i++) {
-				struct Point *tmpPoint = arcIterator->points[i];
+				struct Point *tmpPoint = &arcIterator->points[i];
 				locatedEdges[i] = subdivision_locate(triangulation, tmpPoint);
 			}
 			// do the stacking/popping of triangles to getFirst a sequence
