@@ -164,8 +164,8 @@ int main() {
 			// do the stacking/popping of triangles to get a sequence
 			// of triangles that the shortest path must visit on its way
 			// from start to end
-			struct Edge *edgeStack[arrayListIterator->numPoints + 1];
-			int edgeNumberStack[arrayListIterator->numPoints + 1];
+			struct Edge *edgeStack[arrayListIterator->numPoints + 1] = (struct Edge *) malloc(sizeof(struct Edge *));
+			int edgeNumberStack[arrayListIterator->numPoints + 1] = (int []) malloc(sizeof(int));
 			int sp;
 			sp = 0;
 			// push the first edge crossed
