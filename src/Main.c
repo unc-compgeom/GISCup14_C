@@ -95,7 +95,8 @@ int main() {
 			struct Edge locatedEdges[arcIterator->numPoints];
 			int i;
 			for (i = 0; i < arcIterator->numPoints; i++) {
-				locatedEdges[i] = subdivision_locate(triangulation, arcIterator->points[i]);
+				struct Point *tmpPoint = arcIterator->points[i];
+				locatedEdges[i] = subdivision_locate(triangulation, tmpPoint);
 			}
 			// do the stacking/popping of triangles to getFirst a sequence
 			// of triangles that the shortest path must visit on its way
