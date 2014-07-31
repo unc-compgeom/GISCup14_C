@@ -2,6 +2,7 @@
 #include "QuadEdge.h"
 #include "Subdivision.h"
 #include "Delaunay.h"
+#include "PointList.h"
 #include <stdlib.h>
 
 ///////////////// DELAUNAY TRIANGULATION /////////////////

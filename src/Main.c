@@ -126,7 +126,7 @@ int main() {
 			for (i = 0; i < arrayListIterator->numPoints; i++) {
 				locatedEdges[i] = subdivision_locate(triangulation, &arrayListIterator->points[i]);
 			}
-			// do the stacking/popping of triangles to getFirst a sequence
+			// do the stacking/popping of triangles to get a sequence
 			// of triangles that the shortest path must visit on its way
 			// from start to end
 			struct Edge *edgeStack[arrayListIterator->numPoints + 1];
@@ -211,11 +211,11 @@ int main() {
 	int simpCount;
 	simpCount = 1;
 	while(arrayListIterator->next != 0) {
-		printf("line %d\n", simpCount)
+		printf("line %d\n", simpCount++);
 		int n;
 		for (n = 0; n < arrayListIterator->numPoints; n++) {
-			arrayListIterator->points[n].x += importedStuff->offsetLatitude;
-			arrayListIterator->points[n].y += importedStuff->offsetLongitude;
+			arrayListIterator->points[n].x += importedStuff->offsetLongitude;
+			arrayListIterator->points[n].y += importedStuff->offsetLatitude;
 			// tmp debugging code to print all points
 			printf("  %lf, %lf\n", arrayListIterator->points[n].x, arrayListIterator->points[n].y);
 		}

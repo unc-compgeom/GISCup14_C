@@ -4,8 +4,8 @@
 struct ArcsPointsAndOffsets {
 	struct PointArrayList *arcs;
 	struct PointArrayList *points;
-	long offsetLatitude;
 	long offsetLongitude;
+	long offsetLatitude;
 };
 
 #endif /* CG_ARCSPOINTSANDOFFSETS_H */
