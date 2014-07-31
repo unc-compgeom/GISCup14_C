@@ -88,26 +88,26 @@ int main() {
 	arcIterator = importedStuff->arcs;
 
 	while(arcIterator->next != 0) {
-		if (arcIterator->arc->numPoints < 4) {
-			simplifiedArcsEnd->arc = arcIterator->arc;
+		if (arcIterator->numPoints < 4) {
+			simplifiedArcsEnd->points = arcIterator->points;
 		} else {
 			// locate each edge;
 			struct Edge locatedEdges[arcIterator->numPoints];
 			int i;
 			for (i = 0; i < arcIterator->numPoints; i++) {
-				locatedEdges[i] = subdivision_locate(triangulation, arcIterator->arc[i]);
+				locatedEdges[i] = subdivision_locate(triangulation, arcIterator->points[i]);
 			}
 			// do the stacking/popping of triangles to getFirst a sequence
 			// of triangles that the shortest path must visit on its way
 			// from start to end
-			struct Edge edgeStack[arcIterator->arc->numPoints+1];
-			int edgeNumberStack[arcIterator->arc->numPoints+1];
+			struct Edge edgeStack[arcIterator->numPoints+1];
+			int edgeNumberStack[arcIterator->numPoints+1];
 			int sp;
 			sp = 0;
 			// push the first edge crossed
 			edgeStack[sp++] = locatedEdges[0];
 			// for each subsequent edge
-			for (i = 1; i < arcIterator->arc->numPoints; i++) {
+			for (i = 1; i < arcIterator->numPoints; i++) {
 				if (edge_sym(edgeStack[sp - 1]) == locatedEdges[i]) {
 					// if this edge's reverse is on top of the stac, pop it
 					sp--;
@@ -147,9 +147,9 @@ int main() {
 			}
 			if (sp < 1) {
 				struct Point simplified[2];
-				simplified[0] = arc[0];
-				simplified[1] = arc[arc.length - 1];
-				simplifiedArcsEnd->arc = simplified;
+				simplified[0] = arcIterator->points[0];
+				simplified[1] = arcIterator->points[arcIterator->numPoints - 1];
+				simplifiedArcsEnd->points = simplified;
 			} else {
 				int size;
 				size = term - start + 3;
