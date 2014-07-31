@@ -22,9 +22,6 @@ struct PointsArrayList * importGML_readFile(char fileName[]) {
 		numberOfCoordinates = 0;
 		// skip line header information
 		fscanf(fp, "%c", &c);
-		if (c == EOF) {
-			break;
-		}
 		while(1) {
 			fscanf(fp, "%c", &c);
 			if (c == '>') {
@@ -90,8 +87,11 @@ struct PointsArrayList * importGML_readFile(char fileName[]) {
 				break;
 			}
 		}
+		// go on to the next line
 		fscanf(fp, "%c", &c);
-		if (c == EOF) {
+		// read the first character of the next line
+		fscanf(fp, "%c", &c);
+		if (c == '\n') {
 			break;
 		}
 		importedPoints->next = 	(struct PointsArrayList*) malloc(sizeof(struct PointsArrayList));	
