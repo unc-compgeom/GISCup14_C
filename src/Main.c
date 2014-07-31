@@ -63,7 +63,7 @@ int main() {
 	triPointsSize++;
 	// copy all remaining points from points list
 	while (arrayListIterator) {
-		for (triPointsSize = 1; i < arrayListIterator->numPoints; i++) {
+		for (i = 1; i < arrayListIterator->numPoints; i++) {
 			// make next list entry
 			triIterator->next = (struct PointList*) malloc(sizeof(struct PointList));
 			// advance the list iterator
