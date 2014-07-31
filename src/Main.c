@@ -70,12 +70,13 @@ int main() {
 			triIterator = triIterator->next;
 			// copy pointers
 			triIterator->point = arrayListIterator->points[i];
-			triIterator->next = 0;
 			// increase the count
 			triPointsSize++;
 		}
 		arrayListIterator = arrayListIterator->next;
 	}
+	// set the next pointer to null
+	triIterator->next = 0;
 	// copy unique endpoints from arcs list
 	arrayListIterator = importedStuff->arcs;
 	while (arrayListIterator) {
@@ -118,6 +119,19 @@ int main() {
 			triPointsSize++;
 		}
 		arrayListIterator = arrayListIterator->next;
+	}
+
+	// print out the points to triangulate
+	struct PointList *tmpTriIt;
+	tmpTriIt = triPoints;
+	tmpI2 = 1;
+	printf("triangulation points\n");
+	while (tmpTriIt) {
+		printf(" row %d\n", tmpI2++);
+		for (tmpI = 0; tmpI < tmpTriIt->numPoints; tmpI++) {
+			printf("  %lf, %lf\n", tmpTriIt->points[tmpI].x + importedStuff->offsetLongitude, tmpTriIt->points[tmpI].y + importedStuff->offsetLatitude);
+		}
+		tmpTriIt = tmpTriIt->next;
 	}
 
 	// TRIANGULATE
