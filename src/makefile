@@ -17,7 +17,7 @@ OBJECTS = $(patsubst %,$(OBJECTDIR)/%,$(_OBJECTS))
 $(OBJECTDIR)/%.o: %.c $(DEPENDENCIES)
 	$(CCOMPILER) -c -o $@ $< $(CFLAGS)
 
-triangulate: $(OBJECTS)
+simplify: $(OBJECTS)
 	gcc -o $@ $^ $(CFLAGS) $(LIBRARIES)
 
 .PHONY: clean

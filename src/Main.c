@@ -6,9 +6,13 @@
 #include "ImportGML.h"
 #include "PointList.h"
 
+#define ARCSFILE "../td3/lines_out.txt"
+#define POINTSFILE "../td3/points_out.txt"
+
 int main() {
+	// IMPORT COORDINATES
 	struct ArcsPointsAndOffsets *importedStuff;
-	importedStuff = importGML_importGML("../td1/lines_out.txt", "../td1/points_out.txt");
+	importedStuff = importGML_importGML(ARCSFILE, POINTSFILE);
 	
 	int triangulationPointsCount;
 	triangulationPointsCount = 0;
@@ -22,7 +26,6 @@ int main() {
 	listIterator = importedStuff->points;
 	while(listIterator->next != 0) {
 		for (i = 0; i < listIterator->numPoints; i++) {
-			printf("%lf, %lf\n", listIterator->points[i].x, listIterator->points[i].y);
 			triangulationPointsEnd->point = listIterator->points[i];
 			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(struct PointList));
 			triangulationPointsEnd = triangulationPointsEnd->next;
@@ -34,10 +37,8 @@ int main() {
 	while(listIterator->next != 0) {
 		struct Point *front;
 		front = &listIterator->points[0];
-		printf("%lf, %lf", front->x, front->y);
 		struct Point *end;
 		end = &listIterator->points[listIterator->numPoints-1];
-		printf("%lf, %lf", end->x, end->y);
 		// test if these points are already in the list
 		struct PointList *secondListIterator = triangulationPoints;
 		int shouldInsertFront;
@@ -75,11 +76,8 @@ int main() {
 	int n;
 	struct PointList *iter;
 	iter = triangulationPoints;
-	for(n = 0; n < triangulationPointsCount; n++) {
-		printf("%lf, %lf\n",iter->point.x, iter->point.y);
-		iter = iter->next;
-	}
 
+	// TRIANGULATE
 	struct Subdivision *triangulation;
 	triangulation = delaunay_triangulate(triangulationPoints, triangulationPointsCount);
 }
