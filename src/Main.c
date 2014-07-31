@@ -35,6 +35,7 @@ int main() {
 		tmpIt = tmpIt->next;
 	}
 	printf("arcs\n");
+	tmpI2 = 1;
 	tmpIt = importedStuff->arcs;
 	while (tmpIt) {
 		printf(" row %d\n", tmpI2++);
