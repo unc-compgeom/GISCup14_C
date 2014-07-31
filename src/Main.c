@@ -168,7 +168,7 @@ int main() {
 			int edgeNumberStack[arrayListIterator->numPoints + 1] = (int []) malloc(sizeof(int));
 			int sp;
 			sp = 0;
-			i = 0
+			i = 0;
 			// push the first edge crossed
 			edgeStack[sp] = locatedEdges[i];
 			edgeNumberStack[sp++] = i;
