@@ -21,6 +21,10 @@ struct PointsArrayList * importGML_readFile(char fileName[]) {
 		int numberOfCoordinates;
 		numberOfCoordinates = 0;
 		// skip line header information
+		fscanf(fp, "%c", &c);
+		if (c == EOF) {
+			break;
+		}
 		while(1) {
 			fscanf(fp, "%c", &c);
 			if (c == '>') {
@@ -98,9 +102,9 @@ struct PointsArrayList * importGML_readFile(char fileName[]) {
 struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char pointsFilename[]) {
 	struct ArcsPointsAndOffsets *data;
 	data = arcsPointsAndOffsets_construct();
-	struct PointsList *readArcs;
+	struct PointsArrayList *readArcs;
 	readArcs = importGML_readFile(arcsFilename);
-	struct PointsList *readPoints;
+	struct PointsArrayList *readPoints;
 	readPoints = importGML_readFile(pointsFilename);
 
 	// find the minimum latitude and longitude
