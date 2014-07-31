@@ -9,7 +9,7 @@
 #include "PointList.h"
 #include "Edge.h"
 
-#define DIR "../td3"
+#define DIR "../td1"
 #define ARCS "/lines_out.txt"
 #define POINTS "/points_out.txt"
 
@@ -19,6 +19,31 @@ int main() {
 	struct ArcsPointsAndOffsets *importedStuff;
 	importedStuff = importGML_importGML(DIR ARCS, DIR POINTS);
 	
+
+	// one more time, print out the points we just read in
+	struct PointArrayList *tmpIt;
+	tmpIt = importedStuff->points;
+	int tmpI;
+	int tmpI2;
+	tmpI2 = 1;
+	printf("points\n");
+	while (tmpIt) {
+		printf(" row %d\n", tmpI2++);
+		for (tmpI = 0; tmpI < tmpIt->numPoints; tmpI++) {
+			printf("  %lf, %lf\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
+		}
+		tmpIt = tmpIt->next;
+	}
+	printf("arcs\n");
+	tmpI2 = 1;
+	tmpIt = importedStuff->arcs;
+	while (tmpIt) {
+		printf(" row %d\n", tmpI2++);
+		for (tmpI = 0; tmpI < tmpIt->numPoints; tmpI++) {
+			printf("  %lf, %lf\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
+		}
+		tmpIt = tmpIt->next;
+	}
 	printf("done\n");
 	
 	printf("Triangulating points...");
@@ -28,29 +53,31 @@ int main() {
 	int triPointsSize;
 	triPointsSize = 0;
 	struct PointList *triIterator = triPoints;
-	
-	// add all constraint points and unique arc endpoints to the triangulation list
-	int i;
 	struct PointArrayList *arrayListIterator;
 	arrayListIterator = importedStuff->points;
+	// add all constraint points and unique arc endpoints to the triangulation list
+	
 	// copy the first point to initialize the list
 	triIterator->point = arrayListIterator->points[0];
 	triPointsSize++;
-	// copy all remaining points from points list
-	while (arrayListIterator) {
-		for (triPointsSize = 1; i < arrayListIterator->numPoints; i++) {
-			// make next list entry
-			triIterator->next = (struct PointList*) malloc(sizeof(struct PointList));
-			// advance the list iterator
-			triIterator = triIterator->next;
-			// copy pointers
-			triIterator->point = arrayListIterator->points[i];
-			triIterator->next = 0;
-			// increase the count
-			triPointsSize++;
-		}
+	arrayListIterator = arrayListIterator->next;
+	// copy all points
+	while (arrayListIterator) {		
+		// copy all remaining points from points list
+
+		// make next list entry
+		triIterator->next = (struct PointList*) malloc(sizeof(struct PointList));
+		// advance the list iterator
+		triIterator = triIterator->next;
+		// copy pointers
+		triIterator->point = arrayListIterator->points[0];
+		// increase the count
+		triPointsSize++;
 		arrayListIterator = arrayListIterator->next;
 	}
+	// set the next pointer to null
+	triIterator->next = 0;
+
 	// copy unique endpoints from arcs list
 	arrayListIterator = importedStuff->arcs;
 	while (arrayListIterator) {
@@ -95,13 +122,21 @@ int main() {
 		arrayListIterator = arrayListIterator->next;
 	}
 
+	// print out the points to triangulate
+	struct PointList *tmpTriIt;
+	tmpTriIt = triPoints;
+	printf("triangulation points\n");
+	while (tmpTriIt) {
+		printf("  %lf, %lf  (%lf, %lf)\n", tmpTriIt->point.x + importedStuff->offsetLongitude, tmpTriIt->point.y + importedStuff->offsetLatitude, tmpTriIt->point.x, tmpTriIt->point.y);
+		tmpTriIt = tmpTriIt->next;
+	}
+
 	// TRIANGULATE
 	struct Subdivision *triangulation;
 	triangulation = delaunay_triangulate(triPoints, triPointsSize);
 
 	printf("done\n");
 	// SIMPLIFY
-
 
 	printf("Simplifying arcs...");
 	// make a struct to hold the simplified data
@@ -126,7 +161,7 @@ int main() {
 			for (i = 0; i < arrayListIterator->numPoints; i++) {
 				locatedEdges[i] = subdivision_locate(triangulation, &arrayListIterator->points[i]);
 			}
-			// do the stacking/popping of triangles to getFirst a sequence
+			// do the stacking/popping of triangles to get a sequence
 			// of triangles that the shortest path must visit on its way
 			// from start to end
 			struct Edge *edgeStack[arrayListIterator->numPoints + 1];
@@ -134,7 +169,8 @@ int main() {
 			int sp;
 			sp = 0;
 			// push the first edge crossed
-			edgeStack[sp++] = locatedEdges[0];
+			edgeStack[sp] = locatedEdges[0];
+			edgeNumberStack[sp++] = 0;
 			// for each subsequent edge
 			for (i = 1; i < arrayListIterator->numPoints; i++) {
 				if (edge_sym(edgeStack[sp - 1]) == locatedEdges[i]) {
@@ -208,14 +244,18 @@ int main() {
 	printf("done\n");
 	// restore offset
 	arrayListIterator = simplifiedArcs;
-	while(arrayListIterator) {
-		for (i = 0; i < arrayListIterator->numPoints; i++) {
-			arrayListIterator->points[i].x += importedStuff->offsetLatitude;
-			arrayListIterator->points[i].y += importedStuff->offsetLongitude;
+	int simpCount;
+	simpCount = 1;
+	while(arrayListIterator->next != 0) {
+		printf("line %d\n", simpCount++);
+		int n;
+		for (n = 0; n < arrayListIterator->numPoints; n++) {
+			arrayListIterator->points[n].x += importedStuff->offsetLongitude;
+			arrayListIterator->points[n].y += importedStuff->offsetLatitude;
 			// tmp debugging code to print all points
-			printf("%lf, %lf\n", arrayListIterator->points[i].x, arrayListIterator->points[i].y);
+			printf("  %lf, %lf\n", arrayListIterator->points[n].x, arrayListIterator->points[n].y);
 		}
 		arrayListIterator = arrayListIterator->next;
 	}
-	exportGML_exportGML(simplifiedArcs, DIR);
+	// exportGML_exportGML(simplifiedArcs, DIR);
 }
