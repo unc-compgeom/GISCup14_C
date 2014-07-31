@@ -139,6 +139,7 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 			listIterator->points[i].x -= data->offsetLatitude;
 			listIterator->points[i].y -= data->offsetLongitude;
 		}
+		printf("(%lf, %lf)\n", listIterator->points[i].x, listIterator->points[i].y);
 		listIterator = listIterator->next;
 	}
 	listIterator = data->points;
@@ -147,6 +148,7 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 			listIterator->points[i].x -= data->offsetLatitude;
 			listIterator->points[i].y -= data->offsetLongitude;
 		}
+		printf("(%lf, %lf)\n", listIterator->points[i].x, listIterator->points[i].y);
 		listIterator = listIterator->next;
 	}
 
