@@ -65,7 +65,14 @@ int main() {
 		}
 		listIterator = listIterator->next;
 	}
-	
+
+	int n;
+	struct PointList *iter;
+	iter = triangulationPoints;
+	for(n = 0; n < triangulationPointsCount; n++) {
+		printf("%lf, %lf\n",iter->point.x, iter->point.y);
+	}
+
 	struct Subdivision *triangulation;
 	triangulation = delaunay_triangulate(triangulationPoints, triangulationPointsCount);
 }
