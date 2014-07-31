@@ -16,6 +16,18 @@ double predicate_distSquared(struct Point *p, struct Point *q) {
 	return dx * dx + dy * dy;
 }
 
+int predicate_edgeIsPartOfRing(struct Edge *test, struct Edge *fromOrigin) {
+	struct Edge *e;
+	e = fromOrigin;
+	do {
+		if (e == test || edge_lNext(e) == test || edge_lNext(edge_lNext(e)) == test) {
+			return 1;
+		}
+		e = edge_oNext(e);
+	} while (e != fromOrigin);
+	return 0;
+}
+
 int predicate_isPointInCircle(struct Point *test, struct Point *a,
 			struct Point *b, struct Point *c) {
 	float ax = a->x, ay = a->y;

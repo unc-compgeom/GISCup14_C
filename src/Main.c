@@ -13,8 +13,6 @@
 #define ARCS "/lines_out.txt"
 #define POINTS "/points_out.txt"
 
-int edgeIsPartOfRing(struct Edge *test, struct Edge *fromOrigin);
-
 int main() {
 	printf("Reading data...");
 	// IMPORT COORDINATES
@@ -104,37 +102,41 @@ int main() {
 	printf("done\n");
 	// SIMPLIFY
 
+
+	printf("Simplifying arcs...");
+	// make a struct to hold the simplified data
 	struct PointArrayList *simplifiedArcs = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
-	struct PointArrayList *simplifiedArcsEnd;
-	simplifiedArcsEnd = simplifiedArcs;
+	// an iterator
+	struct PointArrayList *simpArcIter;
+	// initialize to front of list
+	simpArcIter = simplifiedArcs;
+	// iterator for raw data
+	arrayListIterator = importedStuff->arcs;
 
-	struct PointArrayList *arcIterator;
-	arcIterator = importedStuff->arcs;
-
-	while(arcIterator->next != 0) {
-		simplifiedArcsEnd->numPoints = 0;
-		if (arcIterator->numPoints < 4) {
-			simplifiedArcsEnd->points = arcIterator->points;
-			simplifiedArcsEnd->numPoints = arcIterator->numPoints;
+	while (1) {
+		simpArcIter->numPoints = 0;
+		if (arrayListIterator->numPoints < 4) {
+			// don't worry about short arcs
+			simpArcIter->points = arrayListIterator->points;
+			simpArcIter->numPoints = arrayListIterator->numPoints;
 		} else {
 			// locate each edge;
-			struct Edge *locatedEdges[arcIterator->numPoints];
+			struct Edge *locatedEdges[arrayListIterator->numPoints];
 			int i;
-			for (i = 0; i < arcIterator->numPoints; i++) {
-				struct Point *tmpPoint = &arcIterator->points[i];
-				locatedEdges[i] = subdivision_locate(triangulation, tmpPoint);
+			for (i = 0; i < arrayListIterator->numPoints; i++) {
+				locatedEdges[i] = subdivision_locate(triangulation, &arrayListIterator->points[i]);
 			}
 			// do the stacking/popping of triangles to getFirst a sequence
 			// of triangles that the shortest path must visit on its way
 			// from start to end
-			struct Edge *edgeStack[arcIterator->numPoints+1];
-			int edgeNumberStack[arcIterator->numPoints+1];
+			struct Edge *edgeStack[arrayListIterator->numPoints + 1];
+			int edgeNumberStack[arrayListIterator->numPoints + 1];
 			int sp;
 			sp = 0;
 			// push the first edge crossed
 			edgeStack[sp++] = locatedEdges[0];
 			// for each subsequent edge
-			for (i = 1; i < arcIterator->numPoints; i++) {
+			for (i = 1; i < arrayListIterator->numPoints; i++) {
 				if (edge_sym(edgeStack[sp - 1]) == locatedEdges[i]) {
 					// if this edge's reverse is on top of the stac, pop it
 					sp--;
@@ -152,7 +154,7 @@ int main() {
 			int start;
 			start = 1;
 			for (i = 2; i < sp - 1; i++) {
-				if (edgeIsPartOfRing(edgeStack[i], edgeStack[0])) {
+				if (predicate_edgeIsPartOfRing(edgeStack[i], edgeStack[0])) {
 					start = i;
 				} else {
 					break;
@@ -163,7 +165,7 @@ int main() {
 			int term;
 			term = sp - 2;
 			for (i = term - 1; i > 0; i--) {
-				if (edgeIsPartOfRing(edgeStack[i], edgeStack[sp - 1])) {
+				if (predicate_edgeIsPartOfRing(edgeStack[i], edgeStack[sp - 1])) {
 					term = i;
 				} else {
 					break;
@@ -174,53 +176,47 @@ int main() {
 			}
 			if (sp < 1) {
 				struct Point simplified[2];
-				simplified[0] = arcIterator->points[0];
-				simplified[1] = arcIterator->points[arcIterator->numPoints - 1];
-				simplifiedArcsEnd->points = simplified;
-				simplifiedArcsEnd->numPoints = 2;
+				simplified[0] = arrayListIterator->points[0];
+				simplified[1] = arrayListIterator->points[arrayListIterator->numPoints - 1];
+				simpArcIter->points = simplified;
+				simpArcIter->numPoints = 2;
 			} else {
 				int size;
 				size = term - start + 3;
 				int index;
 				index = 0;
 				struct Point simplified[size];
-				simplified[index++] = arcIterator->points[0];
+				simplified[index++] = arrayListIterator->points[0];
 				for (i = start; i <= term; i++) {
-					simplified[index++] = arcIterator->points[edgeNumberStack[i]];
+					simplified[index++] = arrayListIterator->points[edgeNumberStack[i]];
 				}
-				simplified[index] = arcIterator->points[arcIterator->numPoints - 1];
-				simplifiedArcsEnd->points = simplified;
-				simplifiedArcsEnd->numPoints = size;
+				simplified[index] = arrayListIterator->points[arrayListIterator->numPoints - 1];
+				simpArcIter->points = simplified;
+				simpArcIter->numPoints = size;
 			}
 
 		}
-		simplifiedArcsEnd->next = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
-		simplifiedArcsEnd = simplifiedArcsEnd->next;
-		arcIterator = arcIterator->next;
-	}
-	// restore offset
-	arcIterator = simplifiedArcs;
-	while(arcIterator->next != 0) {
-		int n;
-		for (n = 0; n < arcIterator->numPoints; n++) {
-			arcIterator->points[n].x += importedStuff->offsetLatitude;
-			arcIterator->points[n].y += importedStuff->offsetLongitude;
-			// tmp debugging code to print all points
-			printf("%lf, %lf\n", arcIterator->points[n].x, arcIterator->points[n].y);
+		if (arrayListIterator->next) {
+			simpArcIter->next = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
+			simpArcIter = simpArcIter->next;
+			arrayListIterator = arrayListIterator->next;
+		} else {
+			// stop when there are no more point arrays to process
+			break;
 		}
-		arcIterator = arcIterator->next;
+	}
+	printf("done\n");
+	// restore offset
+	arrayListIterator = simplifiedArcs;
+	while(arrayListIterator->next != 0) {
+		int n;
+		for (n = 0; n < arrayListIterator->numPoints; n++) {
+			arrayListIterator->points[n].x += importedStuff->offsetLatitude;
+			arrayListIterator->points[n].y += importedStuff->offsetLongitude;
+			// tmp debugging code to print all points
+			printf("%lf, %lf\n", arrayListIterator->points[n].x, arrayListIterator->points[n].y);
+		}
+		arrayListIterator = arrayListIterator->next;
 	}
 	exportGML_exportGML(simplifiedArcs, DIR);
-}
-
-int edgeIsPartOfRing(struct Edge *test, struct Edge *fromOrigin) {
-	struct Edge *e;
-	e = fromOrigin;
-	do {
-		if (e == test || edge_lNext(e) == test || edge_lNext(edge_lNext(e)) == test) {
-			return 1;
-		}
-		e = edge_oNext(e);
-	} while (e != fromOrigin);
-	return 0;
 }
