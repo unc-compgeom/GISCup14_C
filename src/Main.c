@@ -22,15 +22,26 @@ int main() {
 
 	// one more time, print out the points we just read in
 	struct PointArrayList *tmpIt;
-	tmpIt = importedStuff->arcs;
+	tmpIt = importedStuff->points;
 	int tmpI;
 	int tmpI2;
 	tmpI2 = 1;
+	printf("points\n");
 	while (tmpIt) {
-		printf("row %d\n", tmpI2++);
+		printf(" row %d\n", tmpI2++);
 		for (tmpI = 0; tmpI < tmpIt->numPoints; tmpI++) {
-			printf("  %ld, %ld\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
+			printf("  %lf, %lf\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
 		}
+		tmpIt = tmpIt->next;
+	}
+	printf("arcs\n");
+	tmpIt = importedStuff->arcs;
+	while (tmpIt) {
+		printf(" row %d\n", tmpI2++);
+		for (tmpI = 0; tmpI < tmpIt->numPoints; tmpI++) {
+			printf("  %lf, %lf\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
+		}
+		tmpIt = tmpIt->next;
 	}
 	printf("done\n");
 	

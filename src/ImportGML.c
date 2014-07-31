@@ -148,8 +148,8 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 	listIterator = data->points;
 	while(listIterator->next != 0) {
 		for (i = 0; i < listIterator->numPoints; i++) {
-			listIterator->points[i].x -= data->offsetLatitude;
-			listIterator->points[i].y -= data->offsetLongitude;
+			listIterator->points[i].x -= data->offsetLongitude;
+			listIterator->points[i].y -= data->offsetLatitude;
 		}
 		listIterator = listIterator->next;
 	}
