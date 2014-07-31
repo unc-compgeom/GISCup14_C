@@ -166,7 +166,7 @@ int main() {
 					simplified[index++] = arcIterator->points[edgeNumberStack[i]];
 				}
 				simplified[index] = arcIterator->points[arcIterator->numPoints - 1];
-				simplifiedArcs->points = simplified;
+				simplifiedArcsEnd->points = simplified;
 			}
 
 		}

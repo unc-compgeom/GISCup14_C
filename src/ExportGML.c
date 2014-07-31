@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define FILENAME "simplified.txt"
+#define FILENAME "/simplified.txt"
 
 void exportGML_exportGML(struct PointArrayList *pointArrayList, char directoryName[]) {
 	FILE * fp;
