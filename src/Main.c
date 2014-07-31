@@ -13,17 +13,17 @@ int main() {
 	int triangulationPointsCount;
 	triangulationPointsCount = 0;
 
-	struct PointList *triangulationPoints = (struct PointList*) malloc(sizeof(PointList));
+	struct PointList *triangulationPoints = (struct PointList*) malloc(sizeof(struct PointList));
 	struct PointList *triangulationPointsEnd = triangulationPoints;
 	
 	// add all constraint points and unique arc endpoints to the triangulation list
 	int i;
-
+	struct PointArrayList *listIterator;
 	listIterator = importedStuff->points;
 	while(listIterator->next != 0) {
 		for (i = 0; i < listIterator->numPoints; i++) {
 			triangulationPointsEnd->point = listIterator->points[i];
-			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(PointList));
+			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(struct PointList));
 			triangulationPointsCount++;
 		}
 		listIterator = listIterator->next;
@@ -41,11 +41,11 @@ int main() {
 		shouldInsertFront = 1;
 		shouldInsertEnd = 1;
 		while (secondListIterator != 0) {
-			if (shouldInsertFront && secondListIterator->point.x == front.x && secondListIterator->point.y == front.y) {
+			if (shouldInsertFront && secondListIterator->point.x == front->x && secondListIterator->point.y == front->y) {
 				// front is a duplicate
 				shouldInsertFront = 0;
 			}
-			if (shouldInsertEnd && secondListIterator->point.x == end.x && secondListIterator->point.y == end.y) {
+			if (shouldInsertEnd && secondListIterator->point->x == end.x && secondListIterator->point->y == end.y) {
 				shouldInsertEnd = 0;
 			}
 			if (!shouldInsertFront && !shouldInsertEnd) {
@@ -53,14 +53,14 @@ int main() {
 			}
 		}
 		if (shouldInsertFront) {
-			triangulationPointsEnd->point = front;
+			triangulationPointsEnd->point = *front;
 			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(PointList));
 			triangulationPointsCount++
 		}
 		if (shouldInsertEnd) {
-			triangulationPointsEnd->point = end;
+			triangulationPointsEnd->point = *end;
 			triangulationPointsEnd->next = (struct PointList*) malloc(sizeof(PointList));
-			triangulationPointsCount++
+			triangulationPointsCount++;
 		}
 		listIterator = listIterator->next;
 	}
