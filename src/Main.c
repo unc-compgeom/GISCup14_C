@@ -259,17 +259,3 @@ int main() {
 	}
 	// exportGML_exportGML(simplifiedArcs, DIR);
 }
-
-struct PointArrayList *tmpIt;
-	tmpIt = importedStuff->points;
-	int tmpI;
-	int tmpI2;
-	tmpI2 = 1;
-	printf("points\n");
-	while (tmpIt) {
-		printf(" row %d\n", tmpI2++);
-		for (tmpI = 0; tmpI < tmpIt->numPoints; tmpI++) {
-			printf("  %lf, %lf\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
-		}
-		tmpIt = tmpIt->next;
-	}
