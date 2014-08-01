@@ -259,5 +259,5 @@ int main() {
 		}
 		arrayListIterator = arrayListIterator->next;
 	}
-	exportGML_exportGML(simplifiedArcs, DIR);
+	//exportGML_exportGML(simplifiedArcs, DIR);
 }
