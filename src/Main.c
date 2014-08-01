@@ -251,6 +251,22 @@ int main(int argc, char *argv[]) {
 			break;
 		}
 	}
+
+	// did we stop early?
+	if (arrayListIterator->next) {
+		while(1) {
+			simpArcIter->points = arrayListIterator->points;
+			simpArcIter->numPoints = arrayListIterator->numPoints;
+			if (arrayListIterator->next) {
+				simpArcIter->next = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
+				simpArcIter = simpArcIter->next;
+				arrayListIterator = arrayListIterator->next;
+			} else {
+				break;
+			}
+		}	
+	}
+
 	printf("done\n");
 	// restore offset
 	arrayListIterator = simplifiedArcs;
