@@ -194,27 +194,29 @@ int main(int argc, char *argv[]) {
 			// leave the first point, remove up to index sp - 2
 			int start;
 			start = 1;
-			for (i = 2; i < sp - 1; i++) {
-				if (predicate_edgeIsPartOfRing(edgeStack[i], edgeStack[0])) {
-					start = i;
-				} else {
-					break;
-				}
-			}
+			// this code is wrong
+			// for (i = 2; i < sp - 1; i++) {
+			// 	if (predicate_edgeIsPartOfRing(edgeStack[i], edgeStack[0])) {
+			// 		start = i;
+			// 	} else {
+			// 		break;
+			// 	}
+			// }
 			// eliminate any looping around the end point
 			// leave the last point remove up to index 1
 			int term;
 			term = sp - 2;
-			for (i = term - 1; i > 0; i--) {
-				if (predicate_edgeIsPartOfRing(edgeStack[i], edgeStack[sp - 1])) {
-					term = i;
-				} else {
-					break;
-				}
-			}
-			if (term < start) {
-				term = start;
-			}
+			// this code is wrong
+			// for (i = term - 1; i > 0; i--) {
+			// 	if (predicate_edgeIsPartOfRing(edgeStack[i], edgeStack[sp - 1])) {
+			// 		term = i;
+			// 	} else {
+			// 		break;
+			// 	}
+			// }
+			// if (term < start) {
+			// 	term = start;
+			// }
 			if (sp < 1) {
 				struct Point *simplified = (struct Point *) malloc(sizeof(struct Point)*2);
 				simplified[0] = arrayListIterator->points[0];
