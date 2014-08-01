@@ -7,7 +7,7 @@ LIBRARYDIR =../lib
 
 LIBRARIES=-lm
 
-_DEPENDENCIES = ExportGML.h ArcsPointsAndOffsets.h PointArrayList.h PointList.h ImportGML.h Delaunay.h Subdivision.h QuadEdge.h Edge.h Point.h Predicate.h
+_DEPENDENCIES = UniquePointList.h ExportGML.h ArcsPointsAndOffsets.h PointArrayList.h PointList.h ImportGML.h Delaunay.h Subdivision.h QuadEdge.h Edge.h Point.h Predicate.h
 DEPENDENCIES = $(patsubst %,$(INCLUDEDIR)/%,$(_DEPENDENCIES))
 
 _OBJECTS = ExportGML.o ImportGML.o Main.o Delaunay.o Subdivision.o QuadEdge.o Edge.o Point.o Predicate.o;
