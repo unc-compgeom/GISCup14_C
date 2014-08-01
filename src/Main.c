@@ -91,7 +91,6 @@ int main(int argc, char *argv[]) {
 	qsort((void *)triPts.pts, ntripts, sizeof(struct Point), point_compare); // print out the points to tri
 
 	// set triPts.ids to first occurrence of coordinates
-	printf("d\n");
 	int lastpt;
 	lastpt = 0;
 	triPts.ids[triPts.pts[0].id] = lastpt; // save index of where the point coordinates are in sorted list
