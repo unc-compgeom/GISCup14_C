@@ -7,6 +7,6 @@ struct Point {
 	int id;
 };
 
-int point_compare(struct Point * point1, struct Point * point2);
+int point_compare(const void *p1, const void *p2);
 
 #endif /* CG_POINT_H */
