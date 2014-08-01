@@ -58,9 +58,9 @@ int main(int argc, char *argv[]) {
 	printf(" - Triangulating points...");
 	// Maintain a list of points to triangulate
 	struct UniquePointList triPts;
-	triPts.pts  = (struct Point*) malloc(ntripts*sizeof(struct Point));
-	triPts.ids = (int*) malloc(ntripts*sizeof(int));
-	triPts.edges = malloc(ntripts*sizeof(struct Edge));
+	triPts.pts  = (struct Point*) malloc(ntripts * sizeof(struct Point));
+	triPts.ids = (int*) malloc(ntripts * sizeof(int));
+	triPts.edges = (struct Edge*) malloc(ntripts * sizeof(struct Edge));
 
 	// add all constraint points and unique arc endpoints to the triangulation list
 	struct PointArrayList *arrayListIterator;
@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) {
 		arrayListIterator = arrayListIterator->next;
 	}
 
-	qsort(&triPts.pts[0], ntripts, sizeof(triPts.pts), point_compar); // print out the points to tri
+	qsort(triPts.pts, ntripts, sizeof(struct Point), point_compar); // print out the points to tri
 
 	// set triPts.ids to first occurrence of coordinates
 	int lastpt;
@@ -123,12 +123,11 @@ int main(int argc, char *argv[]) {
 	// TRIANGULATE
 	struct Subdivision *triangulation;
 	triangulation = delaunay_triangulate(triPoints, triPointsSize);
-	
 
 	struct Edge *e; 
 	e = triangulation->startingEdge;
 	while (e) { // for each edge e
-		triPts.edges[edge_orig(e)->id] = *e; // dereferencing.. should be a pointer
+		triPts.edges[edge_orig(e)->id] = *e; 
 		e = subdivision_nextEdge(triangulation, e);
 	}
 

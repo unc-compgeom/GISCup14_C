@@ -11,5 +11,4 @@ struct UniquePointList {
 
 int ptCompare(struct Point * a, struct Point * b);
 
-
 #endif /* CG_UNIQUEPOINTLIST_H */
