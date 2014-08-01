@@ -9,16 +9,18 @@
 #include "PointList.h"
 #include "Edge.h"
 
-#define DIR "../td1"
-#define ARCS "/lines_out.txt"
-#define POINTS "/points_out.txt"
+int main(int argc, char *argv[]) {
 
-int main() {
+	// Call the program on the command line like this:
+	// Simplify < PointToRemove > < LineInputFilePath > < PointInputFilePath > < OutputFilePath >
+	int pointsToRemoveCount;
+	sscanf(argv[1], "%d", &pointsToRemoveCount);
+
 	printf("Reading data...");
 	// IMPORT COORDINATES
 	struct ArcsPointsAndOffsets *importedStuff;
-	importedStuff = importGML_importGML(DIR ARCS, DIR POINTS);
-	
+	importedStuff = importGML_importGML(argv[2], argv[3]);
+
 
 	// one more time, print out the points we just read in
 	struct PointArrayList *tmpIt;
@@ -45,7 +47,7 @@ int main() {
 		tmpIt = tmpIt->next;
 	}
 	printf("done\n");
-	
+
 	printf("Triangulating points...");
 
 	// Maintain a list of points to triangulate
@@ -56,13 +58,13 @@ int main() {
 	struct PointArrayList *arrayListIterator;
 	arrayListIterator = importedStuff->points;
 	// add all constraint points and unique arc endpoints to the triangulation list
-	
+
 	// copy the first point to initialize the list
 	triIterator->point = arrayListIterator->points[0];
 	triPointsSize++;
 	arrayListIterator = arrayListIterator->next;
 	// copy all points
-	while (arrayListIterator) {		
+	while (arrayListIterator) {
 		// copy all remaining points from points list
 
 		// make next list entry
@@ -148,6 +150,8 @@ int main() {
 	// iterator for raw data
 	arrayListIterator = importedStuff->arcs;
 
+	// int removedPoints;
+	// removedPoints = 0;
 	while (1) {
 		simpArcIter->numPoints = 0;
 		if (arrayListIterator->numPoints < 4) {
@@ -168,9 +172,10 @@ int main() {
 			int edgeNumberStack[arrayListIterator->numPoints + 1];
 			int sp;
 			sp = 0;
+			i = 0;
 			// push the first edge crossed
-			edgeStack[sp] = locatedEdges[0];
-			edgeNumberStack[sp++] = 0;
+			edgeStack[sp] = locatedEdges[i];
+			edgeNumberStack[sp++] = i;
 			// for each subsequent edge
 			for (i = 1; i < arrayListIterator->numPoints; i++) {
 				if (edge_sym(edgeStack[sp - 1]) == locatedEdges[i]) {
@@ -189,6 +194,7 @@ int main() {
 			// leave the first point, remove up to index sp - 2
 			int start;
 			start = 1;
+			// this code is wrong
 			for (i = 2; i < sp - 1; i++) {
 				if (predicate_edgeIsPartOfRing(edgeStack[i], edgeStack[0])) {
 					start = i;
@@ -200,6 +206,7 @@ int main() {
 			// leave the last point remove up to index 1
 			int term;
 			term = sp - 2;
+			// this code is wrong
 			for (i = term - 1; i > 0; i--) {
 				if (predicate_edgeIsPartOfRing(edgeStack[i], edgeStack[sp - 1])) {
 					term = i;
@@ -211,7 +218,7 @@ int main() {
 				term = start;
 			}
 			if (sp < 1) {
-				struct Point simplified[2];
+				struct Point *simplified = (struct Point *) malloc(sizeof(struct Point)*2);
 				simplified[0] = arrayListIterator->points[0];
 				simplified[1] = arrayListIterator->points[arrayListIterator->numPoints - 1];
 				simpArcIter->points = simplified;
@@ -221,7 +228,7 @@ int main() {
 				size = term - start + 3;
 				int index;
 				index = 0;
-				struct Point simplified[size];
+				struct Point *simplified = (struct Point *) malloc(sizeof(struct Point)*size);
 				simplified[index++] = arrayListIterator->points[0];
 				for (i = start; i <= term; i++) {
 					simplified[index++] = arrayListIterator->points[edgeNumberStack[i]];
@@ -229,6 +236,7 @@ int main() {
 				simplified[index] = arrayListIterator->points[arrayListIterator->numPoints - 1];
 				simpArcIter->points = simplified;
 				simpArcIter->numPoints = size;
+				// removedPoints += arrayListIterator->numPoints - size;
 			}
 
 		}
@@ -241,13 +249,30 @@ int main() {
 			break;
 		}
 	}
+
+	// did we stop early?
+	// if (arrayListIterator->next) {
+	// 	while(1) {
+	// 		simpArcIter->points = arrayListIterator->points;
+	// 		simpArcIter->numPoints = arrayListIterator->numPoints;
+	// 		if (arrayListIterator->next) {
+	// 			simpArcIter->next = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
+	// 			simpArcIter = simpArcIter->next;
+	// 			arrayListIterator = arrayListIterator->next;
+	// 		} else {
+	// 			break;
+	// 		}
+	// 	}
+	// }
+
 	printf("done\n");
 	// restore offset
 	arrayListIterator = simplifiedArcs;
 	int simpCount;
 	simpCount = 1;
-	while(arrayListIterator->next != 0) {
-		printf("line %d\n", simpCount++);
+	printf("Simplified arcs\n");
+	while(arrayListIterator) {
+		printf(" line %d\n", simpCount++);
 		int n;
 		for (n = 0; n < arrayListIterator->numPoints; n++) {
 			arrayListIterator->points[n].x += importedStuff->offsetLongitude;
@@ -257,5 +282,5 @@ int main() {
 		}
 		arrayListIterator = arrayListIterator->next;
 	}
-	// exportGML_exportGML(simplifiedArcs, DIR);
+	exportGML_exportGML(simplifiedArcs, argv[4]);
 }

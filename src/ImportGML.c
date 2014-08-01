@@ -106,18 +106,18 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 	importGML_readFile(data->points, pointsFilename);
 
 	// find the minimum latitude and longitude
-	double minimumLatitude = data->arcs->points[0].x;
-	double minimumLongitude = data->arcs->points[0].y;
+	double minimumLongitude = data->points->points[0].x;
+	double minimumLatitude = data->points->points[0].y;
 	int i;
 	struct PointArrayList *listIterator;
 	listIterator = data->arcs;
 	while(listIterator->next != 0) {
 		for (i = 0; i < listIterator->numPoints; i++) {
-			if (listIterator->points[i].x < minimumLatitude) {
-				minimumLatitude = listIterator->points[i].x;
+			if (listIterator->points[i].x < minimumLongitude) {
+				minimumLongitude = listIterator->points[i].x;
 			}
-			if (listIterator->points[i].y < minimumLongitude) {
-				minimumLongitude = listIterator->points[i].y;
+			if (listIterator->points[i].y < minimumLatitude) {
+				minimumLatitude = listIterator->points[i].y;
 			}
 		}
 		listIterator = listIterator->next;
@@ -125,31 +125,33 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 	listIterator = data->points;
 	while(listIterator->next != 0) {
 		for (i = 0; i < listIterator->numPoints; i++) {
-			if (listIterator->points[i].x < minimumLatitude) {
-				minimumLatitude = listIterator->points[i].x;
+			if (listIterator->points[i].x < minimumLongitude) {
+				minimumLongitude = listIterator->points[i].x;
 			}
-			if (listIterator->points[i].y < minimumLongitude) {
-				minimumLongitude = listIterator->points[i].y;
+			if (listIterator->points[i].y < minimumLatitude) {
+				minimumLatitude = listIterator->points[i].y;
 			}
 		}
 		listIterator = listIterator->next;
 	}
-	data->offsetLatitude = (long) minimumLatitude;
 	data->offsetLongitude = (long) minimumLongitude;
+	data->offsetLatitude= (long) minimumLatitude;
+	printf("offsetLongitude %ld\n", data->offsetLongitude);
+	printf("offsetLatitude %ld\n", data->offsetLatitude);
 	// subtract offset from points
 	listIterator = data->arcs;
-	while(listIterator->next != 0) {
+	while (listIterator) {
 		for (i = 0; i < listIterator->numPoints; i++) {
-			listIterator->points[i].x -= data->offsetLatitude;
-			listIterator->points[i].y -= data->offsetLongitude;
+			listIterator->points[i].x -= data->offsetLongitude;
+			listIterator->points[i].y -= data->offsetLatitude;
 		}
 		listIterator = listIterator->next;
 	}
 	listIterator = data->points;
-	while(listIterator->next != 0) {
+	while (listIterator) {
 		for (i = 0; i < listIterator->numPoints; i++) {
-			listIterator->points[i].x -= data->offsetLatitude;
-			listIterator->points[i].y -= data->offsetLongitude;
+			listIterator->points[i].x -= data->offsetLongitude;
+			listIterator->points[i].y -= data->offsetLatitude;
 		}
 		listIterator = listIterator->next;
 	}
