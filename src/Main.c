@@ -20,36 +20,9 @@ int main(int argc, char *argv[]) {
 	// IMPORT COORDINATES
 	struct ArcsPointsAndOffsets *importedStuff;
 	importedStuff = importGML_importGML(argv[2], argv[3]);
-
-
-	// one more time, print out the points we just read in
-	struct PointArrayList *tmpIt;
-	tmpIt = importedStuff->points;
-	int tmpI;
-	int tmpI2;
-	tmpI2 = 1;
-	printf("points\n");
-	while (tmpIt) {
-		printf(" row %d\n", tmpI2++);
-		for (tmpI = 0; tmpI < tmpIt->numPoints; tmpI++) {
-			printf("  %lf, %lf\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
-		}
-		tmpIt = tmpIt->next;
-	}
-	printf("arcs\n");
-	tmpI2 = 1;
-	tmpIt = importedStuff->arcs;
-	while (tmpIt) {
-		printf(" row %d\n", tmpI2++);
-		for (tmpI = 0; tmpI < tmpIt->numPoints; tmpI++) {
-			printf("  %lf, %lf\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
-		}
-		tmpIt = tmpIt->next;
-	}
 	printf("done\n");
 
 	printf("Triangulating points...");
-
 	// Maintain a list of points to triangulate
 	struct PointList *triPoints = (struct PointList*) malloc(sizeof(struct PointList));
 	int triPointsSize;
@@ -102,11 +75,8 @@ int main(int argc, char *argv[]) {
 		arrayListIterator = arrayListIterator->next;
 	}
 
-		// copy the first point to initialize the list
-
-	arrayListIterator = importedStuff->points;
-	
 	// copy all points
+	arrayListIterator = importedStuff->points;
 	while (arrayListIterator) {
 		triIterator->point = arrayListIterator->points[0];
 		// copy all remaining points from points list
@@ -119,15 +89,6 @@ int main(int argc, char *argv[]) {
 		triIterator->next = 0;
 		// increase the count
 		triPointsSize++;
-	}
-
-	// print out the points to triangulate
-	struct PointList *tmpTriIt;
-	tmpTriIt = triPoints;
-	printf("triangulation points\n");
-	while (tmpTriIt) {
-		printf("  %lf, %lf  (%lf, %lf)\n", tmpTriIt->point.x + importedStuff->offsetLongitude, tmpTriIt->point.y + importedStuff->offsetLatitude, tmpTriIt->point.x, tmpTriIt->point.y);
-		tmpTriIt = tmpTriIt->next;
 	}
 
 	// TRIANGULATE
@@ -265,17 +226,12 @@ int main(int argc, char *argv[]) {
 	printf("done\n");
 	// restore offset
 	arrayListIterator = simplifiedArcs;
-	int simpCount;
-	simpCount = 1;
-	printf("Simplified arcs\n");
 	while(arrayListIterator) {
-		printf(" line %d\n", simpCount++);
 		int n;
 		for (n = 0; n < arrayListIterator->numPoints; n++) {
 			arrayListIterator->points[n].x += importedStuff->offsetLongitude;
 			arrayListIterator->points[n].y += importedStuff->offsetLatitude;
 			// tmp debugging code to print all points
-			printf("  %lf, %lf\n", arrayListIterator->points[n].x, arrayListIterator->points[n].y);
 		}
 		arrayListIterator = arrayListIterator->next;
 	}
