@@ -27,10 +27,10 @@ int main(int argc, char *argv[]) {
 	
 	int ntripts;  // count points for triangulation
 	ntripts = 0;
-	// one more time, print out the points we just read in
 	struct PointArrayList *tmpIt;
 	tmpIt = importedStuff->points;
 	int tmpI;
+	// bounding box
 	double bbox[4] = {INFINITY, INFINITY, -INFINITY, -INFINITY};
 	while (tmpIt) {
 		ntripts += 1;
@@ -55,14 +55,12 @@ int main(int argc, char *argv[]) {
 	}
 	printf("done\n");
 
-
 	printf(" - Triangulating points...");
 	// Maintain a list of points to triangulate
 	struct UniquePointList triPts;
 	triPts.pts  = (struct Point*) malloc(ntripts*sizeof(struct Point));
 	triPts.ids = (int*) malloc(ntripts*sizeof(int));
 	triPts.edges = malloc(ntripts*sizeof(struct Edge));
-
 
 	// add all constraint points and unique arc endpoints to the triangulation list
 	struct PointArrayList *arrayListIterator;
@@ -89,7 +87,8 @@ int main(int argc, char *argv[]) {
 		i++;
 		arrayListIterator = arrayListIterator->next;
 	}
-	qsort((void *) triPts.pts, ntripts, sizeof(struct Point), point_compar); // print out the points to tri
+
+	qsort(&triPts.pts[0], ntripts, sizeof(triPts.pts), point_compar); // print out the points to tri
 
 	// set triPts.ids to first occurrence of coordinates
 	int lastpt;
