@@ -150,9 +150,9 @@ int main(int argc, char *argv[]) {
 	// iterator for raw data
 	arrayListIterator = importedStuff->arcs;
 
-	int removedPoints;
-	removedPoints = 0;
-	while (removedPoints < pointsToRemoveCount) {
+	// int removedPoints;
+	// removedPoints = 0;
+	while (1) {
 		simpArcIter->numPoints = 0;
 		if (arrayListIterator->numPoints < 4) {
 			// don't worry about short arcs
@@ -195,28 +195,28 @@ int main(int argc, char *argv[]) {
 			int start;
 			start = 1;
 			// this code is wrong
-			// for (i = 2; i < sp - 1; i++) {
-			// 	if (predicate_edgeIsPartOfRing(edgeStack[i], edgeStack[0])) {
-			// 		start = i;
-			// 	} else {
-			// 		break;
-			// 	}
-			// }
+			for (i = 2; i < sp - 1; i++) {
+				if (predicate_edgeIsPartOfRing(edgeStack[i], edgeStack[0])) {
+					start = i;
+				} else {
+					break;
+				}
+			}
 			// eliminate any looping around the end point
 			// leave the last point remove up to index 1
 			int term;
 			term = sp - 2;
 			// this code is wrong
-			// for (i = term - 1; i > 0; i--) {
-			// 	if (predicate_edgeIsPartOfRing(edgeStack[i], edgeStack[sp - 1])) {
-			// 		term = i;
-			// 	} else {
-			// 		break;
-			// 	}
-			// }
-			// if (term < start) {
-			// 	term = start;
-			// }
+			for (i = term - 1; i > 0; i--) {
+				if (predicate_edgeIsPartOfRing(edgeStack[i], edgeStack[sp - 1])) {
+					term = i;
+				} else {
+					break;
+				}
+			}
+			if (term < start) {
+				term = start;
+			}
 			if (sp < 1) {
 				struct Point *simplified = (struct Point *) malloc(sizeof(struct Point)*2);
 				simplified[0] = arrayListIterator->points[0];
@@ -236,9 +236,7 @@ int main(int argc, char *argv[]) {
 				simplified[index] = arrayListIterator->points[arrayListIterator->numPoints - 1];
 				simpArcIter->points = simplified;
 				simpArcIter->numPoints = size;
-
-
-				removedPoints += arrayListIterator->numPoints - size;
+				// removedPoints += arrayListIterator->numPoints - size;
 			}
 
 		}
@@ -253,19 +251,19 @@ int main(int argc, char *argv[]) {
 	}
 
 	// did we stop early?
-	if (arrayListIterator->next) {
-		while(1) {
-			simpArcIter->points = arrayListIterator->points;
-			simpArcIter->numPoints = arrayListIterator->numPoints;
-			if (arrayListIterator->next) {
-				simpArcIter->next = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
-				simpArcIter = simpArcIter->next;
-				arrayListIterator = arrayListIterator->next;
-			} else {
-				break;
-			}
-		}	
-	}
+	// if (arrayListIterator->next) {
+	// 	while(1) {
+	// 		simpArcIter->points = arrayListIterator->points;
+	// 		simpArcIter->numPoints = arrayListIterator->numPoints;
+	// 		if (arrayListIterator->next) {
+	// 			simpArcIter->next = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
+	// 			simpArcIter = simpArcIter->next;
+	// 			arrayListIterator = arrayListIterator->next;
+	// 		} else {
+	// 			break;
+	// 		}
+	// 	}	
+	// }
 
 	printf("done\n");
 	// restore offset
