@@ -10,7 +10,9 @@
 void exportGML_exportGML(struct PointArrayList *pointArrayList, char directoryName[]) {
 	FILE * fp;
 
-	char *newFileName;
+	int fileNameSize;
+	fileNameSize = strlen(directoryName) + strlen(FILENAME);
+	char newFileName[fileNameSize];
 	strcat(newFileName, directoryName);
 	strcat(newFileName, FILENAME);
 	fp = fopen(newFileName, "w");
