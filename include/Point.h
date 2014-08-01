@@ -9,4 +9,6 @@ struct Point {
 
 int point_compare(struct Point * point1, struct Point * point2);
 
+int point_compar(const void *, const void *); // for qsort
+
 #endif /* CG_POINT_H */

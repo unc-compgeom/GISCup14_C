@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) {
 		i++;
 		arrayListIterator = arrayListIterator->next;
 	}
-	qsort((void *)triPts.pts, ntripts, sizeof(struct Point), point_compare); // print out the points to tri
+	qsort((void *)triPts.pts, ntripts, sizeof(struct Point), point_compar); // print out the points to tri
 
 	// set triPts.ids to first occurrence of coordinates
 	int lastpt;
