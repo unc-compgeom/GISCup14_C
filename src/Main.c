@@ -16,13 +16,13 @@ int main(int argc, char *argv[]) {
 	int pointsToRemoveCount;
 	sscanf(argv[1], "%d", &pointsToRemoveCount);
 
-	printf("Reading data...");
+	printf(" - Reading data...");
 	// IMPORT COORDINATES
 	struct ArcsPointsAndOffsets *importedStuff;
 	importedStuff = importGML_importGML(argv[2], argv[3]);
 	printf("done\n");
 
-	printf("Triangulating points...");
+	printf(" - Triangulating points...");
 	// Maintain a list of points to triangulate
 	struct PointList *triPoints = (struct PointList*) malloc(sizeof(struct PointList));
 	int triPointsSize;
@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
 	printf("done\n");
 	// SIMPLIFY
 
-	printf("Simplifying arcs...");
+	printf(" - Simplifying arcs...");
 	// make a struct to hold the simplified data
 	struct PointArrayList *simplifiedArcs = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
 	// an iterator
@@ -108,8 +108,8 @@ int main(int argc, char *argv[]) {
 	// iterator for raw data
 	arrayListIterator = importedStuff->arcs;
 
-	// int removedPoints;
-	// removedPoints = 0;
+	int removedPoints;
+	removedPoints = 0;
 	while (1) {
 		simpArcIter->numPoints = 0;
 		if (arrayListIterator->numPoints < 4) {
@@ -194,7 +194,7 @@ int main(int argc, char *argv[]) {
 				simplified[index] = arrayListIterator->points[arrayListIterator->numPoints - 1];
 				simpArcIter->points = simplified;
 				simpArcIter->numPoints = size;
-				// removedPoints += arrayListIterator->numPoints - size;
+				removedPoints += arrayListIterator->numPoints - size;
 			}
 
 		}
@@ -236,4 +236,7 @@ int main(int argc, char *argv[]) {
 		arrayListIterator = arrayListIterator->next;
 	}
 	exportGML_exportGML(simplifiedArcs, argv[4]);
+	printf("Simplified by %f percent\n", (removedPoints*100.0) / (double) importedStuff->arcPointCount);
+	
+	exit(0);
 }

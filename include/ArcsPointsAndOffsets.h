@@ -3,6 +3,7 @@
 
 struct ArcsPointsAndOffsets {
 	struct PointArrayList *arcs;
+	int arcPointCount;
 	struct PointArrayList *points;
 	long offsetLongitude;
 	long offsetLatitude;

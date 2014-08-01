@@ -102,18 +102,20 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 	struct ArcsPointsAndOffsets *data;
 	data = arcsPointsAndOffsets_construct();
 	data->arcs 		= (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
+	data->arcPointCount = 0;
 	data->points 	= (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
 	importGML_readFile(data->arcs, arcsFilename);
 	importGML_readFile(data->points, pointsFilename);
 
-	// find the minimum latitude and longitude
+	// find the minimum latitude and longitude also count the number of points in the arcs
 	double minimumLongitude = data->points->points[0].x;
 	double minimumLatitude = data->points->points[0].y;
 	int i;
 	struct PointArrayList *arrayListIterator;
+	
 	arrayListIterator = data->arcs;
-
 	while(arrayListIterator) {
+		data->arcPointCount += arrayListIterator->numPoints;
 		for (i = 0; i < arrayListIterator->numPoints; i++) {
 			if (arrayListIterator->points[i].x < minimumLongitude) {
 				minimumLongitude = arrayListIterator->points[i].x;
@@ -124,8 +126,8 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 		}
 		arrayListIterator = arrayListIterator->next;
 	}
-	arrayListIterator = data->points;
 
+	arrayListIterator = data->points;
 	while (arrayListIterator) {
 		for (i = 0; i < arrayListIterator->numPoints; i++) {
 			if (arrayListIterator->points[i].x < minimumLongitude) {
