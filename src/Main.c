@@ -16,8 +16,6 @@ int main(int argc, char *argv[]) {
 	int pointsToRemoveCount;
 	sscanf(argv[1], "%d", &pointsToRemoveCount);
 
-
-
 	printf("Reading data...");
 	// IMPORT COORDINATES
 	struct ArcsPointsAndOffsets *importedStuff;
@@ -152,7 +150,9 @@ int main(int argc, char *argv[]) {
 	// iterator for raw data
 	arrayListIterator = importedStuff->arcs;
 
-	while (1) {
+	int removedPoints;
+	removedPoints = 0;
+	while (removedPoints < pointsToRemoveCount) {
 		simpArcIter->numPoints = 0;
 		if (arrayListIterator->numPoints < 4) {
 			// don't worry about short arcs
@@ -236,6 +236,9 @@ int main(int argc, char *argv[]) {
 				simplified[index] = arrayListIterator->points[arrayListIterator->numPoints - 1];
 				simpArcIter->points = simplified;
 				simpArcIter->numPoints = size;
+
+
+				removedPoints += arrayListIterator->numPoints - size;
 			}
 
 		}
