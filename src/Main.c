@@ -11,6 +11,7 @@
 #include "PointList.h"
 #include "Point.h"
 #include "Edge.h"
+#include "Predicate.h"
 
 int main(int argc, char *argv[]) {
 
@@ -24,8 +25,8 @@ int main(int argc, char *argv[]) {
 	struct ArcsPointsAndOffsets *importedStuff;
 	importedStuff = importGML_importGML(argv[2], argv[3]);
 	
-	int ntripts;
-
+	int ntripts;  // count points for triangulation
+	ntripts = 0;
 	// one more time, print out the points we just read in
 	struct PointArrayList *tmpIt;
 	tmpIt = importedStuff->points;
