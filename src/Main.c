@@ -100,7 +100,6 @@ int main(int argc, char *argv[]) {
 			lastpt = i;
 		triPts.ids[triPts.pts[i].id] = lastpt; // save index of where the point coordinates are in sorted list
 	}
-	printf("d");
 	// Make a list of the unique points to triangulate, in original order
 	struct PointList *triPoints = NULL;
 	struct PointList *triIterator = NULL;
