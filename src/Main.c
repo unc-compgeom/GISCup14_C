@@ -1,27 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "Delaunay.h"
 #include "Subdivision.h"
 #include "ArcsPointsAndOffsets.h"
 #include "PointArrayList.h"
 #include "ImportGML.h"
 #include "ExportGML.h"
-#include "PointList.h"
+#include "UniquePointList.h"
+#include "Predicate.h"
 #include "Edge.h"
 
+			  
 int main(int argc, char *argv[]) {
-
+	
 	// Call the program on the command line like this:
 	// Simplify < PointToRemove > < LineInputFilePath > < PointInputFilePath > < OutputFilePath >
 	int pointsToRemoveCount;
 	sscanf(argv[1], "%d", &pointsToRemoveCount);
-
+	
 	printf("Reading data...");
 	// IMPORT COORDINATES
 	struct ArcsPointsAndOffsets *importedStuff;
 	importedStuff = importGML_importGML(argv[2], argv[3]);
-
-
+	
+	int ntripts; // count points for triangulation
 	// one more time, print out the points we just read in
 	struct PointArrayList *tmpIt;
 	tmpIt = importedStuff->points;
@@ -29,9 +32,15 @@ int main(int argc, char *argv[]) {
 	int tmpI2;
 	tmpI2 = 1;
 	printf("points\n");
+	double bbox[4] = {INFINITY, INFINITY, -INFINITY, -INFINITY};
 	while (tmpIt) {
 		printf(" row %d\n", tmpI2++);
+		ntripts += 1;
 		for (tmpI = 0; tmpI < tmpIt->numPoints; tmpI++) {
+			if (bbox[0]>tmpIt->points[tmpI].x) bbox[0] = tmpIt->points[tmpI].x;
+			if (bbox[1]>tmpIt->points[tmpI].y) bbox[1] = tmpIt->points[tmpI].y;
+			if (bbox[2]<tmpIt->points[tmpI].x) bbox[2] = tmpIt->points[tmpI].x;
+			if (bbox[3]<tmpIt->points[tmpI].y) bbox[3] = tmpIt->points[tmpI].y;
 			printf("  %lf, %lf\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
 		}
 		tmpIt = tmpIt->next;
@@ -41,105 +50,106 @@ int main(int argc, char *argv[]) {
 	tmpIt = importedStuff->arcs;
 	while (tmpIt) {
 		printf(" row %d\n", tmpI2++);
+		ntripts += 2;
 		for (tmpI = 0; tmpI < tmpIt->numPoints; tmpI++) {
+			if (bbox[0]>tmpIt->points[tmpI].x) bbox[0] = tmpIt->points[tmpI].x;
+			if (bbox[1]>tmpIt->points[tmpI].y) bbox[1] = tmpIt->points[tmpI].y;
+			if (bbox[2]<tmpIt->points[tmpI].x) bbox[2] = tmpIt->points[tmpI].x;
+			if (bbox[3]<tmpIt->points[tmpI].y) bbox[3] = tmpIt->points[tmpI].y;
 			printf("  %lf, %lf\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
 		}
 		tmpIt = tmpIt->next;
 	}
 	printf("done\n");
-
+	
 	printf("Triangulating points...");
-
+	
 	// Maintain a list of points to triangulate
-	struct PointList *triPoints = (struct PointList*) malloc(sizeof(struct PointList));
-	int triPointsSize;
-	triPointsSize = 0;
-	struct PointList *triIterator = triPoints;
+	struct UniquePointList triPts;
+	triPts.pts = (struct Point*) malloc(ntripts*sizeof(struct Point));
+	triPts.ids = (int*)malloc(ntripts*sizeof(int));
+	triPts.edges = malloc(ntripts*sizeof(struct Edge));
+
 	struct PointArrayList *arrayListIterator;
-	arrayListIterator = importedStuff->points;
+	int i = 0; 
+	
 	// add all constraint points and unique arc endpoints to the triangulation list
-
-	// copy the first point to initialize the list
-	triIterator->point = arrayListIterator->points[0];
-	triPointsSize++;
-	arrayListIterator = arrayListIterator->next;
-	// copy all points
+	
+	// copy front and end points from arcs list
+	arrayListIterator = importedStuff->arcs;
 	while (arrayListIterator) {
-		// copy all remaining points from points list
-
-		// make next list entry
-		triIterator->next = (struct PointList*) malloc(sizeof(struct PointList));
-		// advance the list iterator
-		triIterator = triIterator->next;
-		// copy pointers
-		triIterator->point = arrayListIterator->points[0];
-		// increase the count
-		triPointsSize++;
+		triPts.pts[i] = arrayListIterator->points[0];
+		triPts.pts[i].id = i;  // front points are even: 2*arc#
+		i++;
+		triPts.pts[i] = arrayListIterator->points[arrayListIterator->numPoints-1];
+		triPts.pts[i].id = i; // end points are odd: 2*arc#+1
+		i++;
 		arrayListIterator = arrayListIterator->next;
+	}
+	int ptIDs = i; // save start of point ids in case we need to distinguish later. 
+	// copy all points
+	arrayListIterator = importedStuff->points;
+	while (arrayListIterator) {
+		triPts.pts[i] = arrayListIterator->points[0];
+		triPts.pts[i].id = i; // points don't need ids, but we'll assign them for consistency
+		i++;
+		arrayListIterator = arrayListIterator->next;
+	}
+	
+	qsort((void *)triPts.pts, ntripts, sizeof(struct Point), point_compare);
+	// print out the points to triangulate
+	printf("triangulation points, sorted\n");
+	for (i=0; i<ntripts; i++){
+		printf("%5d:  %lf, %lf  (%lf, %lf)\n", triPts.pts[i].id, triPts.pts[i].x + importedStuff->offsetLongitude, triPts.pts[i].y + importedStuff->offsetLatitude, 
+			   triPts.pts[i].x, triPts.pts[i].y);
+	}
+	// set triPts.ids to first occurrence of coordinates
+	int lastpt = 0;
+	triPts.ids[triPts.pts[0].id] = lastpt; // save index of where the point coordinates are in sorted list
+	for (i = 1; i<ntripts; i++) {
+		if (point_compare(&triPts.pts[i-1], &triPts.pts[i])!=0) // not a repeat
+			lastpt = i;
+		triPts.ids[triPts.pts[i].id] = lastpt; // save index of where the point coordinates are in sorted list
+	}
+	// Make a list of the unique points to triangulate, in original order
+	struct PointList *triPoints = NULL;
+	struct PointList *triIterator = NULL;
+	int triPointsSize=0;
+	for (i = 0; i<ntripts; i++) {
+		if (triPts.pts[triPts.ids[i]].id == i) { // if the point with my id comes from me
+			if (triPoints == NULL) {
+				triPoints = (struct PointList*) malloc(sizeof(struct PointList));
+				triIterator = triPoints;
+			} else {
+                triIterator->next = (struct PointList*) malloc(sizeof(struct PointList));
+			    triIterator = triIterator->next;
+			}
+			triIterator->point = triPts.pts[triPts.ids[i]];
+			triPointsSize++;
+		}
 	}
 	// set the next pointer to null
 	triIterator->next = 0;
-
-	// copy unique endpoints from arcs list
-	arrayListIterator = importedStuff->arcs;
-	while (arrayListIterator) {
-		struct Point *front;
-		front = &arrayListIterator->points[0];
-		struct Point *end;
-		end = &arrayListIterator->points[arrayListIterator->numPoints-1];
-		// test if these points are already in the list (O(n))
-		struct PointList *dupCheckIter = triPoints;
-		// if they are in the list, do not insert them again
-		int shouldInsertFront;
-		int shouldInsertEnd;
-		shouldInsertFront = 1;
-		shouldInsertEnd = 1;
-		while (dupCheckIter) {
-			if (shouldInsertFront && dupCheckIter->point.x == front->x && dupCheckIter->point.y == front->y) {
-				// front is a duplicate
-				shouldInsertFront = 0;
-			}
-			if (shouldInsertEnd && dupCheckIter->point.x == end->x && dupCheckIter->point.y == end->y) {
-				shouldInsertEnd = 0;
-			}
-			if (!shouldInsertFront && !shouldInsertEnd) {
-				break;
-			}
-			dupCheckIter = dupCheckIter->next;
-		}
-		if (shouldInsertFront) {
-			triIterator->next = (struct PointList*) malloc(sizeof(struct PointList));
-			triIterator = triIterator->next;
-			triIterator->point = *front;
-			triIterator->next = 0;
-			triPointsSize++;
-		}
-		if (shouldInsertEnd) {
-			triIterator->next = (struct PointList*) malloc(sizeof(struct PointList));
-			triIterator = triIterator->next;
-			triIterator->point = *end;
-			triIterator->next = 0;
-			triPointsSize++;
-		}
-		arrayListIterator = arrayListIterator->next;
-	}
 
 	// print out the points to triangulate
 	struct PointList *tmpTriIt;
 	tmpTriIt = triPoints;
 	printf("triangulation points\n");
 	while (tmpTriIt) {
-		printf("  %lf, %lf  (%lf, %lf)\n", tmpTriIt->point.x + importedStuff->offsetLongitude, tmpTriIt->point.y + importedStuff->offsetLatitude, tmpTriIt->point.x, tmpTriIt->point.y);
+		printf("%5d:  %lf, %lf  (%lf, %lf)\n", tmpTriIt->point.id, tmpTriIt->point.x + importedStuff->offsetLongitude, tmpTriIt->point.y + importedStuff->offsetLatitude, tmpTriIt->point.x, tmpTriIt->point.y);
 		tmpTriIt = tmpTriIt->next;
-	}
-
+	}	
+	
 	// TRIANGULATE
 	struct Subdivision *triangulation;
 	triangulation = delaunay_triangulate(triPoints, triPointsSize);
-
+	
+	//for each edge e
+	// triPts.edges[edge_orig(e).id] = e;
+	
 	printf("done\n");
 	// SIMPLIFY
-
+	
 	printf("Simplifying arcs...");
 	// make a struct to hold the simplified data
 	struct PointArrayList *simplifiedArcs = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
@@ -149,7 +159,7 @@ int main(int argc, char *argv[]) {
 	simpArcIter = simplifiedArcs;
 	// iterator for raw data
 	arrayListIterator = importedStuff->arcs;
-
+	
 	// int removedPoints;
 	// removedPoints = 0;
 	while (1) {
@@ -189,7 +199,7 @@ int main(int argc, char *argv[]) {
 					edgeStack[sp++] = locatedEdges[i];
 				}
 			}
-
+			
 			// eliminate any looping around the start point
 			// leave the first point, remove up to index sp - 2
 			int start;
@@ -238,7 +248,7 @@ int main(int argc, char *argv[]) {
 				simpArcIter->numPoints = size;
 				// removedPoints += arrayListIterator->numPoints - size;
 			}
-
+			
 		}
 		if (arrayListIterator->next) {
 			simpArcIter->next = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
@@ -249,7 +259,7 @@ int main(int argc, char *argv[]) {
 			break;
 		}
 	}
-
+	
 	// did we stop early?
 	// if (arrayListIterator->next) {
 	// 	while(1) {
@@ -264,7 +274,7 @@ int main(int argc, char *argv[]) {
 	// 		}
 	// 	}
 	// }
-
+	
 	printf("done\n");
 	// restore offset
 	arrayListIterator = simplifiedArcs;
@@ -272,7 +282,8 @@ int main(int argc, char *argv[]) {
 	simpCount = 1;
 	printf("Simplified arcs\n");
 	while(arrayListIterator) {
-		printf(" line %d\n", simpCount++);
+		//printf(" line %d\n", simpCount++);
+		printf("],\n[");
 		int n;
 		for (n = 0; n < arrayListIterator->numPoints; n++) {
 			arrayListIterator->points[n].x += importedStuff->offsetLongitude;
@@ -284,3 +295,4 @@ int main(int argc, char *argv[]) {
 	}
 	exportGML_exportGML(simplifiedArcs, argv[4]);
 }
+

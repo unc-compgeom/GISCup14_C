@@ -8,7 +8,8 @@ int predicate_ahead(struct Point *p, struct Point *q, struct Point *r);
 
 double predicate_distSquared(struct Point *p, struct Point *q);
 
-int edgeIsPartOfRing(struct Edge *test, struct Edge *fromOrigin);
+int predicate_edgeIsPartOfRing(struct Edge *test, struct Edge *fromOrigin);
+
 
 int predicate_isPointInCircle(struct Point *test, struct Point *a,
 			struct Point *b, struct Point *c);
