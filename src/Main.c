@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 	arrayListIterator = importedStuff->arcs;
 	while (arrayListIterator) {
 		triPts.pts[i] = arrayListIterator->points[0];
-		triPts.pts[i].id = i; // front points are even : 2*arc#
+		triPts.pts[i].id = i; // front points are even: 2*arc#
 		i++;
 		triPts.pts[i] = arrayListIterator->points[arrayListIterator->numPoints-1];
 		triPts.pts[i].id = i; // end points are odd: 2*arc#+1
