@@ -5,17 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#define FILENAME "/simplified.txt"
-
-void exportGML_exportGML(struct PointArrayList *pointArrayList, char directoryName[]) {
+void exportGML_exportGML(struct PointArrayList *pointArrayList, char newFileName[]) {
 	FILE * fp;
-
-	int fileNameSize;
-	fileNameSize = strlen(directoryName) + strlen(FILENAME);
-	char newFileName[fileNameSize];
-	newFileName[0] = '\0';
-	strcat(newFileName, directoryName);
-	strcat(newFileName, FILENAME);
 	fp = fopen(newFileName, "w");
 	if (!fp) {
 		exit(1);
@@ -30,7 +21,6 @@ void exportGML_exportGML(struct PointArrayList *pointArrayList, char directoryNa
 		fprintf(fp, "%d:<gml:LineString srsName=\"EPSG:54004\" xmlns:gml=\"http://www.opengis.net/gml\"><gml:coordinates decimal=\".\" cs=\",\" ts=\" \">", i++);
 		for (j = 0; j < listIterator->numPoints; j++) {
 			fprintf(fp, "%lf,%lf ", listIterator->points[j].x, listIterator->points[j].y);
-			printf("%lf,%lf\n ", listIterator->points[j].x, listIterator->points[j].y);
 		}
 		fprintf(fp, "</gml:coordinates></gml:LineString>\n");
 		listIterator = listIterator->next;

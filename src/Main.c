@@ -9,15 +9,19 @@
 #include "PointList.h"
 #include "Edge.h"
 
-#define DIR "../td1"
-#define ARCS "/lines_out.txt"
-#define POINTS "/points_out.txt"
+int main(int argc, char *argv[]) {
 
-int main() {
+	// Call the program on the command line like this:
+	// Simplify < PointToRemove > < LineInputFilePath > < PointInputFilePath > < OutputFilePath >
+	int pointsToRemoveCount;
+	sscanf(argv[1], "%d", &pointsToRemoveCount);
+
+
+
 	printf("Reading data...");
 	// IMPORT COORDINATES
 	struct ArcsPointsAndOffsets *importedStuff;
-	importedStuff = importGML_importGML(DIR ARCS, DIR POINTS);
+	importedStuff = importGML_importGML(argv[2], argv[3]);
 	
 
 	// one more time, print out the points we just read in
@@ -259,5 +263,5 @@ int main() {
 		}
 		arrayListIterator = arrayListIterator->next;
 	}
-	exportGML_exportGML(simplifiedArcs, DIR);
+	exportGML_exportGML(simplifiedArcs, argv[4]);
 }
