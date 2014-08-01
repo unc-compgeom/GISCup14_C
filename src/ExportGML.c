@@ -7,7 +7,7 @@
 
 void exportGML_exportGML(struct PointArrayList *pointArrayList, char newFileName[]) {
 	FILE * fp;
-	fp = fopen(newFileName, "w");
+	fp = fopen(newFileName, "wb");
 	if (!fp) {
 		exit(1);
 	}
