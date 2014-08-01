@@ -49,4 +49,6 @@ void edge_setRot(struct Edge *edge, struct Edge *rot);
 
 struct Edge * edge_sym(struct Edge *edge);
 
+int edge_isWall(struct Edge *edge);
+
 #endif /* CG_EDGE_H */

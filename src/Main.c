@@ -123,8 +123,15 @@ int main(int argc, char *argv[]) {
 	// TRIANGULATE
 	struct Subdivision *triangulation;
 	triangulation = delaunay_triangulate(triPoints, triPointsSize);
-	// for each edge e
-	// triPts.edges[edge_orig(e).id] = e;
+	
+
+	struct Edge *e; 
+	e = triangulation->startingEdge;
+	while (e) { // for each edge e
+		triPts.edges[edge_orig(e)->id] = *e; // dereferencing.. should be a pointer
+		e = subdivision_nextEdge(triangulation, e);
+	}
+
 	printf("done\n");
 	// SIMPLIFY
 

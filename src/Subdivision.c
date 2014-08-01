@@ -67,3 +67,18 @@ struct Edge * subdivision_locate(struct Subdivision *s, struct Point *q) {
 		}
 	} while (1);
 }
+
+struct Edge * subdivision_nextEdge(struct Subdivision *s, struct Edge *e) {
+	struct Edge *next;
+	if (edge_isWall(e)) {
+		next = edge_rPrev(e);
+	} else {
+		next = edge_oNext(e);
+	}
+	if (next == s->startingEdge) {
+		return 0;
+	} else {
+		return next;
+	}
+
+}
