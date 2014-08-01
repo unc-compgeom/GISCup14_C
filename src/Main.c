@@ -56,29 +56,7 @@ int main(int argc, char *argv[]) {
 	triPointsSize = 0;
 	struct PointList *triIterator = triPoints;
 	struct PointArrayList *arrayListIterator;
-	arrayListIterator = importedStuff->points;
 	// add all constraint points and unique arc endpoints to the triangulation list
-
-	// copy the first point to initialize the list
-	triIterator->point = arrayListIterator->points[0];
-	triPointsSize++;
-	arrayListIterator = arrayListIterator->next;
-	// copy all points
-	while (arrayListIterator) {
-		// copy all remaining points from points list
-
-		// make next list entry
-		triIterator->next = (struct PointList*) malloc(sizeof(struct PointList));
-		// advance the list iterator
-		triIterator = triIterator->next;
-		// copy pointers
-		triIterator->point = arrayListIterator->points[0];
-		// increase the count
-		triPointsSize++;
-		arrayListIterator = arrayListIterator->next;
-	}
-	// set the next pointer to null
-	triIterator->next = 0;
 
 	// copy unique endpoints from arcs list
 	arrayListIterator = importedStuff->arcs;
@@ -108,20 +86,39 @@ int main(int argc, char *argv[]) {
 			dupCheckIter = dupCheckIter->next;
 		}
 		if (shouldInsertFront) {
+			triIterator->point = *front;
 			triIterator->next = (struct PointList*) malloc(sizeof(struct PointList));
 			triIterator = triIterator->next;
-			triIterator->point = *front;
 			triIterator->next = 0;
 			triPointsSize++;
 		}
 		if (shouldInsertEnd) {
+			triIterator->point = *end;
 			triIterator->next = (struct PointList*) malloc(sizeof(struct PointList));
 			triIterator = triIterator->next;
-			triIterator->point = *end;
 			triIterator->next = 0;
 			triPointsSize++;
 		}
 		arrayListIterator = arrayListIterator->next;
+	}
+
+		// copy the first point to initialize the list
+
+	arrayListIterator = importedStuff->points;
+	
+	// copy all points
+	while (arrayListIterator) {
+		triIterator->point = arrayListIterator->points[0];
+		// copy all remaining points from points list
+
+		// make next list entry
+		triIterator->next = (struct PointList*) malloc(sizeof(struct PointList));
+		// advance the list iterator
+		triIterator = triIterator->next;
+		arrayListIterator = arrayListIterator->next;
+		triIterator->next = 0;
+		// increase the count
+		triPointsSize++;
 	}
 
 	// print out the points to triangulate
