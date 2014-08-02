@@ -88,14 +88,13 @@ int main(int argc, char *argv[]) {
 		arrayListIterator = arrayListIterator->next;
 	}
 
-	qsort(triPts.pts, ntripts, sizeof(struct Point), point_compar); // print out the points to tri
+	qsort((void *)triPts.pts, ntripts, sizeof(struct Point), point_compar); // print out the points to tri
 
 	// set triPts.ids to first occurrence of coordinates
 	int lastpt;
 	lastpt = 0;
 	triPts.ids[triPts.pts[0].id] = lastpt; // save index of where the point coordinates are in sorted list
 	for (i = 1; i<ntripts; i++) {
-		printf("%d\n",i);
 		if (point_compare(&triPts.pts[i-1], &triPts.pts[i])!=0) // not a repeat
 			lastpt = i;
 		triPts.ids[triPts.pts[i].id] = lastpt; // save index of where the point coordinates are in sorted list

@@ -77,5 +77,5 @@ struct Edge * edge_sym(struct Edge *edge) {
 }
 
 int edge_isWall(struct Edge *edge) {
-	return point_compare(edge_orig(edge), edge_orig(edge_lNext(edge))) >= 0 && point_compare(edge_orig(edge_lNext(edge)), edge_orig(edge_lPrev(edge))) > 0;
+	return (point_compare(edge_orig(edge), edge_orig(edge_lNext(edge))) >= 0) && (point_compare(edge_orig(edge_lNext(edge)), edge_orig(edge_lPrev(edge))) > 0);
 }
