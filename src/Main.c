@@ -182,8 +182,8 @@ int main(int argc, char *argv[]) {
 	int arcNumberStack[6*triPointsSize]; // index in arc of point that crosses edge
 	// int removedPoints;
 	// removedPoints = 0;
-	
-	for (int arcno = 0; arcno<ptIDs; i++) {// loop over each arc
+	int arcno;
+	for (arcno = 0; arcno<ptIDs; i++) {// loop over each arc
 		simpArcIter->numPoints = 0;
 		if (arrayListIterator->numPoints < 4) {
 			// ignore short arcs
