@@ -182,11 +182,11 @@ int main(int argc, char *argv[]) {
 	
 	struct Edge *edgeStack[6*triPointsSize]; // make stacks big enough to hold all triangle edges.  Allocate once
 	int arcNumberStack[6*triPointsSize]; // index in arc of point that crosses edge
-	// int removedPoints;
-	// removedPoints = 0;
+	int removedPoints;
+	removedPoints = 0;
 
 	int arcno;
-	for (arcno = 0; arcno<ptIDs; i++) {// loop over each arc
+	for (arcno = 0; arcno<ptIDs && removedPoints <= pointsToRemoveCount; i++) {// loop over each arc
 		simpArcIter->numPoints = 0;
 		if (arrayListIterator->numPoints < 4) {
 			// ignore short arcs
@@ -302,7 +302,7 @@ int main(int argc, char *argv[]) {
 				simplified[count++] = *p;
 			}
 			simpArcIter->points = simplified;
-			// removedPoints += arrayListIterator->numPoints - size;
+			removedPoints += arrayListIterator->numPoints - count;
 		}
 		
 		if (arrayListIterator->next) {
@@ -316,19 +316,18 @@ int main(int argc, char *argv[]) {
 	}
 	
 	// did we stop early?
-	// if (arrayListIterator->next) {
-	// 	while(1) {
-	// 		simpArcIter->points = arrayListIterator->points;
-	// 		simpArcIter->numPoints = arrayListIterator->numPoints;
-	// 		if (arrayListIterator->next) {
-	// 			simpArcIter->next = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
-	// 			simpArcIter = simpArcIter->next;
-	// 			arrayListIterator = arrayListIterator->next;
-	// 		} else {
-	// 			break;
-	// 		}
-	// 	}
-	// }
+	for (arcno = arcno; arcno<ptIDs && removedPoints <= pointsToRemoveCount; i++) {// loop over each arc
+		simpArcIter->points = arrayListIterator->points;
+		simpArcIter->numPoints = arrayListIterator->numPoints;
+		if (arrayListIterator->next) {
+			simpArcIter->next = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
+			simpArcIter = simpArcIter->next;
+			arrayListIterator = arrayListIterator->next;
+		} else {
+			// stop when there are no more point arrays to process
+			break;
+		}
+	}
 	
 	printf("done\n");
 	// restore offset
@@ -349,5 +348,6 @@ int main(int argc, char *argv[]) {
 		arrayListIterator = arrayListIterator->next;
 	}
 	exportGML_exportGML(simplifiedArcs, argv[4]);
+	printf("removed %d points\n", removedPoints);
 }
 
