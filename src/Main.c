@@ -25,12 +25,8 @@ int main(int argc, char *argv[]) {
 	struct ArcsPointsAndOffsets *importedStuff;
 	importedStuff = importGML_importGML(argv[2], argv[3]);
 	
-<<<<<<< HEAD
-	int ntripts = 0; // count points for triangulation
-=======
 	int ntripts; // count points for triangulation
 	ntripts = 0;
->>>>>>> ad03765d2a311dd656839eadc5c02bc07abbf064
 	// one more time, print out the points we just read in
 	struct PointArrayList *tmpIt;
 	tmpIt = importedStuff->points;
@@ -157,7 +153,9 @@ int main(int argc, char *argv[]) {
 	
 	// TRIANGULATE
 	struct Subdivision *triangulation;
-	triangulation = delaunay_triangulate(triPoints, triPointsSize);
+	struct Point bboxLL = {bbox[0], bbox[1], -1};
+	struct Point bboxUR = {bbox[2], bbox[3], -1};
+	triangulation = delaunay_triangulate(triPoints, triPointsSize, &bboxLL, &bboxUR);
 	
 	struct Edge *e;
 	e = triangulation->startingEdge;
@@ -186,13 +184,9 @@ int main(int argc, char *argv[]) {
 	int arcNumberStack[6*triPointsSize]; // index in arc of point that crosses edge
 	// int removedPoints;
 	// removedPoints = 0;
-<<<<<<< HEAD
-	
-	for (int arcno = 0; arcno<ptIDs; arcno++) {// loop over each arc
-=======
+
 	int arcno;
 	for (arcno = 0; arcno<ptIDs; i++) {// loop over each arc
->>>>>>> ad03765d2a311dd656839eadc5c02bc07abbf064
 		simpArcIter->numPoints = 0;
 		if (arrayListIterator->numPoints < 4) {
 			// ignore short arcs
