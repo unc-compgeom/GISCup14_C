@@ -33,32 +33,32 @@ int main(int argc, char *argv[]) {
 	int tmpI;
 	int tmpI2;
 	tmpI2 = 1;
-	printf("points\n");
+	// printf("points\n");
 	double bbox[4] = {INFINITY, INFINITY, -INFINITY, -INFINITY};
 	while (tmpIt) {
-		printf(" row %d\n", tmpI2++);
+		// printf(" row %d\n", tmpI2++);
 		ntripts += 1;
 		for (tmpI = 0; tmpI < tmpIt->numPoints; tmpI++) {
 			if (bbox[0]>tmpIt->points[tmpI].x) bbox[0] = tmpIt->points[tmpI].x;
 			if (bbox[1]>tmpIt->points[tmpI].y) bbox[1] = tmpIt->points[tmpI].y;
 			if (bbox[2]<tmpIt->points[tmpI].x) bbox[2] = tmpIt->points[tmpI].x;
 			if (bbox[3]<tmpIt->points[tmpI].y) bbox[3] = tmpIt->points[tmpI].y;
-			printf("  %lf, %lf\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
+			// printf("  %lf, %lf\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
 		}
 		tmpIt = tmpIt->next;
 	}
-	printf("arcs\n");
+	// printf("arcs\n");
 	tmpI2 = 1;
 	tmpIt = importedStuff->arcs;
 	while (tmpIt) {
-		printf(" row %d\n", tmpI2++);
+		// printf(" row %d\n", tmpI2++);
 		ntripts += 2;
 		for (tmpI = 0; tmpI < tmpIt->numPoints; tmpI++) {
 			if (bbox[0]>tmpIt->points[tmpI].x) bbox[0] = tmpIt->points[tmpI].x;
 			if (bbox[1]>tmpIt->points[tmpI].y) bbox[1] = tmpIt->points[tmpI].y;
 			if (bbox[2]<tmpIt->points[tmpI].x) bbox[2] = tmpIt->points[tmpI].x;
 			if (bbox[3]<tmpIt->points[tmpI].y) bbox[3] = tmpIt->points[tmpI].y;
-			printf("  %lf, %lf\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
+			// printf("  %lf, %lf\n", tmpIt->points[tmpI].x + importedStuff->offsetLongitude, tmpIt->points[tmpI].y + importedStuff->offsetLatitude);
 		}
 		tmpIt = tmpIt->next;
 	}
@@ -101,11 +101,11 @@ int main(int argc, char *argv[]) {
 	qsort((void *)triPts.pts, ntripts, sizeof(struct Point), point_compare);
 	
 	// print out the points to triangulate
-	printf("triangulation points, sorted\n");
-	for (i=0; i<ntripts; i++){
-		printf("%5d:  %lf, %lf  (%lf, %lf)\n", triPts.pts[i].id, triPts.pts[i].x + importedStuff->offsetLongitude, triPts.pts[i].y + importedStuff->offsetLatitude, 
-			   triPts.pts[i].x, triPts.pts[i].y);
-	}
+	// printf("triangulation points, sorted\n");
+	// for (i=0; i<ntripts; i++){
+	// 	printf("%5d:  %lf, %lf  (%lf, %lf)\n", triPts.pts[i].id, triPts.pts[i].x + importedStuff->offsetLongitude, triPts.pts[i].y + importedStuff->offsetLatitude, 
+	// 		   triPts.pts[i].x, triPts.pts[i].y);
+	// }
 	/* set triPts.ids to first occurrence of coordinates.
 	 * After this we will have triPts.pts[triPts.ids[i]] being the coordinates that were originally at i. 
 	 * Moreover, all points with the same coordinates will have the same value for triPts.ids[i].
@@ -145,11 +145,11 @@ int main(int argc, char *argv[]) {
 	// print out the points to triangulate
 	struct PointList *tmpTriIt;
 	tmpTriIt = triPoints;
-	printf("triangulation points\n");
-	while (tmpTriIt) {
-		printf("%5d:  %lf, %lf  (%lf, %lf)\n", tmpTriIt->point.id, tmpTriIt->point.x + importedStuff->offsetLongitude, tmpTriIt->point.y + importedStuff->offsetLatitude, tmpTriIt->point.x, tmpTriIt->point.y);
-		tmpTriIt = tmpTriIt->next;
-	}	
+	// printf("triangulation points\n");
+	// while (tmpTriIt) {
+	// 	printf("%5d:  %lf, %lf  (%lf, %lf)\n", tmpTriIt->point.id, tmpTriIt->point.x + importedStuff->offsetLongitude, tmpTriIt->point.y + importedStuff->offsetLatitude, tmpTriIt->point.x, tmpTriIt->point.y);
+	// 	tmpTriIt = tmpTriIt->next;
+	// }	
 	
 	// TRIANGULATE
 	struct Subdivision *triangulation;
@@ -334,16 +334,16 @@ int main(int argc, char *argv[]) {
 	arrayListIterator = simplifiedArcs;
 	int simpCount;
 	simpCount = 1;
-	printf("Simplified arcs\n");
+	// printf("Simplified arcs\n");
 	while(arrayListIterator) {
 		//printf(" line %d\n", simpCount++);
-		printf("],\n[");
+		// printf("],\n[");
 		int n;
 		for (n = 0; n < arrayListIterator->numPoints; n++) {
 			arrayListIterator->points[n].x += importedStuff->offsetLongitude;
 			arrayListIterator->points[n].y += importedStuff->offsetLatitude;
 			// tmp debugging code to print all points
-			printf("  %lf, %lf\n", arrayListIterator->points[n].x, arrayListIterator->points[n].y);
+			// printf("  %lf, %lf\n", arrayListIterator->points[n].x, arrayListIterator->points[n].y);
 		}
 		arrayListIterator = arrayListIterator->next;
 	}
