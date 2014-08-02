@@ -6,7 +6,7 @@
 struct UniquePointList {
 	int *ids; // index in sorted point list of original point
 	struct Point *pts; // array of points to be sorted
-	struct Edge *edges;
+	struct Edge **edges;
 };
 
 int ptCompare(struct Point * a, struct Point * b);

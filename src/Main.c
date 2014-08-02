@@ -4,6 +4,7 @@
 #include "Delaunay.h"
 #include "Subdivision.h"
 #include "ArcsPointsAndOffsets.h"
+#include "Point.h"
 #include "PointArrayList.h"
 #include "ImportGML.h"
 #include "ExportGML.h"
@@ -96,15 +97,23 @@ int main(int argc, char *argv[]) {
 		i++;
 		arrayListIterator = arrayListIterator->next;
 	}
-	
+	// FIND UNIQUE POINTS
 	qsort((void *)triPts.pts, ntripts, sizeof(struct Point), point_compare);
+	
 	// print out the points to triangulate
 	printf("triangulation points, sorted\n");
 	for (i=0; i<ntripts; i++){
 		printf("%5d:  %lf, %lf  (%lf, %lf)\n", triPts.pts[i].id, triPts.pts[i].x + importedStuff->offsetLongitude, triPts.pts[i].y + importedStuff->offsetLatitude, 
 			   triPts.pts[i].x, triPts.pts[i].y);
 	}
-	// set triPts.ids to first occurrence of coordinates
+	/* set triPts.ids to first occurrence of coordinates.
+	 * After this we will have triPts.pts[triPts.ids[i]] being the coordinates that were originally at i. 
+	 * Moreover, all points with the same coordinates will have the same value for triPts.ids[i].
+	 * Only those points with orig index i == triPts.pts[triPts.ids[i]].id will be in the triangulation. 
+	 * Said in the other way, sorted index j is a point in the triangulation iff j == triPts.ids[triPts.pts[j].id]
+     * For each sorted point, assign an edge origin: triPts.edges[edge_orig(e).id] = e. 
+	 * For each original point i, the edge with that as origin is triPts.edge[triPts.id[i]]
+	 */
 	int lastpt = 0;
 	triPts.ids[triPts.pts[0].id] = lastpt; // save index of where the point coordinates are in sorted list
 	for (i = 1; i<ntripts; i++) {
@@ -113,6 +122,7 @@ int main(int argc, char *argv[]) {
 		triPts.ids[triPts.pts[i].id] = lastpt; // save index of where the point coordinates are in sorted list
 	}
 	// Make a list of the unique points to triangulate, in original order
+	// Should add bounding box points?
 	struct PointList *triPoints = NULL;
 	struct PointList *triIterator = NULL;
 	int triPointsSize=0;
@@ -145,8 +155,15 @@ int main(int argc, char *argv[]) {
 	struct Subdivision *triangulation;
 	triangulation = delaunay_triangulate(triPoints, triPointsSize);
 	
-	//for each edge e
-	// triPts.edges[edge_orig(e).id] = e;
+	struct Edge *e;
+	e = triangulation->startingEdge;
+	while (e) { // for each edge e
+		if (edge_orig(e)->id>=0)
+		triPts.edges[triPts.ids[edge_orig(e)->id]] = e;
+		if (edge_dest(e)->id>=0)
+		triPts.edges[triPts.ids[edge_dest(e)->id]] = edge_sym(e);
+		e = subdivision_nextEdge(triangulation, e);
+	}
 	
 	printf("done\n");
 	// SIMPLIFY
@@ -161,73 +178,78 @@ int main(int argc, char *argv[]) {
 	// iterator for raw data
 	arrayListIterator = importedStuff->arcs;
 	
+	struct Edge *edgeStack[6*triPointsSize]; // make stacks big enough to hold all triangle edges.  Allocate once
+	int arcNumberStack[6*triPointsSize]; // index in arc of point that crosses edge
 	// int removedPoints;
 	// removedPoints = 0;
-	while (1) {
+	
+	for (int arcno = 0; arcno<ptIDs; i++) {// loop over each arc
 		simpArcIter->numPoints = 0;
 		if (arrayListIterator->numPoints < 4) {
-			// don't worry about short arcs
+			// ignore short arcs
 			simpArcIter->points = arrayListIterator->points;
 			simpArcIter->numPoints = arrayListIterator->numPoints;
-		} else {
-			// locate each edge;
-			struct Edge *locatedEdges[arrayListIterator->numPoints];
-			int i;
-			for (i = 0; i < arrayListIterator->numPoints; i++) {
-				locatedEdges[i] = subdivision_locate(triangulation, &arrayListIterator->points[i]);
+		} else { 
+			/* Here is where we follow an arc through the triangulation, 
+			 stacking the edges that get crossed from L to R,
+			 but popping whenever we cross back over an edge that we just crossed. 
+			 We have an edge the line pq entered on.  Find the exit edge for the line pq.
+			 Then decide if q exits or not. 
+			 If it does, stack (or pop) the edge.  
+			 If not, find the new entry edge. 
+			 Points on edges will be perturbed to be just outside the triangle. 
+			 Vertices are perturbed to be L of pq. 
+			 */
+			int start = triPts.ids[2*arcno]; // find which point knows its edge
+			struct Edge *e = triPts.edges[start]; // edge with start point as orig
+			struct Point *p = &arrayListIterator->points[0]; 
+			if (point_compare(p,edge_orig(e))!=0) // should have start point at origin
+				printf("oops");
+			int nq = 1;
+			struct Point *q = &arrayListIterator->points[1];
+			while (!predicate_rightOrAhead(q, edge_dest(e), edge_orig(e))) {
+				e = edge_oPrev(e); // start with edge that had next point to left or behind
 			}
-			// do the stacking/popping of triangles to get a sequence
-			// of triangles that the shortest path must visit on its way
-			// from start to end
-			struct Edge *edgeStack[arrayListIterator->numPoints + 1];
-			int edgeNumberStack[arrayListIterator->numPoints + 1];
-			int sp;
-			sp = 0;
-			i = 0;
-			// push the first edge crossed
-			edgeStack[sp] = locatedEdges[i];
-			edgeNumberStack[sp++] = i;
-			// for each subsequent edge
-			for (i = 1; i < arrayListIterator->numPoints; i++) {
-				if (edge_sym(edgeStack[sp - 1]) == locatedEdges[i]) {
-					// if this edge's reverse is on top of the stac, pop it
-					sp--;
-				} else if (edgeStack[sp - 1] == locatedEdges[i]) {
-					// if this edge is on top of the stack then do nothing
-				} else {
-					// else we're crossing a new edge, push it
-					edgeNumberStack[sp] = i;
-					edgeStack[sp++] = locatedEdges[i];
+			
+			int sp = -1;
+			while (nq < arrayListIterator->numPoints) { // while arc points remain
+				if (predicate_rightOrAhead(edge_dest(edge_oNext(e)), p, q))
+					e = edge_oNext(e);
+				else 
+					e = edge_dPrev(e); 
+				/* We have the next edge the line crosses; now see if pq actually does cross it. */
+				if (q == edge_dest(e)) 
+					break; // we reached the end point
+                else {
+					if (predicate_leftOrAhead(q, edge_orig(e), edge_dest(e))) {
+						// we continue into next triangle 
+						if ((sp>=0) && (edgeStack[sp]==edge_sym(e)))
+							sp--;
+						else {
+							edgeStack[++sp] = e;
+							arcNumberStack[sp] = nq;
+						}
+					} else {
+						p = q; // we reached the end of the arcedge in triangle to the right of e
+						q = &arrayListIterator->points[++nq];
+						e = edge_sym(e);
+						// Find the triangle edge that the line pq would have entered.
+						double d0 = predicate_triArea(edge_orig(e),p,q); // triangle right is d0,d1,d2 ccw
+						double d1 = predicate_triArea(edge_dest(e),p,q); 						
+						double d2 = predicate_triArea(edge_dest(edge_oNext(e)),p,q);
+						//if (d0>0 && d1<=0) || (d0>=0 && d1<0) e = e;
+						if ((d1>0 && d2<=0) || (d1>=0 && d2<0)) 
+							e = edge_lNext(e);
+						else if ((d2>0 && d0<=0) || (d2>=0 && d0<0)) 
+							e = edge_lPrev(e);
+						
+					}  
 				}
 			}
 			
 			// eliminate any looping around the start point
-			// leave the first point, remove up to index sp - 2
-			int start;
-			start = 1;
-			// this code is wrong
-			for (i = 2; i < sp - 1; i++) {
-				if (predicate_edgeIsPartOfRing(edgeStack[i], edgeStack[0])) {
-					start = i;
-				} else {
-					break;
-				}
-			}
-			// eliminate any looping around the end point
-			// leave the last point remove up to index 1
-			int term;
-			term = sp - 2;
-			// this code is wrong
-			for (i = term - 1; i > 0; i--) {
-				if (predicate_edgeIsPartOfRing(edgeStack[i], edgeStack[sp - 1])) {
-					term = i;
-				} else {
-					break;
-				}
-			}
-			if (term < start) {
-				term = start;
-			}
+			
+			int term = sp-2; 
 			if (sp < 1) {
 				struct Point *simplified = (struct Point *) malloc(sizeof(struct Point)*2);
 				simplified[0] = arrayListIterator->points[0];
@@ -242,7 +264,7 @@ int main(int argc, char *argv[]) {
 				struct Point *simplified = (struct Point *) malloc(sizeof(struct Point)*size);
 				simplified[index++] = arrayListIterator->points[0];
 				for (i = start; i <= term; i++) {
-					simplified[index++] = arrayListIterator->points[edgeNumberStack[i]];
+					simplified[index++] = arrayListIterator->points[arcNumberStack[i]];
 				}
 				simplified[index] = arrayListIterator->points[arrayListIterator->numPoints - 1];
 				simpArcIter->points = simplified;

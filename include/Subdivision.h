@@ -15,4 +15,6 @@ void subdivision_insertSite(struct Subdivision *s, struct Point *p);
 
 struct Edge * subdivision_locate(struct Subdivision *s, struct Point *q);
 
+struct Edge * subdivision_nextEdge(struct Subdivision *s, struct Edge *e);
+
 #endif /* CG_SUBDIVISION_H */
