@@ -1,4 +1,6 @@
-GISCup14_C
+GISCup14
 ==========
 
-The GISCup14 repository implemented in C
+Code is in C.  
+Compile code by running make in the src directory.  
+Run program by typing Simplify < PointToRemove > < LineInputFilePath > < PointInputFilePath > < OutputFilePath > on the command line
