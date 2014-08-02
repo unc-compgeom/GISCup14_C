@@ -15,10 +15,13 @@ struct QuadEdge * quadEdge_construct() {
 	scale = 536870912;
 	a->x = -1 * scale - 1;
 	a->y = 2 * scale;
+	a->id = -1;
 	b->x = -1 * scale;
 	b->y = -1 * scale;
+	b->id = -1;
 	c->x = 2 * scale;
 	c->y = -1 * scale;
+	c->id = -1;
 
 	struct Edge *ea;
 	ea = quadEdge_makeEdge();

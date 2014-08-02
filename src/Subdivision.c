@@ -22,7 +22,7 @@ void subdivision_insertSite(struct Subdivision *s, struct Point *p) {
 	}
 	struct Edge *base;
 	base = quadEdge_makeEdge();
-	struct Point tmpDest = {p->x, p->y};
+	struct Point tmpDest = {p->x, p->y, p->id};
 	edge_setCoordinates(base, *edge_orig(e), tmpDest);
 	quadEdge_splice(base, e);
 	s->startingEdge = base;
@@ -66,4 +66,19 @@ struct Edge * subdivision_locate(struct Subdivision *s, struct Point *q) {
 			e = edge_sym(edge_lNext(e));
 		}
 	} while (1);
+}
+
+struct Edge * subdivision_nextEdge(struct Subdivision *s, struct Edge *e) {
+	struct Edge *next;
+	if (quadEdge_isWall(e) || quadEdge_isWall(edge_sym(e))) {
+		next = edge_rPrev(e);
+	} else {
+		next = edge_oNext(e);
+	}
+	if (next == s->startingEdge) {
+		return 0;
+	} else {
+		return next;
+	}
+	
 }
