@@ -9,7 +9,7 @@ struct Subdivision {
 	struct QuadEdge *qe;
 };
 
-struct Subdivision * subdivision_construct();
+struct Subdivision * subdivision_construct(struct Point *bboxLL, struct Point *bboxUR);
 
 void subdivision_insertSite(struct Subdivision *s, struct Point *p);
 

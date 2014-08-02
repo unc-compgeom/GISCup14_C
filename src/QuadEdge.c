@@ -4,23 +4,21 @@
 #include "Null.h"
 #include <stdlib.h> 
 
-struct QuadEdge * quadEdge_construct() {
+struct QuadEdge * quadEdge_construct(struct Point *bboxLL, struct Point *bboxUR) {
 	struct QuadEdge *qe = (struct QuadEdge*) malloc(sizeof(struct QuadEdge));
 	// initialize the triangle
 	struct Point *a = (struct Point*) malloc(sizeof(struct Point));
 	struct Point *b = (struct Point*) malloc(sizeof(struct Point));
 	struct Point *c = (struct Point*) malloc(sizeof(struct Point));
 
-	int scale;
-	scale = 536870912;
-	a->x = -1 * scale - 1;
-	a->y = 2 * scale;
+	a->x = bboxLL->x - 2 * (bboxUR->x - bboxLL->x);			// -1
+	a->y = bboxLL->y + 4 * (bboxUR->y - bboxLL->y);		// 2
 	a->id = -1;
-	b->x = -1 * scale;
-	b->y = -1 * scale;
+	b->x = bboxLL->x - 2 * (bboxUR->x - bboxLL->x);			// -1
+	b->y = bboxLL->y - 2 * (bboxUR->y - bboxLL->x);			// -1
 	b->id = -1;
-	c->x = 2 * scale;
-	c->y = -1 * scale;
+	c->x = bboxLL->x + 4 * (bboxUR->x - bboxLL->x);		// 2
+	c->y = bboxLL->y - 2* (bboxUR->y - bboxLL->x);			// -1
 	c->id = -1;
 
 	struct Edge *ea;

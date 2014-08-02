@@ -47,6 +47,9 @@ int main(int argc, char *argv[]) {
 		}
 		tmpIt = tmpIt->next;
 	}
+	// pass these to the triangulation function call
+	struct Point bboxLL = {bbox[0], bbox[1], -1};
+	struct Point bboxUR = {bbox[2], bbox[3], -1};
 	printf("arcs\n");
 	tmpI2 = 1;
 	tmpIt = importedStuff->arcs;
@@ -153,7 +156,7 @@ int main(int argc, char *argv[]) {
 	
 	// TRIANGULATE
 	struct Subdivision *triangulation;
-	triangulation = delaunay_triangulate(triPoints, triPointsSize);
+	triangulation = delaunay_triangulate(triPoints, triPointsSize, &bboxLL, &bboxUR);
 	
 	struct Edge *e;
 	e = triangulation->startingEdge;

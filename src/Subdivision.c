@@ -6,9 +6,9 @@
 #include "Null.h"
 #include <stdlib.h> 
 
-struct Subdivision * subdivision_construct() {
+struct Subdivision * subdivision_construct(struct Point *bboxLL, struct Point *bboxUR) {
 	struct Subdivision *s = (struct Subdivision*) malloc(sizeof(struct Subdivision));
-	s->qe = quadEdge_construct();
+	s->qe = quadEdge_construct(bboxLL, bboxUR);
 	s->startingEdge = s->qe->first;
 	return s;
 }

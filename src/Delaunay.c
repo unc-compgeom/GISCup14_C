@@ -6,9 +6,9 @@
 #include <stdlib.h>
 
 ///////////////// DELAUNAY TRIANGULATION /////////////////
-struct Subdivision * delaunay_triangulate(struct PointList *points, int numPoints) {
+struct Subdivision * delaunay_triangulate(struct PointList *points, int numPoints, struct Point *bboxLL, struct Point *bboxUR) {
 	struct Subdivision *s;
-	s = subdivision_construct();
+	s = subdivision_construct(bboxLL, bboxUR);
 	int i;
 	struct PointList *listIterator;
 	listIterator = points;
