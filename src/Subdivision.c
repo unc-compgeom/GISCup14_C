@@ -70,7 +70,7 @@ struct Edge * subdivision_locate(struct Subdivision *s, struct Point *q) {
 
 struct Edge * subdivision_nextEdge(struct Subdivision *s, struct Edge *e) {
 	struct Edge *next;
-	if (edge_isWall(e)) {
+	if (edge_isWall(e) || edge_isWall(edge_sym(e))) {
 		next = edge_rPrev(e);
 	} else {
 		next = edge_oNext(e);
@@ -80,5 +80,4 @@ struct Edge * subdivision_nextEdge(struct Subdivision *s, struct Edge *e) {
 	} else {
 		return next;
 	}
-
 }
