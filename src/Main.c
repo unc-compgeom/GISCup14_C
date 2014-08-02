@@ -12,7 +12,7 @@
 #include "Predicate.h"
 #include "Edge.h"
 
-			  
+
 int main(int argc, char *argv[]) {
 	
 	// Call the program on the command line like this:
@@ -25,8 +25,12 @@ int main(int argc, char *argv[]) {
 	struct ArcsPointsAndOffsets *importedStuff;
 	importedStuff = importGML_importGML(argv[2], argv[3]);
 	
+<<<<<<< HEAD
+	int ntripts = 0; // count points for triangulation
+=======
 	int ntripts; // count points for triangulation
 	ntripts = 0;
+>>>>>>> ad03765d2a311dd656839eadc5c02bc07abbf064
 	// one more time, print out the points we just read in
 	struct PointArrayList *tmpIt;
 	tmpIt = importedStuff->points;
@@ -47,9 +51,6 @@ int main(int argc, char *argv[]) {
 		}
 		tmpIt = tmpIt->next;
 	}
-	// pass these to the triangulation function call
-	struct Point bboxLL = {bbox[0], bbox[1], -1};
-	struct Point bboxUR = {bbox[2], bbox[3], -1};
 	printf("arcs\n");
 	tmpI2 = 1;
 	tmpIt = importedStuff->arcs;
@@ -74,7 +75,7 @@ int main(int argc, char *argv[]) {
 	triPts.pts = (struct Point*) malloc(ntripts*sizeof(struct Point));
 	triPts.ids = (int*)malloc(ntripts*sizeof(int));
 	triPts.edges = malloc(ntripts*sizeof(struct Edge));
-
+	
 	struct PointArrayList *arrayListIterator;
 	int i = 0; 
 	
@@ -144,7 +145,7 @@ int main(int argc, char *argv[]) {
 	}
 	// set the next pointer to null
 	triIterator->next = 0;
-
+	
 	// print out the points to triangulate
 	struct PointList *tmpTriIt;
 	tmpTriIt = triPoints;
@@ -156,15 +157,15 @@ int main(int argc, char *argv[]) {
 	
 	// TRIANGULATE
 	struct Subdivision *triangulation;
-	triangulation = delaunay_triangulate(triPoints, triPointsSize, &bboxLL, &bboxUR);
+	triangulation = delaunay_triangulate(triPoints, triPointsSize);
 	
 	struct Edge *e;
 	e = triangulation->startingEdge;
 	while (e) { // for each edge e
 		if (edge_orig(e)->id>=0)
-		triPts.edges[triPts.ids[edge_orig(e)->id]] = e;
+			triPts.edges[triPts.ids[edge_orig(e)->id]] = e;
 		if (edge_dest(e)->id>=0)
-		triPts.edges[triPts.ids[edge_dest(e)->id]] = edge_sym(e);
+			triPts.edges[triPts.ids[edge_dest(e)->id]] = edge_sym(e);
 		e = subdivision_nextEdge(triangulation, e);
 	}
 	
@@ -185,8 +186,13 @@ int main(int argc, char *argv[]) {
 	int arcNumberStack[6*triPointsSize]; // index in arc of point that crosses edge
 	// int removedPoints;
 	// removedPoints = 0;
+<<<<<<< HEAD
+	
+	for (int arcno = 0; arcno<ptIDs; arcno++) {// loop over each arc
+=======
 	int arcno;
 	for (arcno = 0; arcno<ptIDs; i++) {// loop over each arc
+>>>>>>> ad03765d2a311dd656839eadc5c02bc07abbf064
 		simpArcIter->numPoints = 0;
 		if (arrayListIterator->numPoints < 4) {
 			// ignore short arcs
@@ -207,7 +213,7 @@ int main(int argc, char *argv[]) {
 			struct Edge *e = triPts.edges[start]; // edge with start point as orig
 			struct Point *p = &arrayListIterator->points[0]; 
 			if (point_compare(p,edge_orig(e))!=0) // should have start point at origin
-				printf("oops");
+				printf("should have start point at origin");
 			int nq = 1;
 			struct Point *q = &arrayListIterator->points[1];
 			while (!predicate_rightOrAhead(q, edge_dest(e), edge_orig(e))) {
@@ -251,31 +257,60 @@ int main(int argc, char *argv[]) {
 			}
 			
 			// eliminate any looping around the start point
+			while (sp >= 0 && point_compare(edge_dest(edgeStack[sp]), 
+											&arrayListIterator->points[arrayListIterator->numPoints-1]) ==0)
+				sp--;
+			start = 0;
+			while (start <= sp && point_compare(edge_orig(edgeStack[start]), 
+												&arrayListIterator->points[0]) ==0)
+				start++;
 			
-			int term = sp-2; 
-			if (sp < 1) {
-				struct Point *simplified = (struct Point *) malloc(sizeof(struct Point)*2);
-				simplified[0] = arrayListIterator->points[0];
-				simplified[1] = arrayListIterator->points[arrayListIterator->numPoints - 1];
-				simpArcIter->points = simplified;
-				simpArcIter->numPoints = 2;
-			} else {
-				int size;
-				size = term - start + 3;
-				int index;
-				index = 0;
-				struct Point *simplified = (struct Point *) malloc(sizeof(struct Point)*size);
-				simplified[index++] = arrayListIterator->points[0];
-				for (i = start; i <= term; i++) {
-					simplified[index++] = arrayListIterator->points[arcNumberStack[i]];
+			int count = 1;
+			p = &arrayListIterator->points[0];
+			for (i=start; i<=sp; i++) {
+				q = &arrayListIterator->points[arcNumberStack[i]-1];
+				if (point_compare(p, q)!=0) {
+					p = q;
+					count++;
 				}
-				simplified[index] = arrayListIterator->points[arrayListIterator->numPoints - 1];
-				simpArcIter->points = simplified;
-				simpArcIter->numPoints = size;
-				// removedPoints += arrayListIterator->numPoints - size;
+				q = &arrayListIterator->points[arcNumberStack[i]];
+				if (point_compare(p, q)!=0) {
+					p = q;
+					count++;
+				}
+			}
+			q = &arrayListIterator->points[arrayListIterator->numPoints-1];
+			if (point_compare(p, q)!=0) {
+				p = q;
+				count++;
 			}
 			
+			struct Point *simplified = (struct Point *) malloc(sizeof(struct Point)*count);
+			simpArcIter->numPoints = count;
+			p = &arrayListIterator->points[0];
+			simplified[0] = *p;
+			count = 1;
+			for (i=start; i<=sp; i++) {
+				q = &arrayListIterator->points[arcNumberStack[i]-1];
+				if (point_compare(p, q)!=0) {
+					p = q;
+					simplified[count++] = *p;
+				}
+				q = &arrayListIterator->points[arcNumberStack[i]];
+				if (point_compare(p, q)!=0) {
+					p = q;
+					simplified[count++] = *p;
+				}
+			}
+			q = &arrayListIterator->points[arrayListIterator->numPoints-1];
+			if (point_compare(p, q)!=0) {
+				p = q;
+				simplified[count++] = *p;
+			}
+			simpArcIter->points = simplified;
+			// removedPoints += arrayListIterator->numPoints - size;
 		}
+		
 		if (arrayListIterator->next) {
 			simpArcIter->next = (struct PointArrayList*) malloc(sizeof(struct PointArrayList));
 			simpArcIter = simpArcIter->next;
