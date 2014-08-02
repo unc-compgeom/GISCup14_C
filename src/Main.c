@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 	char *pointInputFilePath;
 	char *outputFilePath;
 	if (argc < 5) {
-		printf("no arguments supplied ... attempting to recover\n");
+		printf("no arguments supplied ... atteming to recover\n");
 		pointsToRemoveCount = INFINITY;
 		lineInputFilePath = "../td1/lines_out.txt";
 		pointInputFilePath = "../td1/points_out.txt";

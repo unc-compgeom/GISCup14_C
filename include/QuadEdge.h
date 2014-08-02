@@ -1,6 +1,7 @@
 #ifndef CG_QUADEDGE_H
 #define CG_QUADEDGE_H
 
+#include "Point.h"
 #include "Edge.h"
 
 struct QuadEdge {

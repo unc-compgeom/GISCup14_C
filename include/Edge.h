@@ -1,7 +1,6 @@
 #ifndef CG_EDGE_H
 #define CG_EDGE_H
 
-
 #include "Point.h"
 
 struct Edge {
@@ -36,8 +35,7 @@ struct Edge * edge_rPrev(struct Edge *edge);
 
 struct Edge * edge_rNext(struct Edge *edge);
 
-void edge_setCoordinates(struct Edge *edge, struct Point origin, 
-		struct Point destination);
+void edge_setCoordinates(struct Edge *edge, struct Point origin, struct Point destination);
 
 void edge_setOrigin(struct Edge *edge, struct Point origin);
 

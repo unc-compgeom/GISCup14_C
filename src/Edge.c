@@ -1,5 +1,4 @@
 #include "Edge.h"
-#include "Point.h"
 
 struct Point * edge_dest(struct Edge *edge) {
 	return edge_orig(edge_sym(edge));

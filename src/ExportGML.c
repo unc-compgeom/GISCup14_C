@@ -1,9 +1,7 @@
-#include "ExportGML.h"
-#include "Point.h"
-#include "PointArrayList.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include "ExportGML.h"
+#include "Point.h"
 
 void exportGML_exportGML(struct PointArrayList *pointArrayList, char newFileName[]) {
 	FILE * fp;

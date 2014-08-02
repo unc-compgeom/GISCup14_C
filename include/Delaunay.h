@@ -3,6 +3,7 @@
 
 #include "Point.h"
 #include "PointList.h"
+#include "Subdivision.h"
 
 struct Subdivision * delaunay_triangulate(struct PointList *points, int numPoints, struct Point *bboxLL, struct Point *bboxUR);
 

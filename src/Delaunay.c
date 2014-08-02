@@ -1,9 +1,6 @@
-#include "Point.h"
-#include "QuadEdge.h"
-#include "Subdivision.h"
-#include "Delaunay.h"
-#include "PointList.h"
 #include <stdlib.h>
+#include "Delaunay.h"
+#include "Subdivision.h"
 
 ///////////////// DELAUNAY TRIANGULATION /////////////////
 struct Subdivision * delaunay_triangulate(struct PointList *points, int numPoints, struct Point *bboxLL, struct Point *bboxUR) {

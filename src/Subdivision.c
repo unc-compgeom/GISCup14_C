@@ -1,10 +1,6 @@
-#include "Subdivision.h"
-#include "QuadEdge.h"
-#include "Edge.h"
-#include "Point.h"
-#include "Predicate.h"
-#include "Null.h"
 #include <stdlib.h> 
+#include "Subdivision.h"
+#include "Predicate.h"
 
 struct Subdivision * subdivision_construct(struct Point *bboxLL, struct Point *bboxUR) {
 	struct Subdivision *s = (struct Subdivision*) malloc(sizeof(struct Subdivision));

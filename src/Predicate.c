@@ -1,20 +1,12 @@
 #include "Predicate.h"
-#include "Point.h"
-#include "Edge.h"
 
 int predicate_ahead(struct Point *p, struct Point *q, struct Point *r) { // is p ahead of qr
-	double pqx = p->x - r->x;
-	double pqy = p->y - r->y;
+	double prx = p->x - r->x;
+	double pry = p->y - r->y;
 	double rqx = r->x - q->x;
 	double rqy = r->y - q->y;
-	double dot = pqx * rqx + pqy * rqy;
+	double dot = prx * rqx + pry * rqy;
 	return dot > 0;	
-//	double pqx = p->x - q->x; //JSS: the test (p-q)(r-q) > (r-q)(r-q)
-//	double pqy = p->y - q->y; //     is equiv [(p-q)-(r-q)](r-q) > 0
-//	double rqx = r->x - q->x; //     is equiv (p-r)(r-q) > 0
-//	double rqy = r->y - q->y; 
-//	double dot = pqx * rqx + pqy * rqy; 
-//	return dot > predicate_distSquared(q, r);
 }
 
 double predicate_distSquared(struct Point *p, struct Point *q) {

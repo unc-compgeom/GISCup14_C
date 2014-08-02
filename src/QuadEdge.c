@@ -1,8 +1,5 @@
+#include <stdlib.h>
 #include "QuadEdge.h"
-#include "Edge.h"
-#include "Point.h"
-#include "Null.h"
-#include <stdlib.h> 
 
 struct QuadEdge * quadEdge_construct(struct Point *bboxLL, struct Point *bboxUR) {
 	struct QuadEdge *qe = (struct QuadEdge*) malloc(sizeof(struct QuadEdge));
@@ -38,11 +35,6 @@ struct QuadEdge * quadEdge_construct(struct Point *bboxLL, struct Point *bboxUR)
 	quadEdge_splice(edge_sym(ec), ea);
 
 	qe->first = ec;
-
-	free(a);
-	free(b);
-	free(c);
-
 	return qe;
 }
 

@@ -1,16 +1,15 @@
-#include "ImportGML.h"
-#include "Point.h"
-#include "PointArrayList.h"
-#include "ArcsPointsAndOffsets.h"
-#include "PointList.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "ImportGML.h"
+#include "ArcsPointsAndOffsets.h"
+#include "Point.h"
+#include "PointList.h"
 
  void importGML_readFile(struct PointArrayList *destination, char fileName[]) {
 	FILE * fp;
 	fp = fopen(fileName, "r");
 	if (!fp) {
-		printf("Error opening file %s\n", fileName);
+		printf("Error opening %s in importGML_readFile()\n", fileName);
 		exit(1);
 	}
 
@@ -160,9 +159,5 @@ struct ArcsPointsAndOffsets * importGML_importGML(char arcsFilename[], char poin
 	}
 
 	// done!
-	return data;
-}
-struct ArcsPointsAndOffsets * arcsPointsAndOffsets_construct() {
-	struct ArcsPointsAndOffsets *data = (struct ArcsPointsAndOffsets*) malloc(sizeof(struct ArcsPointsAndOffsets));
 	return data;
 }
