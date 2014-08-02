@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "ArcsPointsAndOffsets.h"
 #include "Delaunay.h"
 #include "Subdivision.h"
-#include "ArcsPointsAndOffsets.h"
 #include "Point.h"
 #include "PointArrayList.h"
 #include "ImportGML.h"
@@ -22,7 +22,12 @@ int main(int argc, char *argv[]) {
 	char *pointInputFilePath;
 	char *outputFilePath;
 	if (argc < 5) {
-		printf("no arguments supplied ... atteming to recover\n");
+		printf("Simplify should be called with 4 arguments\n");
+		printf(" 1. int pointsToRemove\n");
+		printf(" 2. String lineInputFilePath\n");
+		printf(" 3. String pointInputFilePath\n");
+		printf(" 4. String outputFilePath\n");
+		printf("... atteming to recover with test data ...\n");
 		pointsToRemoveCount = INFINITY;
 		lineInputFilePath = "../td1/lines_out.txt";
 		pointInputFilePath = "../td1/points_out.txt";
