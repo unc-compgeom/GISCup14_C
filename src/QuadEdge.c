@@ -11,14 +11,14 @@ struct QuadEdge * quadEdge_construct(struct Point *bboxLL, struct Point *bboxUR)
 	struct Point *b = (struct Point*) malloc(sizeof(struct Point));
 	struct Point *c = (struct Point*) malloc(sizeof(struct Point));
 
-	a->x = bboxLL->x - 2 * (bboxUR->x - bboxLL->x);			// -1
-	a->y = bboxLL->y + 4 * (bboxUR->y - bboxLL->y);		// 2
+	a->x = bboxLL->x - 4 * (bboxUR->x - bboxLL->x);		// -1
+	a->y = bboxLL->y + 8 * (bboxUR->y - bboxLL->y);		// 2
 	a->id = -1;
-	b->x = bboxLL->x - 2 * (bboxUR->x - bboxLL->x);			// -1
-	b->y = bboxLL->y - 2 * (bboxUR->y - bboxLL->x);			// -1
+	b->x = bboxLL->x - 4 * (bboxUR->x - bboxLL->x);		// -1
+	b->y = bboxLL->y - 4 * (bboxUR->y - bboxLL->x);		// -1
 	b->id = -1;
-	c->x = bboxLL->x + 4 * (bboxUR->x - bboxLL->x);		// 2
-	c->y = bboxLL->y - 2* (bboxUR->y - bboxLL->x);			// -1
+	c->x = bboxLL->x + 8 * (bboxUR->x - bboxLL->x);		// 2
+	c->y = bboxLL->y - 4* (bboxUR->y - bboxLL->x);		// -1
 	c->id = -1;
 
 	struct Edge *ea;

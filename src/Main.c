@@ -186,7 +186,7 @@ int main(int argc, char *argv[]) {
 	removedPoints = 0;
 
 	int arcno;
-	for (arcno = 0; arcno<ptIDs && removedPoints <= pointsToRemoveCount; i++) {// loop over each arc
+	for (arcno = 0; arcno<ptIDs && removedPoints <= pointsToRemoveCount; arcno++) {// loop over each arc
 		simpArcIter->numPoints = 0;
 		if (arrayListIterator->numPoints < 4) {
 			// ignore short arcs
@@ -348,6 +348,6 @@ int main(int argc, char *argv[]) {
 		arrayListIterator = arrayListIterator->next;
 	}
 	exportGML_exportGML(simplifiedArcs, argv[4]);
-	printf("removed %d points\n", removedPoints);
+	// printf("removed %d points\n", removedPoints);
 }
 
